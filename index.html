@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Store Next Door | Theory Background Prototype</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="recording-control" aria-label="Recording controls">
+      <button id="recordToggle" type="button">R · Auto Scroll</button>
+      <span id="recordState">Paused</span>
+    </div>
+
+    <nav class="progress-dots" aria-label="Panel navigation">
+      <button class="dot is-active" type="button" data-target-panel="0" aria-label="Go to panel 1"></button>
+      <button class="dot" type="button" data-target-panel="1" aria-label="Go to panel 2"></button>
+      <button class="dot" type="button" data-target-panel="2" aria-label="Go to panel 3"></button>
+    </nav>
+
+    <svg class="story-path" viewBox="0 0 100 300" preserveAspectRatio="none" aria-hidden="true">
+      <path
+        id="mainPath"
+        d="M 15 18 C 42 38, 62 48, 50 74 C 38 102, 18 110, 28 134 C 42 170, 72 150, 73 183 C 74 217, 31 211, 36 242 C 40 267, 66 264, 82 288"
+      />
+    </svg>
+
+    <main>
+      <section class="panel panel-opening" data-panel data-panel-theme="story">
+        <div class="panel-copy" data-animate="copy">
+          <p class="kicker">Theory + Reference Background</p>
+          <h1>Store Next Door</h1>
+          <p class="subtitle">A low-pressure shopping field begins in everyday life.</p>
+          <p class="microcopy">
+            A community supermarket is not only a place to buy goods. It is part of the
+            everyday service fabric of a neighbourhood.
+          </p>
+        </div>
+
+        <div class="scene scene-neighbourhood" data-scene aria-label="Illustrated neighbourhood supermarket scene">
+          <div class="sun" data-animate="sky"></div>
+          <div class="cloud cloud-a" data-animate="sky"></div>
+          <div class="cloud cloud-b" data-animate="sky"></div>
+          <div class="building building-left" data-animate="building">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="storefront" data-animate="anchor">
+            <div class="awning"></div>
+            <div class="store-sign">STORE NEXT DOOR</div>
+            <div class="door"></div>
+            <div class="window window-left"></div>
+            <div class="window window-right"></div>
+          </div>
+          <div class="building building-right" data-animate="building">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="character older-person" data-animate="figure">
+            <div class="head"></div>
+            <div class="body"></div>
+            <div class="legs"></div>
+          </div>
+          <div class="character staff-person" data-animate="figure">
+            <div class="head"></div>
+            <div class="body"></div>
+            <div class="legs"></div>
+          </div>
+          <div class="cart" data-animate="figure">
+            <div class="basket"></div>
+            <div class="wheel wheel-left"></div>
+            <div class="wheel wheel-right"></div>
+          </div>
+          <span class="sticker sticker-community" data-animate="sticker">Community</span>
+          <span class="sticker sticker-daily" data-animate="sticker">Daily life</span>
+          <span class="sticker sticker-care" data-animate="sticker">Low pressure</span>
+        </div>
+      </section>
+
+      <section class="panel panel-ageing" data-panel data-panel-theme="diagram">
+        <div class="panel-copy compact" data-animate="copy">
+          <p class="kicker">Social Background</p>
+          <h1>Ageing Is Everyday</h1>
+          <p class="subtitle">Ageing is reshaping daily consumption, community services, and retail experience.</p>
+        </div>
+
+        <div class="scene scene-ageing" data-scene aria-label="Illustrated ageing society diagram">
+          <div class="population-card" data-animate="card">
+            <div class="mini-chart">
+              <span data-animate="bar" style="--h: 32%"></span>
+              <span data-animate="bar" style="--h: 48%"></span>
+              <span data-animate="bar" style="--h: 64%"></span>
+              <span data-animate="bar" style="--h: 78%"></span>
+            </div>
+            <p>Ageing Society</p>
+          </div>
+
+          <div class="orbit orbit-one" data-animate="orbit"></div>
+          <div class="orbit orbit-two" data-animate="orbit"></div>
+          <div class="elder-portrait" data-animate="anchor">
+            <div class="portrait-head"></div>
+            <div class="portrait-body"></div>
+          </div>
+
+          <div class="life-node node-home" data-animate="node">
+            <span class="node-icon">⌂</span>
+            <strong>Home</strong>
+          </div>
+          <div class="life-node node-health" data-animate="node">
+            <span class="node-icon">+</span>
+            <strong>Care</strong>
+          </div>
+          <div class="life-node node-shop" data-animate="node">
+            <span class="node-icon">□</span>
+            <strong>Retail</strong>
+          </div>
+          <div class="life-node node-transit" data-animate="node">
+            <span class="node-icon">→</span>
+            <strong>Access</strong>
+          </div>
+
+          <p class="annotation age-note" data-animate="note">
+            Not a niche issue. A daily condition for service design.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel panel-spending" data-panel data-panel-theme="network">
+        <div class="panel-copy compact" data-animate="copy">
+          <p class="kicker">Silver Economy</p>
+          <h1>More Than Spending</h1>
+          <p class="subtitle">The silver economy is also about service quality, dignity, convenience, and trust.</p>
+        </div>
+
+        <div class="scene scene-needs" data-scene aria-label="Silver economy needs map">
+          <div class="needs-center" data-animate="anchor">
+            <span>Silver<br />Economy</span>
+          </div>
+          <div class="need need-price" data-animate="node">
+            <small>01</small>
+            <strong>Price</strong>
+          </div>
+          <div class="need need-access" data-animate="node">
+            <small>02</small>
+            <strong>Access</strong>
+          </div>
+          <div class="need need-clarity" data-animate="node">
+            <small>03</small>
+            <strong>Clarity</strong>
+          </div>
+          <div class="need need-comfort" data-animate="node">
+            <small>04</small>
+            <strong>Comfort</strong>
+          </div>
+          <div class="need need-respect" data-animate="node">
+            <small>05</small>
+            <strong>Respect</strong>
+          </div>
+          <div class="need need-trust" data-animate="node">
+            <small>06</small>
+            <strong>Trust</strong>
+          </div>
+          <svg class="need-lines" data-animate="lines" viewBox="0 0 600 420" aria-hidden="true">
+            <path d="M300 210 L110 96" />
+            <path d="M300 210 L318 64" />
+            <path d="M300 210 L498 110" />
+            <path d="M300 210 L505 312" />
+            <path d="M300 210 L288 362" />
+            <path d="M300 210 L96 296" />
+          </svg>
+          <p class="annotation economy-note" data-animate="note">
+            Older consumers do not only ask for cheaper goods. They need a service field
+            that is clear, stable, and respectful.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script src="./vendor/gsap.min.js"></script>
+    <script src="./vendor/ScrollTrigger.min.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
