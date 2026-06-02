@@ -20,101 +20,41 @@
 
     <main>
       <section class="panel panel-cover" data-panel data-panel-theme="cover">
-        <div class="scene-cover" aria-label="Illustrated community supermarket opening scene">
-          <svg class="cover-svg" viewBox="0 0 1440 900" role="img" aria-labelledby="coverTitle coverDesc">
-            <title id="coverTitle">Store Next Door</title>
-            <desc id="coverDesc">A calm neighbourhood supermarket scene with older residents, staff, and a gentle path entering the store.</desc>
-            <defs>
-              <pattern id="brickPattern" width="34" height="24" patternUnits="userSpaceOnUse">
-                <path d="M0 23.5H34M17 0V12M0 12H34" fill="none" stroke="#24302e" stroke-opacity=".08" stroke-width="1" />
-              </pattern>
-              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
-                <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#24302e" flood-opacity=".13" />
-              </filter>
-            </defs>
+        <div class="cover-poster" aria-label="Store Next Door opening poster scene">
+          <div class="cover-paper cover-paper-main" data-animate="cover-paper"></div>
+          <div class="cover-paper cover-paper-pink" data-animate="cover-paper"></div>
+          <div class="cover-paper cover-paper-cream" data-animate="cover-paper"></div>
 
-            <rect width="1440" height="900" fill="#FAF7F0" />
-            <path data-animate="layer" class="cover-sun" d="M1184 114a54 54 0 1 1-108 0 54 54 0 0 1 108 0Z" />
-            <path data-animate="layer" class="cover-cloud cloud-left" d="M178 148c14-28 58-27 70 3 28-12 64 8 64 39H94c2-30 39-51 84-42Z" />
-            <path data-animate="layer" class="cover-cloud cloud-right" d="M1058 212c18-35 71-32 85 4 35-16 78 8 79 47H954c4-39 48-65 104-51Z" />
+          <div class="cover-copy">
+            <p class="chapter-label" data-animate="chapter">Chapter 01 / Theoretical Background</p>
+            <h1 class="cover-headline" data-animate="headline">
+              <span>Store</span>
+              <span>Next</span>
+              <span>Door</span>
+            </h1>
+            <p class="cover-deck" data-animate="subtitle">
+              A low-pressure shopping field begins in everyday life.
+            </p>
+            <div class="cover-keywords" aria-label="Project keywords">
+              <span data-animate="tag">Ageing economy</span>
+              <span data-animate="tag">Community supermarket</span>
+              <span data-animate="tag">Service design management</span>
+              <span data-animate="tag">Low-pressure shopping field</span>
+            </div>
+          </div>
 
-            <g data-animate="layer" class="street-back">
-              <path d="M0 602c175-38 350-54 524-48 218 8 372 74 579 72 117-1 225-25 337-55v329H0Z" fill="#E7E1D5" />
-              <path d="M78 663c200-48 387-64 559-47 173 17 313 82 480 74 105-5 206-31 318-69" fill="none" stroke="#24302e" stroke-opacity=".12" stroke-width="3" stroke-dasharray="9 12" />
-            </g>
+          <div class="cover-visual-wrap" data-animate="main-visual">
+            <div class="cover-visual-halo"></div>
+            <img
+              class="cover-main-image"
+              src="./asset-storefront-elderly-shoppers.png"
+              alt="Community supermarket storefront with elderly shoppers"
+            />
+          </div>
 
-            <g data-animate="building" class="block-left" filter="url(#softShadow)">
-              <path d="M124 314h262v285H124Z" fill="#FFFDF7" stroke="#24302e" stroke-width="3" />
-              <path d="M124 314h262v285H124Z" fill="url(#brickPattern)" />
-              <path d="M150 354h58v54h-58Zm94 0h58v54h-58Zm-94 86h58v54h-58Zm94 86h58v54h-58Z" fill="#8BDCC4" fill-opacity=".45" stroke="#24302e" stroke-width="2" />
-              <path d="M312 446h48v153h-48Z" fill="#FFE39A" stroke="#24302e" stroke-width="2" />
-            </g>
-
-            <g data-animate="store" class="storefront" filter="url(#softShadow)">
-              <path d="M438 260h564c39 0 70 31 70 70v283H368V330c0-39 31-70 70-70Z" fill="#FFFDF7" stroke="#24302e" stroke-width="4" />
-              <path d="M405 258h630l48 112H357Z" fill="#2F5E4E" stroke="#24302e" stroke-width="4" />
-              <path d="M438 278h90l-32 92h-93Zm118 0h90l-15 92h-107Zm118 0h90v92H659Zm118 0h90l15 92H792Zm118 0h90l32 92H925Z" fill="#8BDCC4" stroke="#24302e" stroke-width="2" />
-              <path d="M467 424h170v126H467Zm335 0h170v126H802Z" fill="#C9E59A" fill-opacity=".45" stroke="#24302e" stroke-width="3" />
-              <path d="M682 418h82v195h-82Z" fill="#8BDCC4" fill-opacity=".35" stroke="#24302e" stroke-width="3" />
-              <path d="M718 418v195" stroke="#24302e" stroke-width="2" />
-              <path d="M533 210h374c19 0 34 15 34 34v53H499v-53c0-19 15-34 34-34Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
-              <text x="720" y="268" text-anchor="middle" class="store-sign-text">STORE NEXT DOOR</text>
-              <path d="M520 464h72m246 0h72" stroke="#24302e" stroke-width="5" stroke-linecap="round" />
-            </g>
-
-            <g data-animate="building" class="block-right" filter="url(#softShadow)">
-              <path d="M1082 358h214v239h-214Z" fill="#FFFDF7" stroke="#24302e" stroke-width="3" />
-              <path d="M1115 393h50v49h-50Zm88 0h50v49h-50Zm-88 78h50v49h-50Zm88 0h50v49h-50Z" fill="#FFE39A" fill-opacity=".52" stroke="#24302e" stroke-width="2" />
-              <path d="M1100 326h180l40 32h-260Z" fill="#F28A78" stroke="#24302e" stroke-width="3" />
-            </g>
-
-            <path data-animate="path" class="panel-path cover-path" d="M214 788C354 722 485 682 613 676c132-7 202 33 280-2 61-28 83-72 117-129" />
-
-            <g data-animate="figure" class="elder figure-a">
-              <path d="M586 628c-26 26-35 70-38 117" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
-              <path d="M614 629c19 34 25 71 22 113" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
-              <path d="M566 514c42-14 86 18 84 65-1 46-43 72-86 57-35-13-47-49-33-82 7-18 19-31 35-40Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
-              <path d="M532 616c31-33 93-33 125 2l18 98H511Z" fill="#C9E59A" stroke="#24302e" stroke-width="4" />
-              <path d="M550 549c24 18 55 19 82 5" stroke="#24302e" stroke-width="4" fill="none" stroke-linecap="round" />
-              <path d="M535 721h113" stroke="#24302e" stroke-width="5" stroke-linecap="round" />
-              <path d="M669 592c42 20 66 46 72 78" stroke="#24302e" stroke-width="5" fill="none" stroke-linecap="round" />
-            </g>
-
-            <g data-animate="figure" class="staff figure-b">
-              <path d="M837 599c-17 40-22 80-17 123" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
-              <path d="M866 602c20 37 27 76 24 118" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
-              <path d="M815 498c36-18 80 5 84 48 4 39-27 68-65 62-39-7-58-45-43-80 5-13 13-23 24-30Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
-              <path d="M789 590c34-31 90-27 120 10l13 94H777Z" fill="#2F5E4E" stroke="#24302e" stroke-width="4" />
-              <path d="M794 615c-46 9-82 28-108 57" stroke="#24302e" stroke-width="5" fill="none" stroke-linecap="round" />
-              <path d="M823 540c20 13 42 13 64-1" stroke="#24302e" stroke-width="4" fill="none" stroke-linecap="round" />
-            </g>
-
-            <g data-animate="figure" class="cart">
-              <path d="M412 653h124l-22 67H431Z" fill="#F28A78" fill-opacity=".25" stroke="#24302e" stroke-width="4" />
-              <path d="M386 629c31 4 38 17 46 24" stroke="#24302e" stroke-width="5" fill="none" stroke-linecap="round" />
-              <path d="M439 738a16 16 0 1 1-32 0 16 16 0 0 1 32 0Zm92 0a16 16 0 1 1-32 0 16 16 0 0 1 32 0Z" fill="#FFFDF7" stroke="#24302e" stroke-width="4" />
-              <path d="M442 676h76m-86 22h75" stroke="#24302e" stroke-opacity=".35" stroke-width="3" />
-            </g>
-
-            <g data-animate="label" class="cover-card">
-              <path d="M203 654h265c18 0 32 14 32 32v82c0 18-14 32-32 32H203c-18 0-32-14-32-32v-82c0-18 14-32 32-32Z" />
-              <text x="201" y="704" class="cover-title">Store Next Door</text>
-              <text x="202" y="743" class="cover-subtitle">A low-pressure shopping field begins in everyday life.</text>
-            </g>
-
-            <g data-animate="label" class="cover-tag tag-community">
-              <path d="M980 652h125v43H980Z" />
-              <text x="1042" y="680" text-anchor="middle">Community</text>
-            </g>
-            <g data-animate="label" class="cover-tag tag-daily">
-              <path d="M1096 250h102v42h-102Z" />
-              <text x="1147" y="278" text-anchor="middle">Daily life</text>
-            </g>
-            <g data-animate="label" class="cover-tag tag-care">
-              <path d="M286 248h125v42H286Z" />
-              <text x="349" y="276" text-anchor="middle">Low pressure</text>
-            </g>
-          </svg>
+          <div class="cover-stamp" data-animate="stamp">Everyday Service Field</div>
+          <div class="cover-index" data-animate="stamp">01</div>
+          <div class="cover-rule" data-animate="stamp"></div>
         </div>
       </section>
 

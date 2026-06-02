@@ -127,35 +127,47 @@ function playPanel(panel) {
 
   if (theme === "cover") {
     tl.fromTo(
-      panel.querySelectorAll('[data-animate="layer"]'),
-      { y: -22, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.09 },
+      panel.querySelectorAll('[data-animate="cover-paper"]'),
+      { y: 36, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.82, stagger: 0.08 },
       0,
     )
       .fromTo(
-        panel.querySelectorAll('[data-animate="building"]'),
-        { y: 54, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.9, stagger: 0.12 },
+        panel.querySelector('[data-animate="chapter"]'),
+        { x: -28, autoAlpha: 0 },
+        { x: 0, autoAlpha: 1, duration: 0.52 },
         0.16,
       )
+      .set(panel.querySelector('[data-animate="headline"]'), { autoAlpha: 1 }, 0.28)
       .fromTo(
-        panel.querySelector('[data-animate="store"]'),
-        { y: 78, scale: 0.96, autoAlpha: 0 },
-        { y: 0, scale: 1, autoAlpha: 1, duration: 1 },
-        0.24,
-      )
-      .to(panel.querySelector('[data-animate="path"]'), drawPath(panel.querySelector('[data-animate="path"]')), 0.68)
-      .fromTo(
-        panel.querySelectorAll('[data-animate="figure"]'),
-        { x: -40, y: 24, autoAlpha: 0 },
-        { x: 0, y: 0, autoAlpha: 1, duration: 0.82, stagger: 0.13 },
-        0.86,
+        panel.querySelectorAll('[data-animate="headline"] span'),
+        { x: -46, autoAlpha: 0 },
+        { x: 0, autoAlpha: 1, duration: 0.66, stagger: 0.08 },
+        0.28,
       )
       .fromTo(
-        panel.querySelectorAll('[data-animate="label"]'),
-        { y: 24, rotation: -3, autoAlpha: 0 },
-        { y: 0, rotation: 0, autoAlpha: 1, duration: 0.62, stagger: 0.1 },
-        1.15,
+        panel.querySelector('[data-animate="subtitle"]'),
+        { y: 18, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.55 },
+        0.62,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="main-visual"]'),
+        { x: 72, y: 16, rotation: -4, scale: 0.96, autoAlpha: 0 },
+        { x: 0, y: 0, rotation: -1.5, scale: 1, autoAlpha: 1, duration: 0.9 },
+        0.74,
+      )
+      .fromTo(
+        panel.querySelectorAll('[data-animate="tag"]'),
+        { y: 22, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.48, stagger: 0.08 },
+        1.02,
+      )
+      .fromTo(
+        panel.querySelectorAll('[data-animate="stamp"]'),
+        { y: 16, scale: 0.94, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.5, stagger: 0.08 },
+        1.18,
       );
     return;
   }
