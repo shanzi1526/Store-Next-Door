@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="recording-control" aria-label="Recording controls">
-      <button id="recordToggle" type="button">R · Auto Scroll</button>
+      <button id="recordToggle" type="button">R · Auto Play</button>
       <span id="recordState">Paused</span>
     </div>
 
@@ -18,158 +18,253 @@
       <button class="dot" type="button" data-target-panel="2" aria-label="Go to panel 3"></button>
     </nav>
 
-    <svg class="story-path" viewBox="0 0 100 300" preserveAspectRatio="none" aria-hidden="true">
-      <path
-        id="mainPath"
-        d="M 15 18 C 42 38, 62 48, 50 74 C 38 102, 18 110, 28 134 C 42 170, 72 150, 73 183 C 74 217, 31 211, 36 242 C 40 267, 66 264, 82 288"
-      />
-    </svg>
-
     <main>
-      <section class="panel panel-opening" data-panel data-panel-theme="story">
-        <div class="panel-copy" data-animate="copy">
-          <p class="kicker">Theory + Reference Background</p>
-          <h1>Store Next Door</h1>
-          <p class="subtitle">A low-pressure shopping field begins in everyday life.</p>
-          <p class="microcopy">
-            A community supermarket is not only a place to buy goods. It is part of the
-            everyday service fabric of a neighbourhood.
-          </p>
-        </div>
+      <section class="panel panel-cover" data-panel data-panel-theme="cover">
+        <div class="scene-cover" aria-label="Illustrated community supermarket opening scene">
+          <svg class="cover-svg" viewBox="0 0 1440 900" role="img" aria-labelledby="coverTitle coverDesc">
+            <title id="coverTitle">Store Next Door</title>
+            <desc id="coverDesc">A calm neighbourhood supermarket scene with older residents, staff, and a gentle path entering the store.</desc>
+            <defs>
+              <pattern id="brickPattern" width="34" height="24" patternUnits="userSpaceOnUse">
+                <path d="M0 23.5H34M17 0V12M0 12H34" fill="none" stroke="#24302e" stroke-opacity=".08" stroke-width="1" />
+              </pattern>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+                <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#24302e" flood-opacity=".13" />
+              </filter>
+            </defs>
 
-        <div class="scene scene-neighbourhood" data-scene aria-label="Illustrated neighbourhood supermarket scene">
-          <div class="sun" data-animate="sky"></div>
-          <div class="cloud cloud-a" data-animate="sky"></div>
-          <div class="cloud cloud-b" data-animate="sky"></div>
-          <div class="building building-left" data-animate="building">
-            <span></span><span></span><span></span><span></span>
-          </div>
-          <div class="storefront" data-animate="anchor">
-            <div class="awning"></div>
-            <div class="store-sign">STORE NEXT DOOR</div>
-            <div class="door"></div>
-            <div class="window window-left"></div>
-            <div class="window window-right"></div>
-          </div>
-          <div class="building building-right" data-animate="building">
-            <span></span><span></span><span></span><span></span>
-          </div>
-          <div class="character older-person" data-animate="figure">
-            <div class="head"></div>
-            <div class="body"></div>
-            <div class="legs"></div>
-          </div>
-          <div class="character staff-person" data-animate="figure">
-            <div class="head"></div>
-            <div class="body"></div>
-            <div class="legs"></div>
-          </div>
-          <div class="cart" data-animate="figure">
-            <div class="basket"></div>
-            <div class="wheel wheel-left"></div>
-            <div class="wheel wheel-right"></div>
-          </div>
-          <span class="sticker sticker-community" data-animate="sticker">Community</span>
-          <span class="sticker sticker-daily" data-animate="sticker">Daily life</span>
-          <span class="sticker sticker-care" data-animate="sticker">Low pressure</span>
-        </div>
-      </section>
+            <rect width="1440" height="900" fill="#FAF7F0" />
+            <path data-animate="layer" class="cover-sun" d="M1184 114a54 54 0 1 1-108 0 54 54 0 0 1 108 0Z" />
+            <path data-animate="layer" class="cover-cloud cloud-left" d="M178 148c14-28 58-27 70 3 28-12 64 8 64 39H94c2-30 39-51 84-42Z" />
+            <path data-animate="layer" class="cover-cloud cloud-right" d="M1058 212c18-35 71-32 85 4 35-16 78 8 79 47H954c4-39 48-65 104-51Z" />
 
-      <section class="panel panel-ageing" data-panel data-panel-theme="diagram">
-        <div class="panel-copy compact" data-animate="copy">
-          <p class="kicker">Social Background</p>
-          <h1>Ageing Is Everyday</h1>
-          <p class="subtitle">Ageing is reshaping daily consumption, community services, and retail experience.</p>
-        </div>
+            <g data-animate="layer" class="street-back">
+              <path d="M0 602c175-38 350-54 524-48 218 8 372 74 579 72 117-1 225-25 337-55v329H0Z" fill="#E7E1D5" />
+              <path d="M78 663c200-48 387-64 559-47 173 17 313 82 480 74 105-5 206-31 318-69" fill="none" stroke="#24302e" stroke-opacity=".12" stroke-width="3" stroke-dasharray="9 12" />
+            </g>
 
-        <div class="scene scene-ageing" data-scene aria-label="Illustrated ageing society diagram">
-          <div class="population-card" data-animate="card">
-            <div class="mini-chart">
-              <span data-animate="bar" style="--h: 32%"></span>
-              <span data-animate="bar" style="--h: 48%"></span>
-              <span data-animate="bar" style="--h: 64%"></span>
-              <span data-animate="bar" style="--h: 78%"></span>
-            </div>
-            <p>Ageing Society</p>
-          </div>
+            <g data-animate="building" class="block-left" filter="url(#softShadow)">
+              <path d="M124 314h262v285H124Z" fill="#FFFDF7" stroke="#24302e" stroke-width="3" />
+              <path d="M124 314h262v285H124Z" fill="url(#brickPattern)" />
+              <path d="M150 354h58v54h-58Zm94 0h58v54h-58Zm-94 86h58v54h-58Zm94 86h58v54h-58Z" fill="#8BDCC4" fill-opacity=".45" stroke="#24302e" stroke-width="2" />
+              <path d="M312 446h48v153h-48Z" fill="#FFE39A" stroke="#24302e" stroke-width="2" />
+            </g>
 
-          <div class="orbit orbit-one" data-animate="orbit"></div>
-          <div class="orbit orbit-two" data-animate="orbit"></div>
-          <div class="elder-portrait" data-animate="anchor">
-            <div class="portrait-head"></div>
-            <div class="portrait-body"></div>
-          </div>
+            <g data-animate="store" class="storefront" filter="url(#softShadow)">
+              <path d="M438 260h564c39 0 70 31 70 70v283H368V330c0-39 31-70 70-70Z" fill="#FFFDF7" stroke="#24302e" stroke-width="4" />
+              <path d="M405 258h630l48 112H357Z" fill="#2F5E4E" stroke="#24302e" stroke-width="4" />
+              <path d="M438 278h90l-32 92h-93Zm118 0h90l-15 92h-107Zm118 0h90v92H659Zm118 0h90l15 92H792Zm118 0h90l32 92H925Z" fill="#8BDCC4" stroke="#24302e" stroke-width="2" />
+              <path d="M467 424h170v126H467Zm335 0h170v126H802Z" fill="#C9E59A" fill-opacity=".45" stroke="#24302e" stroke-width="3" />
+              <path d="M682 418h82v195h-82Z" fill="#8BDCC4" fill-opacity=".35" stroke="#24302e" stroke-width="3" />
+              <path d="M718 418v195" stroke="#24302e" stroke-width="2" />
+              <path d="M533 210h374c19 0 34 15 34 34v53H499v-53c0-19 15-34 34-34Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
+              <text x="720" y="268" text-anchor="middle" class="store-sign-text">STORE NEXT DOOR</text>
+              <path d="M520 464h72m246 0h72" stroke="#24302e" stroke-width="5" stroke-linecap="round" />
+            </g>
 
-          <div class="life-node node-home" data-animate="node">
-            <span class="node-icon">⌂</span>
-            <strong>Home</strong>
-          </div>
-          <div class="life-node node-health" data-animate="node">
-            <span class="node-icon">+</span>
-            <strong>Care</strong>
-          </div>
-          <div class="life-node node-shop" data-animate="node">
-            <span class="node-icon">□</span>
-            <strong>Retail</strong>
-          </div>
-          <div class="life-node node-transit" data-animate="node">
-            <span class="node-icon">→</span>
-            <strong>Access</strong>
-          </div>
+            <g data-animate="building" class="block-right" filter="url(#softShadow)">
+              <path d="M1082 358h214v239h-214Z" fill="#FFFDF7" stroke="#24302e" stroke-width="3" />
+              <path d="M1115 393h50v49h-50Zm88 0h50v49h-50Zm-88 78h50v49h-50Zm88 0h50v49h-50Z" fill="#FFE39A" fill-opacity=".52" stroke="#24302e" stroke-width="2" />
+              <path d="M1100 326h180l40 32h-260Z" fill="#F28A78" stroke="#24302e" stroke-width="3" />
+            </g>
 
-          <p class="annotation age-note" data-animate="note">
-            Not a niche issue. A daily condition for service design.
-          </p>
-        </div>
-      </section>
+            <path data-animate="path" class="panel-path cover-path" d="M214 788C354 722 485 682 613 676c132-7 202 33 280-2 61-28 83-72 117-129" />
 
-      <section class="panel panel-spending" data-panel data-panel-theme="network">
-        <div class="panel-copy compact" data-animate="copy">
-          <p class="kicker">Silver Economy</p>
-          <h1>More Than Spending</h1>
-          <p class="subtitle">The silver economy is also about service quality, dignity, convenience, and trust.</p>
-        </div>
+            <g data-animate="figure" class="elder figure-a">
+              <path d="M586 628c-26 26-35 70-38 117" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
+              <path d="M614 629c19 34 25 71 22 113" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
+              <path d="M566 514c42-14 86 18 84 65-1 46-43 72-86 57-35-13-47-49-33-82 7-18 19-31 35-40Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
+              <path d="M532 616c31-33 93-33 125 2l18 98H511Z" fill="#C9E59A" stroke="#24302e" stroke-width="4" />
+              <path d="M550 549c24 18 55 19 82 5" stroke="#24302e" stroke-width="4" fill="none" stroke-linecap="round" />
+              <path d="M535 721h113" stroke="#24302e" stroke-width="5" stroke-linecap="round" />
+              <path d="M669 592c42 20 66 46 72 78" stroke="#24302e" stroke-width="5" fill="none" stroke-linecap="round" />
+            </g>
 
-        <div class="scene scene-needs" data-scene aria-label="Silver economy needs map">
-          <div class="needs-center" data-animate="anchor">
-            <span>Silver<br />Economy</span>
-          </div>
-          <div class="need need-price" data-animate="node">
-            <small>01</small>
-            <strong>Price</strong>
-          </div>
-          <div class="need need-access" data-animate="node">
-            <small>02</small>
-            <strong>Access</strong>
-          </div>
-          <div class="need need-clarity" data-animate="node">
-            <small>03</small>
-            <strong>Clarity</strong>
-          </div>
-          <div class="need need-comfort" data-animate="node">
-            <small>04</small>
-            <strong>Comfort</strong>
-          </div>
-          <div class="need need-respect" data-animate="node">
-            <small>05</small>
-            <strong>Respect</strong>
-          </div>
-          <div class="need need-trust" data-animate="node">
-            <small>06</small>
-            <strong>Trust</strong>
-          </div>
-          <svg class="need-lines" data-animate="lines" viewBox="0 0 600 420" aria-hidden="true">
-            <path d="M300 210 L110 96" />
-            <path d="M300 210 L318 64" />
-            <path d="M300 210 L498 110" />
-            <path d="M300 210 L505 312" />
-            <path d="M300 210 L288 362" />
-            <path d="M300 210 L96 296" />
+            <g data-animate="figure" class="staff figure-b">
+              <path d="M837 599c-17 40-22 80-17 123" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
+              <path d="M866 602c20 37 27 76 24 118" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
+              <path d="M815 498c36-18 80 5 84 48 4 39-27 68-65 62-39-7-58-45-43-80 5-13 13-23 24-30Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
+              <path d="M789 590c34-31 90-27 120 10l13 94H777Z" fill="#2F5E4E" stroke="#24302e" stroke-width="4" />
+              <path d="M794 615c-46 9-82 28-108 57" stroke="#24302e" stroke-width="5" fill="none" stroke-linecap="round" />
+              <path d="M823 540c20 13 42 13 64-1" stroke="#24302e" stroke-width="4" fill="none" stroke-linecap="round" />
+            </g>
+
+            <g data-animate="figure" class="cart">
+              <path d="M412 653h124l-22 67H431Z" fill="#F28A78" fill-opacity=".25" stroke="#24302e" stroke-width="4" />
+              <path d="M386 629c31 4 38 17 46 24" stroke="#24302e" stroke-width="5" fill="none" stroke-linecap="round" />
+              <path d="M439 738a16 16 0 1 1-32 0 16 16 0 0 1 32 0Zm92 0a16 16 0 1 1-32 0 16 16 0 0 1 32 0Z" fill="#FFFDF7" stroke="#24302e" stroke-width="4" />
+              <path d="M442 676h76m-86 22h75" stroke="#24302e" stroke-opacity=".35" stroke-width="3" />
+            </g>
+
+            <g data-animate="label" class="cover-card">
+              <path d="M203 654h265c18 0 32 14 32 32v82c0 18-14 32-32 32H203c-18 0-32-14-32-32v-82c0-18 14-32 32-32Z" />
+              <text x="201" y="704" class="cover-title">Store Next Door</text>
+              <text x="202" y="743" class="cover-subtitle">A low-pressure shopping field begins in everyday life.</text>
+            </g>
+
+            <g data-animate="label" class="cover-tag tag-community">
+              <path d="M980 652h125v43H980Z" />
+              <text x="1042" y="680" text-anchor="middle">Community</text>
+            </g>
+            <g data-animate="label" class="cover-tag tag-daily">
+              <path d="M1096 250h102v42h-102Z" />
+              <text x="1147" y="278" text-anchor="middle">Daily life</text>
+            </g>
+            <g data-animate="label" class="cover-tag tag-care">
+              <path d="M286 248h125v42H286Z" />
+              <text x="349" y="276" text-anchor="middle">Low pressure</text>
+            </g>
           </svg>
-          <p class="annotation economy-note" data-animate="note">
-            Older consumers do not only ask for cheaper goods. They need a service field
-            that is clear, stable, and respectful.
-          </p>
+        </div>
+      </section>
+
+      <section class="panel panel-ageing" data-panel data-panel-theme="ageing">
+        <div class="ageing-composition" aria-label="Ageing society as everyday service context">
+          <svg class="ageing-svg" viewBox="0 0 1440 900" role="img" aria-labelledby="ageingTitle ageingDesc">
+            <title id="ageingTitle">Ageing Is Everyday</title>
+            <desc id="ageingDesc">A community route connects home, care, retail, and access with a small population chart and everyday life annotations.</desc>
+            <rect width="1440" height="900" fill="#FAF7F0" />
+            <path class="soft-ground" d="M0 690c153-63 305-84 454-63 177 25 314 111 506 89 153-18 277-84 480-93v277H0Z" />
+            <path data-animate="path" class="panel-path ageing-path" d="M194 643C292 548 398 522 526 550c113 24 160 92 265 83 105-10 145-90 251-104 81-10 151 18 214 73" />
+
+            <g data-animate="title" class="annotation-card title-note">
+              <path d="M125 126h314c19 0 34 15 34 34v109c0 19-15 34-34 34H125c-19 0-34-15-34-34V160c0-19 15-34 34-34Z" />
+              <text x="128" y="189" class="panel-title">Ageing Is Everyday</text>
+              <text x="130" y="232" class="panel-subtitle">Ageing is reshaping daily consumption, community services, and retail experience.</text>
+            </g>
+
+            <g data-animate="chart" class="population-note">
+              <path d="M954 96h306c18 0 32 14 32 32v202c0 18-14 32-32 32H954c-18 0-32-14-32-32V128c0-18 14-32 32-32Z" />
+              <text x="974" y="144" class="small-heading">Population shift</text>
+              <path class="chart-axis" d="M980 300h246M980 170v130" />
+              <path data-animate="bar" d="M1006 252h31v48h-31Z" />
+              <path data-animate="bar" d="M1064 224h31v76h-31Z" />
+              <path data-animate="bar" d="M1122 196h31v104h-31Z" />
+              <path data-animate="bar" d="M1180 158h31v142h-31Z" />
+              <text x="974" y="333" class="tiny-copy">A social background becomes a daily design condition.</text>
+            </g>
+
+            <g data-animate="node" class="life-stop stop-home">
+              <path d="M159 553h190v110H159Z" />
+              <path d="M184 553l70-58 70 58" />
+              <text x="254" y="618" text-anchor="middle">Home</text>
+            </g>
+            <g data-animate="node" class="life-stop stop-care">
+              <path d="M462 454h198v118H462Z" />
+              <path d="M542 486h38v24h24v38h-24v24h-38v-24h-24v-38h24Z" />
+              <text x="562" y="626" text-anchor="middle">Care</text>
+            </g>
+            <g data-animate="node" class="life-stop stop-retail">
+              <path d="M770 538h220v122H770Z" />
+              <path d="M792 538h176l22 48H770Z" />
+              <text x="880" y="622" text-anchor="middle">Retail</text>
+            </g>
+            <g data-animate="node" class="life-stop stop-access">
+              <path d="M1127 560h178v102H1127Z" />
+              <path d="M1174 603h76m-31-30 36 30-36 30" />
+              <text x="1216" y="704" text-anchor="middle">Access</text>
+            </g>
+
+            <g data-animate="figure" class="walking-elder">
+              <path d="M672 643c-20 42-25 82-15 120" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
+              <path d="M708 642c24 34 37 72 40 114" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
+              <path d="M650 532c47-28 100 6 93 61-6 47-57 72-101 48-39-22-40-83 8-109Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
+              <path d="M623 626c43-38 102-35 135 7l19 92H604Z" fill="#8BDCC4" stroke="#24302e" stroke-width="4" />
+              <path d="M626 650c-39 17-69 42-91 75" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
+            </g>
+
+            <g data-animate="label" class="small-label label-services">
+              <path d="M325 709h152v46H325Z" />
+              <text x="401" y="739" text-anchor="middle">Daily services</text>
+            </g>
+            <g data-animate="label" class="small-label label-radius">
+              <path d="M1005 434h190v46h-190Z" />
+              <text x="1100" y="464" text-anchor="middle">Life radius</text>
+            </g>
+            <g data-animate="label" class="small-label label-routine">
+              <path d="M638 362h178v46H638Z" />
+              <text x="727" y="392" text-anchor="middle">Routine touchpoints</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <section class="panel panel-spending" data-panel data-panel-theme="collage">
+        <div class="collage-stage" aria-label="Silver economy needs collage map">
+          <svg class="collage-svg" viewBox="0 0 1440 900" role="img" aria-labelledby="spendingTitle spendingDesc">
+            <title id="spendingTitle">More Than Spending</title>
+            <desc id="spendingDesc">A collage of paper notes and receipts surrounds an older shopper scene to explain silver economy service needs.</desc>
+            <defs>
+              <filter id="paperShadow" x="-20%" y="-20%" width="140%" height="150%">
+                <feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#24302e" flood-opacity=".12" />
+              </filter>
+            </defs>
+            <rect width="1440" height="900" fill="#FAF7F0" />
+            <path class="table-shape" d="M185 734c104-160 296-252 515-258 231-6 421 82 548 248 42 55 11 132-58 132H241c-67 0-95-67-56-122Z" />
+            <path data-animate="path" class="panel-path collage-path" d="M302 250C443 167 559 183 651 299c73 92 132 109 243 67 125-48 230-2 290 116 49 95 9 189-91 223-104 35-198-11-274-96-85-95-171-90-284-34-101 49-198 19-254-67-60-92-52-194 21-258Z" />
+
+            <g data-animate="title" class="annotation-card collage-title-note">
+              <path d="M91 92h361c19 0 34 15 34 34v114c0 19-15 34-34 34H91c-19 0-34-15-34-34V126c0-19 15-34 34-34Z" />
+              <text x="96" y="157" class="panel-title">More Than Spending</text>
+              <text x="98" y="202" class="panel-subtitle">Silver economy also means service quality, dignity, convenience, and trust.</text>
+            </g>
+
+            <g data-animate="shopper" class="shopper-card" filter="url(#paperShadow)">
+              <path d="M533 253h390c24 0 44 20 44 44v336c0 24-20 44-44 44H533c-24 0-44-20-44-44V297c0-24 20-44 44-44Z" fill="#FFFDF7" stroke="#24302e" stroke-width="4" />
+              <path d="M533 253h390c24 0 44 20 44 44v58H489v-58c0-24 20-44 44-44Z" fill="#C9E59A" stroke="#24302e" stroke-width="4" />
+              <text x="728" y="314" text-anchor="middle" class="small-heading">Silver economy</text>
+              <path d="M630 522c-18 31-25 66-22 106m49-105c23 29 34 63 36 101" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
+              <path d="M605 416c38-28 87-5 88 42 1 43-41 69-79 52-34-15-43-68-9-94Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
+              <path d="M573 502c42-34 100-28 132 13l20 95H552Z" fill="#8BDCC4" stroke="#24302e" stroke-width="4" />
+              <path d="M714 526h122l-22 72H735Z" fill="#F28A78" fill-opacity=".25" stroke="#24302e" stroke-width="4" />
+              <path d="M704 500c24 5 32 14 39 26" stroke="#24302e" stroke-width="5" fill="none" stroke-linecap="round" />
+              <path d="M750 618a13 13 0 1 1-26 0 13 13 0 0 1 26 0Zm78 0a13 13 0 1 1-26 0 13 13 0 0 1 26 0Z" fill="#FFFDF7" stroke="#24302e" stroke-width="4" />
+              <path d="M575 642h308" stroke="#24302e" stroke-opacity=".18" stroke-width="7" stroke-linecap="round" />
+            </g>
+
+            <g data-animate="paper" class="paper paper-price">
+              <path d="M184 326h220l24 35v124H184Z" />
+              <path d="M404 326v35h24" />
+              <text x="213" y="386" class="paper-index">01</text>
+              <text x="213" y="433" class="paper-title">Price</text>
+              <text x="213" y="465" class="paper-copy">Fair, readable, stable.</text>
+            </g>
+            <g data-animate="paper" class="paper paper-access">
+              <path d="M459 121h215l18 28v126H459Z" />
+              <path d="M674 121v28h18" />
+              <text x="487" y="176" class="paper-index">02</text>
+              <text x="487" y="221" class="paper-title">Access</text>
+              <text x="487" y="252" class="paper-copy">Close to daily routes.</text>
+            </g>
+            <g data-animate="paper" class="paper paper-clarity">
+              <path d="M881 143h242l22 34v125H881Z" />
+              <path d="M1123 143v34h22" />
+              <text x="911" y="200" class="paper-index">03</text>
+              <text x="911" y="246" class="paper-title">Clarity</text>
+              <text x="911" y="276" class="paper-copy">Less guessing, more independence.</text>
+            </g>
+            <g data-animate="paper" class="paper paper-comfort">
+              <path d="M1033 416h236l20 31v130h-256Z" />
+              <path d="M1269 416v31h20" />
+              <text x="1064" y="475" class="paper-index">04</text>
+              <text x="1064" y="521" class="paper-title">Comfort</text>
+              <text x="1064" y="553" class="paper-copy">Slower pace, softer waiting.</text>
+            </g>
+            <g data-animate="paper" class="paper paper-respect">
+              <path d="M833 688h243l25 34v124H833Z" />
+              <path d="M1076 688v34h25" />
+              <text x="864" y="747" class="paper-index">05</text>
+              <text x="864" y="793" class="paper-title">Respect</text>
+              <text x="864" y="824" class="paper-copy">Support without pressure.</text>
+            </g>
+            <g data-animate="paper" class="paper paper-trust">
+              <path d="M327 652h236l20 31v126H327Z" />
+              <path d="M563 652v31h20" />
+              <text x="357" y="710" class="paper-index">06</text>
+              <text x="357" y="756" class="paper-title">Trust</text>
+              <text x="357" y="787" class="paper-copy">Familiar staff, reliable cues.</text>
+            </g>
+          </svg>
         </div>
       </section>
     </main>

@@ -1,299 +1,276 @@
-const config = {
-  autoPanelDwell: 1400,
-  autoPanelScroll: 9000,
-  minAutoDuration: 20000,
-  panelEnd: "bottom top",
-};
-
 const panels = Array.from(document.querySelectorAll("section[data-panel]"));
 const dots = Array.from(document.querySelectorAll(".dot"));
 const recordControl = document.querySelector(".recording-control");
 const recordToggle = document.querySelector("#recordToggle");
 const recordState = document.querySelector("#recordState");
 
-let autoScrollFrame = null;
-let autoTimer = null;
-let autoTimerResolve = null;
-let autoRunToken = 0;
-let isAutoScrolling = false;
-let activePanel = 0;
-const panelTriggers = new Map();
+const autoConfig = {
+  dwell: 4300,
+  settle: 1350,
+};
 
-const qs = (root, selector) => Array.from(root.querySelectorAll(selector));
-const group = (panel, name) => qs(panel, `[data-animate="${name}"]`);
-const first = (panel, name) => panel.querySelector(`[data-animate="${name}"]`);
+let activePanel = 0;
+let isAutoPlaying = false;
+let autoTimer = null;
+let autoRunToken = 0;
+const timelines = new WeakMap();
+
+function clampPanel(index) {
+  return Math.max(0, Math.min(panels.length - 1, index));
+}
 
 function setActivePanel(index) {
-  activePanel = Math.max(0, Math.min(panels.length - 1, index));
+  activePanel = clampPanel(index);
   document.body.dataset.activePanel = String(activePanel);
   dots.forEach((dot, dotIndex) => dot.classList.toggle("is-active", dotIndex === activePanel));
 }
 
-function scrollToPanel(index) {
-  const nextIndex = Math.max(0, Math.min(panels.length - 1, index));
-  stopAutoScroll();
-  panels[nextIndex].scrollIntoView({ behavior: "smooth", block: "start" });
-  setActivePanel(nextIndex);
-}
-
-function stopAutoScroll() {
-  if (autoScrollFrame) cancelAnimationFrame(autoScrollFrame);
-  if (autoTimer) clearTimeout(autoTimer);
-  if (autoTimerResolve) autoTimerResolve();
-  autoRunToken += 1;
-  autoScrollFrame = null;
-  autoTimer = null;
-  autoTimerResolve = null;
-  isAutoScrolling = false;
-  recordControl.classList.remove("is-recording");
-  recordState.textContent = "Paused";
-}
-
-function sleep(ms, token) {
+function wait(ms, token) {
   return new Promise((resolve) => {
-    autoTimerResolve = resolve;
-    autoTimer = setTimeout(() => {
+    autoTimer = window.setTimeout(() => {
       autoTimer = null;
-      autoTimerResolve = null;
       if (token === autoRunToken) resolve();
     }, ms);
   });
 }
 
-function smoothScrollTo(targetY, duration, token) {
-  return new Promise((resolve) => {
-    const startY = window.scrollY;
-    const distance = targetY - startY;
-    const startTime = performance.now();
-    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-
-    const tick = (now) => {
-      if (token !== autoRunToken || !isAutoScrolling) {
-        resolve();
-        return;
-      }
-
-      const progress = Math.min(1, (now - startTime) / duration);
-      window.scrollTo(0, startY + distance * ease(progress));
-
-      if (progress < 1) {
-        autoScrollFrame = requestAnimationFrame(tick);
-      } else {
-        autoScrollFrame = null;
-        resolve();
-      }
-    };
-
-    autoScrollFrame = requestAnimationFrame(tick);
-  });
+function stopAutoPlay() {
+  if (autoTimer) window.clearTimeout(autoTimer);
+  autoTimer = null;
+  autoRunToken += 1;
+  isAutoPlaying = false;
+  recordControl.classList.remove("is-recording");
+  recordState.textContent = "Paused";
 }
 
-function currentPanelIndex() {
-  if (!window.ScrollTrigger) return activePanel;
-  const y = window.scrollY;
-  const matches = panels
-    .map((panel, index) => ({ index, trigger: panelTriggers.get(panel) }))
-    .filter(({ trigger }) => trigger && y >= trigger.start - 4 && y <= trigger.end + 4);
-
-  if (matches.length) return matches[0].index;
-  return panels.reduce((closest, panel, index) => {
-    const trigger = panelTriggers.get(panel);
-    if (!trigger) return closest;
-    const distance = Math.abs(y - trigger.start);
-    return distance < closest.distance ? { index, distance } : closest;
-  }, { index: activePanel, distance: Infinity }).index;
+function goToPanel(index, { keepAuto = false } = {}) {
+  const nextIndex = clampPanel(index);
+  if (!keepAuto) stopAutoPlay();
+  panels[nextIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+  setActivePanel(nextIndex);
 }
 
-async function runPanelSequence(token) {
-  if (window.ScrollTrigger) ScrollTrigger.refresh();
+function nearestPanelIndex() {
+  const center = window.scrollY + window.innerHeight * 0.5;
+  return panels.reduce(
+    (closest, panel, index) => {
+      const panelCenter = panel.offsetTop + panel.offsetHeight * 0.5;
+      const distance = Math.abs(center - panelCenter);
+      return distance < closest.distance ? { index, distance } : closest;
+    },
+    { index: activePanel, distance: Infinity },
+  ).index;
+}
 
-  let index = currentPanelIndex();
+async function runAutoSequence(token) {
+  let index = nearestPanelIndex();
   setActivePanel(index);
+  playPanel(panels[index]);
 
-  while (isAutoScrolling && token === autoRunToken && index < panels.length) {
-    const trigger = panelTriggers.get(panels[index]);
-    const target = trigger ? trigger.end : panels[index].offsetTop + window.innerHeight;
+  while (isAutoPlaying && token === autoRunToken) {
+    await wait(autoConfig.dwell, token);
+    if (!isAutoPlaying || token !== autoRunToken) return;
 
-    await sleep(config.autoPanelDwell, token);
-    if (!isAutoScrolling || token !== autoRunToken) return;
-
-    await smoothScrollTo(target, config.autoPanelScroll, token);
-    if (!isAutoScrolling || token !== autoRunToken) return;
+    if (index >= panels.length - 1) {
+      stopAutoPlay();
+      return;
+    }
 
     index += 1;
-    setActivePanel(Math.min(index, panels.length - 1));
+    goToPanel(index, { keepAuto: true });
+    await wait(autoConfig.settle, token);
+    if (!isAutoPlaying || token !== autoRunToken) return;
+    playPanel(panels[index]);
   }
-
-  if (token === autoRunToken) stopAutoScroll();
 }
 
-function startAutoScroll() {
-  if (isAutoScrolling) {
-    stopAutoScroll();
+function toggleAutoPlay() {
+  if (isAutoPlaying) {
+    stopAutoPlay();
     return;
   }
 
-  isAutoScrolling = true;
+  isAutoPlaying = true;
   autoRunToken += 1;
-  const token = autoRunToken;
   recordControl.classList.add("is-recording");
   recordState.textContent = "Recording";
-  runPanelSequence(token);
+  runAutoSequence(autoRunToken);
 }
 
-function createPinnedTimeline(panel) {
-  const timeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: panel,
-      start: "top top",
-      end: config.panelEnd,
-      scrub: 1,
-      pin: true,
-    },
-  });
-  panelTriggers.set(panel, timeline.scrollTrigger);
-  return timeline;
-}
-
-function addCommonCopy(timeline, panel) {
-  const copy = first(panel, "copy");
-  if (!copy) return timeline;
-
-  return timeline
-    .from(copy, { x: -38, autoAlpha: 0, duration: 0.18 })
-    .to(copy, { y: -26, autoAlpha: 0.28, duration: 0.2 }, 0.86);
-}
-
-function animateStoryPanel(panel) {
-  const timeline = createPinnedTimeline(panel);
-  addCommonCopy(timeline, panel);
-
-  timeline
-    .from(group(panel, "anchor"), { y: 80, scale: 0.94, autoAlpha: 0, duration: 0.28 }, 0.05)
-    .from(group(panel, "building"), { y: 55, autoAlpha: 0, stagger: 0.04, duration: 0.25 }, 0.1)
-    .from(group(panel, "sky"), { y: -28, autoAlpha: 0, stagger: 0.05, duration: 0.22 }, 0.14)
-    .from(group(panel, "figure"), {
-      x: -55,
-      autoAlpha: 0,
-      stagger: 0.07,
-      duration: 0.28,
-    }, 0.22)
-    .from(group(panel, "sticker"), {
-      y: -24,
-      rotation: -9,
-      scale: 0.86,
-      autoAlpha: 0,
-      stagger: 0.08,
-      duration: 0.22,
-    }, 0.42)
-    .to(panel.querySelector("[data-scene]"), { y: -60, scale: 0.97, duration: 0.32 }, 0.72);
-}
-
-function animateDiagramPanel(panel) {
-  const timeline = createPinnedTimeline(panel);
-  addCommonCopy(timeline, panel);
-
-  timeline
-    .from(group(panel, "anchor"), { scale: 0.78, autoAlpha: 0, duration: 0.24 }, 0.08)
-    .from(group(panel, "orbit"), { scale: 0.45, autoAlpha: 0, stagger: 0.08, duration: 0.26 }, 0.16)
-    .from(group(panel, "card"), { x: -50, y: 20, autoAlpha: 0, duration: 0.22 }, 0.24)
-    .from(group(panel, "bar"), {
-      scaleY: 0,
-      transformOrigin: "bottom center",
-      stagger: 0.06,
-      duration: 0.26,
-    }, 0.32)
-    .from(group(panel, "node"), {
-      scale: 0.78,
-      autoAlpha: 0,
-      stagger: 0.07,
-      duration: 0.24,
-    }, 0.42)
-    .from(group(panel, "note"), { x: -24, autoAlpha: 0, duration: 0.18 }, 0.67)
-    .to(panel.querySelector("[data-scene]"), { y: -44, duration: 0.24 }, 0.82);
-}
-
-function animateNetworkPanel(panel) {
-  const timeline = createPinnedTimeline(panel);
-  addCommonCopy(timeline, panel);
-
-  timeline
-    .from(group(panel, "anchor"), { scale: 0.72, rotation: -4, autoAlpha: 0, duration: 0.24 }, 0.08)
-    .from(qs(panel, '[data-animate="lines"] path'), {
-      strokeDasharray: 240,
-      strokeDashoffset: 240,
-      stagger: 0.035,
-      duration: 0.34,
-      ease: "none",
-    }, 0.24)
-    .from(group(panel, "node"), {
-      y: 22,
-      rotation: () => gsap.utils.random(-5, 5),
-      scale: 0.84,
-      autoAlpha: 0,
-      stagger: 0.055,
-      duration: 0.22,
-    }, 0.34)
-    .from(group(panel, "note"), { x: 24, autoAlpha: 0, duration: 0.2 }, 0.72)
-    .to(panel.querySelector("[data-scene]"), { scale: 0.98, y: -28, duration: 0.22 }, 0.84);
-}
-
-function animatePanel(panel) {
-  const theme = panel.dataset.panelTheme;
-  if (theme === "story") animateStoryPanel(panel);
-  else if (theme === "network") animateNetworkPanel(panel);
-  else animateDiagramPanel(panel);
-}
-
-function animateGlobalPath() {
-  const path = document.querySelector("#mainPath");
-  if (!path) return;
-
+function setupPath(path) {
+  if (!path || !path.getTotalLength) return;
   const length = path.getTotalLength();
-  gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-  gsap.to(path, {
+  gsap.set(path, {
+    strokeDasharray: length,
+    strokeDashoffset: length,
+  });
+}
+
+function drawPath(path, position = 0.2) {
+  if (!path) return {};
+  return {
     strokeDashoffset: 0,
-    ease: "none",
-    scrollTrigger: {
-      trigger: document.body,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 0.8,
-    },
-  });
+    duration: 1.35,
+    ease: "power2.inOut",
+  };
 }
 
-function watchPanelProgress() {
-  panels.forEach((panel, index) => {
-    ScrollTrigger.create({
-      trigger: panel,
-      start: "top center",
-      end: "bottom center",
-      onEnter: () => setActivePanel(index),
-      onEnterBack: () => setActivePanel(index),
-    });
-  });
+function playPanel(panel) {
+  if (!window.gsap || !panel) return;
+
+  const existing = timelines.get(panel);
+  if (existing) existing.kill();
+
+  const theme = panel.dataset.panelTheme;
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+  timelines.set(panel, tl);
+
+  if (theme === "cover") {
+    tl.fromTo(
+      panel.querySelectorAll('[data-animate="layer"]'),
+      { y: -22, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.09 },
+      0,
+    )
+      .fromTo(
+        panel.querySelectorAll('[data-animate="building"]'),
+        { y: 54, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.9, stagger: 0.12 },
+        0.16,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="store"]'),
+        { y: 78, scale: 0.96, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 1 },
+        0.24,
+      )
+      .to(panel.querySelector('[data-animate="path"]'), drawPath(panel.querySelector('[data-animate="path"]')), 0.68)
+      .fromTo(
+        panel.querySelectorAll('[data-animate="figure"]'),
+        { x: -40, y: 24, autoAlpha: 0 },
+        { x: 0, y: 0, autoAlpha: 1, duration: 0.82, stagger: 0.13 },
+        0.86,
+      )
+      .fromTo(
+        panel.querySelectorAll('[data-animate="label"]'),
+        { y: 24, rotation: -3, autoAlpha: 0 },
+        { y: 0, rotation: 0, autoAlpha: 1, duration: 0.62, stagger: 0.1 },
+        1.15,
+      );
+    return;
+  }
+
+  if (theme === "ageing") {
+    tl.fromTo(
+      panel.querySelector('[data-animate="title"]'),
+      { x: -38, y: 14, autoAlpha: 0 },
+      { x: 0, y: 0, autoAlpha: 1, duration: 0.72 },
+      0,
+    )
+      .to(panel.querySelector('[data-animate="path"]'), drawPath(panel.querySelector('[data-animate="path"]')), 0.24)
+      .fromTo(
+        panel.querySelectorAll('[data-animate="node"]'),
+        { y: 32, scale: 0.92, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.72, stagger: 0.16 },
+        0.36,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="figure"]'),
+        { x: -34, autoAlpha: 0 },
+        { x: 0, autoAlpha: 1, duration: 0.78 },
+        0.82,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="chart"]'),
+        { x: 32, y: -12, autoAlpha: 0 },
+        { x: 0, y: 0, autoAlpha: 1, duration: 0.7 },
+        0.95,
+      )
+      .fromTo(
+        panel.querySelectorAll('[data-animate="bar"]'),
+        { scaleY: 0 },
+        { scaleY: 1, duration: 0.55, stagger: 0.09 },
+        1.2,
+      )
+      .fromTo(
+        panel.querySelectorAll('[data-animate="label"]'),
+        { y: 20, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.1 },
+        1.45,
+      );
+    return;
+  }
+
+  tl.fromTo(
+    panel.querySelector('[data-animate="title"]'),
+    { x: -36, rotation: -3, autoAlpha: 0 },
+    { x: 0, rotation: 0, autoAlpha: 1, duration: 0.7 },
+    0,
+  )
+    .fromTo(
+      panel.querySelector('[data-animate="shopper"]'),
+      { y: 46, scale: 0.96, autoAlpha: 0 },
+      { y: 0, scale: 1, autoAlpha: 1, duration: 0.86 },
+      0.18,
+    )
+    .to(panel.querySelector('[data-animate="path"]'), drawPath(panel.querySelector('[data-animate="path"]')), 0.38)
+    .fromTo(
+      panel.querySelectorAll('[data-animate="paper"]'),
+      {
+        x: () => gsap.utils.random(-34, 34),
+        y: -56,
+        rotation: () => gsap.utils.random(-8, 8),
+        scale: 0.92,
+        autoAlpha: 0,
+      },
+      {
+        x: 0,
+        y: 0,
+        rotation: 0,
+        scale: 1,
+        autoAlpha: 1,
+        duration: 0.66,
+        stagger: 0.11,
+        ease: "back.out(1.3)",
+      },
+      0.72,
+    );
 }
 
-function initGsap() {
-  if (!window.gsap || !window.ScrollTrigger) {
+function prepareAnimations() {
+  if (!window.gsap) {
     document.body.classList.add("no-gsap");
     return;
   }
 
-  gsap.registerPlugin(ScrollTrigger);
   gsap.defaults({ ease: "power3.out" });
+  panels.forEach((panel) => {
+    gsap.set(panel.querySelectorAll("[data-animate]"), { autoAlpha: 0 });
+    panel.querySelectorAll('[data-animate="path"]').forEach(setupPath);
+  });
+}
 
-  animateGlobalPath();
-  watchPanelProgress();
-  panels.forEach(animatePanel);
+function observePanels() {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const index = panels.indexOf(entry.target);
+        setActivePanel(index);
+        playPanel(entry.target);
+      });
+    },
+    { threshold: 0.58 },
+  );
+
+  panels.forEach((panel) => observer.observe(panel));
 }
 
 dots.forEach((dot) => {
-  dot.addEventListener("click", () => scrollToPanel(Number(dot.dataset.targetPanel)));
+  dot.addEventListener("click", () => goToPanel(Number(dot.dataset.targetPanel)));
 });
 
-recordToggle.addEventListener("click", startAutoScroll);
+recordToggle.addEventListener("click", toggleAutoPlay);
 
 window.addEventListener("keydown", (event) => {
   const forwardKeys = ["ArrowDown", "PageDown", " "];
@@ -301,21 +278,23 @@ window.addEventListener("keydown", (event) => {
 
   if (event.key.toLowerCase() === "r") {
     event.preventDefault();
-    startAutoScroll();
+    toggleAutoPlay();
     return;
   }
 
   if (forwardKeys.includes(event.key)) {
     event.preventDefault();
-    scrollToPanel(activePanel + 1);
+    goToPanel(activePanel + 1);
     return;
   }
 
   if (backKeys.includes(event.key)) {
     event.preventDefault();
-    scrollToPanel(activePanel - 1);
+    goToPanel(activePanel - 1);
   }
 });
 
 setActivePanel(0);
-initGsap();
+prepareAnimations();
+observePanels();
+playPanel(panels[0]);
