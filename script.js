@@ -5,7 +5,7 @@ const recordToggle = document.querySelector("#recordToggle");
 const recordState = document.querySelector("#recordState");
 
 const autoConfig = {
-  dwell: 4300,
+  dwell: 8000,
   settle: 1350,
 };
 
@@ -109,6 +109,7 @@ function setupPath(path) {
 function drawPath(path, position = 0.2) {
   if (!path) return {};
   return {
+    autoAlpha: 1,
     strokeDashoffset: 0,
     duration: 1.35,
     ease: "power2.inOut",
@@ -169,6 +170,54 @@ function playPanel(panel) {
         { y: 0, scale: 1, autoAlpha: 1, duration: 0.5, stagger: 0.08 },
         1.18,
       );
+    return;
+  }
+
+  if (["group-map", "pressure", "service-node"].includes(theme)) {
+    const visualStart = theme === "pressure" ? { x: -58, y: 24 } : { x: 58, y: 24 };
+    const routePath = panel.querySelector('[data-animate="path"]');
+
+    tl.fromTo(
+      panel.querySelectorAll('[data-animate="paper-layer"]'),
+      { x: () => gsap.utils.random(-42, 42), y: 34, rotation: () => gsap.utils.random(-5, 5), autoAlpha: 0 },
+      { x: 0, y: 0, rotation: 0, autoAlpha: 1, duration: 0.78, stagger: 0.1 },
+      0,
+    )
+      .fromTo(
+        panel.querySelector('[data-animate="chapter"]'),
+        { x: -26, autoAlpha: 0 },
+        { x: 0, autoAlpha: 1, duration: 0.44 },
+        0.18,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="title"]'),
+        { x: -42, autoAlpha: 0 },
+        { x: 0, autoAlpha: 1, duration: 0.62 },
+        0.3,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="subtitle"]'),
+        { y: 18, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.52 },
+        0.52,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="main-visual"]'),
+        { ...visualStart, scale: 0.96, autoAlpha: 0 },
+        { x: 0, y: 0, scale: 1, autoAlpha: 1, duration: 0.88 },
+        0.62,
+      )
+      .fromTo(
+        panel.querySelectorAll('[data-animate="label"]'),
+        { y: 22, scale: 0.94, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.48, stagger: 0.08 },
+        1.1,
+      );
+
+    if (routePath) {
+      tl.to(routePath, drawPath(routePath), 0.95);
+    }
+
     return;
   }
 

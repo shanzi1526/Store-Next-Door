@@ -16,6 +16,7 @@
       <button class="dot is-active" type="button" data-target-panel="0" aria-label="Go to panel 1"></button>
       <button class="dot" type="button" data-target-panel="1" aria-label="Go to panel 2"></button>
       <button class="dot" type="button" data-target-panel="2" aria-label="Go to panel 3"></button>
+      <button class="dot" type="button" data-target-panel="3" aria-label="Go to panel 4"></button>
     </nav>
 
     <main>
@@ -58,153 +59,82 @@
         </div>
       </section>
 
-      <section class="panel panel-ageing" data-panel data-panel-theme="ageing">
-        <div class="ageing-composition" aria-label="Ageing society as everyday service context">
-          <svg class="ageing-svg" viewBox="0 0 1440 900" role="img" aria-labelledby="ageingTitle ageingDesc">
-            <title id="ageingTitle">Ageing Is Everyday</title>
-            <desc id="ageingDesc">A community route connects home, care, retail, and access with a small population chart and everyday life annotations.</desc>
-            <rect width="1440" height="900" fill="#FAF7F0" />
-            <path class="soft-ground" d="M0 690c153-63 305-84 454-63 177 25 314 111 506 89 153-18 277-84 480-93v277H0Z" />
-            <path data-animate="path" class="panel-path ageing-path" d="M194 643C292 548 398 522 526 550c113 24 160 92 265 83 105-10 145-90 251-104 81-10 151 18 214 73" />
+      <section class="panel group-panel panel-community-map" data-panel data-panel-theme="group-map">
+        <div class="group-stage map-stage" aria-label="Community route map social background">
+          <div class="group-paper map-paper-a" data-animate="paper-layer"></div>
+          <div class="group-paper map-paper-b" data-animate="paper-layer"></div>
 
-            <g data-animate="title" class="annotation-card title-note">
-              <path d="M125 126h314c19 0 34 15 34 34v109c0 19-15 34-34 34H125c-19 0-34-15-34-34V160c0-19 15-34 34-34Z" />
-              <text x="128" y="189" class="panel-title">Ageing Is Everyday</text>
-              <text x="130" y="232" class="panel-subtitle">Ageing is reshaping daily consumption, community services, and retail experience.</text>
-            </g>
+          <div class="group-copy map-copy">
+            <p class="group-kicker" data-animate="chapter">Social Background</p>
+            <h2 data-animate="title">Ageing Is Already Here</h2>
+            <p data-animate="subtitle">
+              It is shaping everyday routes, access, and the way residents reach daily services.
+            </p>
+          </div>
 
-            <g data-animate="chart" class="population-note">
-              <path d="M954 96h306c18 0 32 14 32 32v202c0 18-14 32-32 32H954c-18 0-32-14-32-32V128c0-18 14-32 32-32Z" />
-              <text x="974" y="144" class="small-heading">Population shift</text>
-              <path class="chart-axis" d="M980 300h246M980 170v130" />
-              <path data-animate="bar" d="M1006 252h31v48h-31Z" />
-              <path data-animate="bar" d="M1064 224h31v76h-31Z" />
-              <path data-animate="bar" d="M1122 196h31v104h-31Z" />
-              <path data-animate="bar" d="M1180 158h31v142h-31Z" />
-              <text x="974" y="333" class="tiny-copy">A social background becomes a daily design condition.</text>
-            </g>
+          <div class="map-asset-wrap" data-animate="main-visual">
+            <img src="./asset-community-access-map.png" alt="Community access map with age-friendly routes" />
+          </div>
 
-            <g data-animate="node" class="life-stop stop-home">
-              <path d="M159 553h190v110H159Z" />
-              <path d="M184 553l70-58 70 58" />
-              <text x="254" y="618" text-anchor="middle">Home</text>
-            </g>
-            <g data-animate="node" class="life-stop stop-care">
-              <path d="M462 454h198v118H462Z" />
-              <path d="M542 486h38v24h24v38h-24v24h-38v-24h-24v-38h24Z" />
-              <text x="562" y="626" text-anchor="middle">Care</text>
-            </g>
-            <g data-animate="node" class="life-stop stop-retail">
-              <path d="M770 538h220v122H770Z" />
-              <path d="M792 538h176l22 48H770Z" />
-              <text x="880" y="622" text-anchor="middle">Retail</text>
-            </g>
-            <g data-animate="node" class="life-stop stop-access">
-              <path d="M1127 560h178v102H1127Z" />
-              <path d="M1174 603h76m-31-30 36 30-36 30" />
-              <text x="1216" y="704" text-anchor="middle">Access</text>
-            </g>
-
-            <g data-animate="figure" class="walking-elder">
-              <path d="M672 643c-20 42-25 82-15 120" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
-              <path d="M708 642c24 34 37 72 40 114" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
-              <path d="M650 532c47-28 100 6 93 61-6 47-57 72-101 48-39-22-40-83 8-109Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
-              <path d="M623 626c43-38 102-35 135 7l19 92H604Z" fill="#8BDCC4" stroke="#24302e" stroke-width="4" />
-              <path d="M626 650c-39 17-69 42-91 75" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
-            </g>
-
-            <g data-animate="label" class="small-label label-services">
-              <path d="M325 709h152v46H325Z" />
-              <text x="401" y="739" text-anchor="middle">Daily services</text>
-            </g>
-            <g data-animate="label" class="small-label label-radius">
-              <path d="M1005 434h190v46h-190Z" />
-              <text x="1100" y="464" text-anchor="middle">Life radius</text>
-            </g>
-            <g data-animate="label" class="small-label label-routine">
-              <path d="M638 362h178v46H638Z" />
-              <text x="727" y="392" text-anchor="middle">Routine touchpoints</text>
-            </g>
+          <svg class="map-route-overlay" viewBox="0 0 900 620" aria-hidden="true">
+            <path data-animate="path" d="M105 500 C 170 420, 210 330, 330 315 S 520 355, 610 240 S 735 130, 810 95" />
           </svg>
+
+          <div class="editorial-label label-home" data-animate="label">Home</div>
+          <div class="editorial-label label-access" data-animate="label">Access</div>
+          <div class="editorial-label label-market" data-animate="label">Community Market</div>
         </div>
       </section>
 
-      <section class="panel panel-spending" data-panel data-panel-theme="collage">
-        <div class="collage-stage" aria-label="Silver economy needs collage map">
-          <svg class="collage-svg" viewBox="0 0 1440 900" role="img" aria-labelledby="spendingTitle spendingDesc">
-            <title id="spendingTitle">More Than Spending</title>
-            <desc id="spendingDesc">A collage of paper notes and receipts surrounds an older shopper scene to explain silver economy service needs.</desc>
-            <defs>
-              <filter id="paperShadow" x="-20%" y="-20%" width="140%" height="150%">
-                <feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#24302e" flood-opacity=".12" />
-              </filter>
-            </defs>
-            <rect width="1440" height="900" fill="#FAF7F0" />
-            <path class="table-shape" d="M185 734c104-160 296-252 515-258 231-6 421 82 548 248 42 55 11 132-58 132H241c-67 0-95-67-56-122Z" />
-            <path data-animate="path" class="panel-path collage-path" d="M302 250C443 167 559 183 651 299c73 92 132 109 243 67 125-48 230-2 290 116 49 95 9 189-91 223-104 35-198-11-274-96-85-95-171-90-284-34-101 49-198 19-254-67-60-92-52-194 21-258Z" />
+      <section class="panel group-panel panel-shopping-pressure" data-panel data-panel-theme="pressure">
+        <div class="group-stage pressure-stage" aria-label="Everyday shopping pressure close-up">
+          <div class="group-paper pressure-paper-a" data-animate="paper-layer"></div>
+          <div class="group-paper pressure-paper-b" data-animate="paper-layer"></div>
 
-            <g data-animate="title" class="annotation-card collage-title-note">
-              <path d="M91 92h361c19 0 34 15 34 34v114c0 19-15 34-34 34H91c-19 0-34-15-34-34V126c0-19 15-34 34-34Z" />
-              <text x="96" y="157" class="panel-title">More Than Spending</text>
-              <text x="98" y="202" class="panel-subtitle">Silver economy also means service quality, dignity, convenience, and trust.</text>
-            </g>
+          <div class="group-copy pressure-copy">
+            <p class="group-kicker" data-animate="chapter">Everyday Frictions</p>
+            <h2 data-animate="title">Small Frictions Add Up</h2>
+            <p data-animate="subtitle">
+              Shopping pressure often appears through ordinary details, not dramatic barriers.
+            </p>
+          </div>
 
-            <g data-animate="shopper" class="shopper-card" filter="url(#paperShadow)">
-              <path d="M533 253h390c24 0 44 20 44 44v336c0 24-20 44-44 44H533c-24 0-44-20-44-44V297c0-24 20-44 44-44Z" fill="#FFFDF7" stroke="#24302e" stroke-width="4" />
-              <path d="M533 253h390c24 0 44 20 44 44v58H489v-58c0-24 20-44 44-44Z" fill="#C9E59A" stroke="#24302e" stroke-width="4" />
-              <text x="728" y="314" text-anchor="middle" class="small-heading">Silver economy</text>
-              <path d="M630 522c-18 31-25 66-22 106m49-105c23 29 34 63 36 101" stroke="#24302e" stroke-width="5" stroke-linecap="round" fill="none" />
-              <path d="M605 416c38-28 87-5 88 42 1 43-41 69-79 52-34-15-43-68-9-94Z" fill="#FFE39A" stroke="#24302e" stroke-width="4" />
-              <path d="M573 502c42-34 100-28 132 13l20 95H552Z" fill="#8BDCC4" stroke="#24302e" stroke-width="4" />
-              <path d="M714 526h122l-22 72H735Z" fill="#F28A78" fill-opacity=".25" stroke="#24302e" stroke-width="4" />
-              <path d="M704 500c24 5 32 14 39 26" stroke="#24302e" stroke-width="5" fill="none" stroke-linecap="round" />
-              <path d="M750 618a13 13 0 1 1-26 0 13 13 0 0 1 26 0Zm78 0a13 13 0 1 1-26 0 13 13 0 0 1 26 0Z" fill="#FFFDF7" stroke="#24302e" stroke-width="4" />
-              <path d="M575 642h308" stroke="#24302e" stroke-opacity=".18" stroke-width="7" stroke-linecap="round" />
-            </g>
+          <div class="pressure-asset-wrap" data-animate="main-visual">
+            <img src="./asset-grocery-list-daily-care.png" alt="Older hand holding grocery list and daily care items" />
+          </div>
 
-            <g data-animate="paper" class="paper paper-price">
-              <path d="M184 326h220l24 35v124H184Z" />
-              <path d="M404 326v35h24" />
-              <text x="213" y="386" class="paper-index">01</text>
-              <text x="213" y="433" class="paper-title">Price</text>
-              <text x="213" y="465" class="paper-copy">Fair, readable, stable.</text>
-            </g>
-            <g data-animate="paper" class="paper paper-access">
-              <path d="M459 121h215l18 28v126H459Z" />
-              <path d="M674 121v28h18" />
-              <text x="487" y="176" class="paper-index">02</text>
-              <text x="487" y="221" class="paper-title">Access</text>
-              <text x="487" y="252" class="paper-copy">Close to daily routes.</text>
-            </g>
-            <g data-animate="paper" class="paper paper-clarity">
-              <path d="M881 143h242l22 34v125H881Z" />
-              <path d="M1123 143v34h22" />
-              <text x="911" y="200" class="paper-index">03</text>
-              <text x="911" y="246" class="paper-title">Clarity</text>
-              <text x="911" y="276" class="paper-copy">Less guessing, more independence.</text>
-            </g>
-            <g data-animate="paper" class="paper paper-comfort">
-              <path d="M1033 416h236l20 31v130h-256Z" />
-              <path d="M1269 416v31h20" />
-              <text x="1064" y="475" class="paper-index">04</text>
-              <text x="1064" y="521" class="paper-title">Comfort</text>
-              <text x="1064" y="553" class="paper-copy">Slower pace, softer waiting.</text>
-            </g>
-            <g data-animate="paper" class="paper paper-respect">
-              <path d="M833 688h243l25 34v124H833Z" />
-              <path d="M1076 688v34h25" />
-              <text x="864" y="747" class="paper-index">05</text>
-              <text x="864" y="793" class="paper-title">Respect</text>
-              <text x="864" y="824" class="paper-copy">Support without pressure.</text>
-            </g>
-            <g data-animate="paper" class="paper paper-trust">
-              <path d="M327 652h236l20 31v126H327Z" />
-              <path d="M563 652v31h20" />
-              <text x="357" y="710" class="paper-index">06</text>
-              <text x="357" y="756" class="paper-title">Trust</text>
-              <text x="357" y="787" class="paper-copy">Familiar staff, reliable cues.</text>
-            </g>
-          </svg>
+          <div class="editorial-label pressure-label label-small-type" data-animate="label">small type</div>
+          <div class="editorial-label pressure-label label-prices" data-animate="label">unclear prices</div>
+          <div class="editorial-label pressure-label label-distance" data-animate="label">long walking distance</div>
+          <div class="editorial-label pressure-label label-decision" data-animate="label">slow decision-making</div>
+          <div class="editorial-label pressure-label label-anxiety" data-animate="label">service anxiety</div>
+        </div>
+      </section>
+
+      <section class="panel group-panel panel-service-node" data-panel data-panel-theme="service-node">
+        <div class="group-stage node-stage" aria-label="Community supermarket service node">
+          <div class="group-paper node-paper-a" data-animate="paper-layer"></div>
+          <div class="group-paper node-paper-b" data-animate="paper-layer"></div>
+
+          <div class="group-copy node-copy">
+            <p class="group-kicker" data-animate="chapter">Service Node</p>
+            <h2 data-animate="title">More Than A Store</h2>
+            <p data-animate="subtitle">
+              A community supermarket can gather daily needs, health routines, trust, and support into one low-pressure field.
+            </p>
+          </div>
+
+          <div class="node-asset-wrap" data-animate="main-visual">
+            <img src="./asset-grocery-basket-silver-economy.png" alt="Shopping basket with groceries and silver economy care cues" />
+          </div>
+
+          <div class="service-keywords" aria-label="Service keywords">
+            <span data-animate="label">access</span>
+            <span data-animate="label">comfort</span>
+            <span data-animate="label">clarity</span>
+            <span data-animate="label">trust</span>
+            <span data-animate="label">dignity</span>
+          </div>
         </div>
       </section>
     </main>
