@@ -5,7 +5,7 @@ const recordToggle = document.querySelector("#recordToggle");
 const recordState = document.querySelector("#recordState");
 
 const autoConfig = {
-  dwell: 8000,
+  dwell: 9500,
   settle: 1350,
 };
 
@@ -127,53 +127,107 @@ function playPanel(panel) {
   timelines.set(panel, tl);
 
   if (theme === "cover") {
+    const routePath = panel.querySelector('[data-animate="path"]');
+
     tl.fromTo(
-      panel.querySelectorAll('[data-animate="cover-paper"]'),
-      { y: 36, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.82, stagger: 0.08 },
+      panel.querySelector('[data-animate="hero-bg"]'),
+      { xPercent: -50, yPercent: -50, scale: 1.06, autoAlpha: 0 },
+      { xPercent: -50, yPercent: -50, scale: 1, autoAlpha: 1, duration: 1.05 },
       0,
     )
       .fromTo(
-        panel.querySelector('[data-animate="chapter"]'),
-        { x: -28, autoAlpha: 0 },
-        { x: 0, autoAlpha: 1, duration: 0.52 },
-        0.16,
+        panel.querySelectorAll('[data-animate="hero-paper"]'),
+        { y: 32, scale: 0.98, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.72, stagger: 0.1 },
+        0.18,
       )
-      .set(panel.querySelector('[data-animate="headline"]'), { autoAlpha: 1 }, 0.28)
+      .set(panel.querySelector('[data-animate="hero-title"]'), { xPercent: -50, yPercent: -50, autoAlpha: 1 }, 0.36)
       .fromTo(
-        panel.querySelectorAll('[data-animate="headline"] span'),
-        { x: -46, autoAlpha: 0 },
-        { x: 0, autoAlpha: 1, duration: 0.66, stagger: 0.08 },
-        0.28,
+        panel.querySelectorAll('[data-animate="hero-title"] span'),
+        { y: 34, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.72, stagger: 0.12 },
+        0.38,
+      )
+      .to(
+        panel.querySelector('[data-animate="hero-title"]'),
+        { xPercent: -50, yPercent: -36, scale: 0.86, duration: 3.8, ease: "power1.inOut" },
+        2.2,
       )
       .fromTo(
-        panel.querySelector('[data-animate="subtitle"]'),
+        panel.querySelector('[data-animate="hero-front"]'),
+        { xPercent: -50, yPercent: 34, scale: 1.01, autoAlpha: 1 },
+        { xPercent: -50, yPercent: 0, scale: 1, autoAlpha: 1, duration: 4.4, ease: "power1.inOut" },
+        2.65,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="hero-caption"]'),
         { y: 18, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.55 },
-        0.62,
-      )
-      .fromTo(
-        panel.querySelector('[data-animate="main-visual"]'),
-        { x: 72, y: 16, rotation: -4, scale: 0.96, autoAlpha: 0 },
-        { x: 0, y: 0, rotation: -1.5, scale: 1, autoAlpha: 1, duration: 0.9 },
-        0.74,
+        { y: 0, autoAlpha: 1, duration: 0.72 },
+        6.4,
       )
       .fromTo(
         panel.querySelectorAll('[data-animate="tag"]'),
-        { y: 22, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.48, stagger: 0.08 },
-        1.02,
-      )
-      .fromTo(
-        panel.querySelectorAll('[data-animate="stamp"]'),
-        { y: 16, scale: 0.94, autoAlpha: 0 },
-        { y: 0, scale: 1, autoAlpha: 1, duration: 0.5, stagger: 0.08 },
-        1.18,
+        { y: 20, scale: 0.95, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.58, stagger: 0.1 },
+        7.15,
       );
+
+    if (routePath) {
+      tl.to(routePath, drawPath(routePath), 5.45);
+    }
+
     return;
   }
 
   if (["group-map", "pressure", "service-node"].includes(theme)) {
+    if (theme === "group-map") {
+      const routePath = panel.querySelector('[data-animate="path"]');
+
+      tl.fromTo(
+        panel.querySelectorAll('[data-animate="paper-layer"]'),
+        { x: -70, y: 24, rotation: -4, scale: 0.98, autoAlpha: 0 },
+        { x: 0, y: 0, rotation: 0, scale: 1, autoAlpha: 1, duration: 0.82, stagger: 0.12 },
+        0,
+      )
+        .fromTo(
+          panel.querySelector('[data-animate="main-visual"]'),
+          { y: 54, scale: 0.94, autoAlpha: 0 },
+          { y: 0, scale: 1, autoAlpha: 1, duration: 0.95 },
+          0.22,
+        );
+
+      if (routePath) {
+        tl.to(routePath, drawPath(routePath), 0.78);
+      }
+
+      tl.fromTo(
+        panel.querySelector('[data-animate="chapter"]'),
+        { y: -18, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.42 },
+        0.88,
+      )
+        .set(panel.querySelector('[data-animate="title"]'), { autoAlpha: 1 }, 0.98)
+        .fromTo(
+          panel.querySelectorAll('[data-animate="title"] span'),
+          { x: -52, autoAlpha: 0 },
+          { x: 0, autoAlpha: 1, duration: 0.58, stagger: 0.08 },
+          0.98,
+        )
+        .fromTo(
+          panel.querySelector('[data-animate="subtitle"]'),
+          { y: 18, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.48 },
+          1.28,
+        )
+        .fromTo(
+          panel.querySelectorAll('[data-animate="label"]'),
+          { y: 22, scale: 0.94, autoAlpha: 0 },
+          { y: 0, scale: 1, autoAlpha: 1, duration: 0.45, stagger: 0.08 },
+          1.42,
+        );
+      return;
+    }
+
     const visualStart = theme === "pressure" ? { x: -58, y: 24 } : { x: 58, y: 24 };
     const routePath = panel.querySelector('[data-animate="path"]');
 
