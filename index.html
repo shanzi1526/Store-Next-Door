@@ -17,6 +17,8 @@
       <button class="dot" type="button" data-target-panel="1" aria-label="Go to panel 2"></button>
       <button class="dot" type="button" data-target-panel="2" aria-label="Go to panel 3"></button>
       <button class="dot" type="button" data-target-panel="3" aria-label="Go to panel 4"></button>
+      <button class="dot" type="button" data-target-panel="4" aria-label="Go to panel 5"></button>
+      <button class="dot" type="button" data-target-panel="5" aria-label="Go to panel 6"></button>
     </nav>
 
     <main>
@@ -49,37 +51,41 @@
         </div>
       </section>
 
-      <section class="panel group-panel panel-community-map" data-panel data-panel-theme="group-map">
-        <div class="group-stage map-stage" aria-label="Community route map social background">
-          <div class="group-paper map-paper-field" data-animate="paper-layer"></div>
-          <div class="group-paper map-paper-pink" data-animate="paper-layer"></div>
-          <div class="group-paper map-paper-cream" data-animate="paper-layer"></div>
+      <section class="panel panel-chapter-gate" data-panel data-panel-theme="chapter-gate">
+        <div class="chapter-gate-stage" aria-label="Chapter gate">
+          <p class="gate-chapter" data-animate="chapter">Chapter 01</p>
+          <h2 class="gate-title" data-animate="title">The New Everyday</h2>
+          <p class="gate-label" data-animate="subtitle">Social Background / Community System</p>
+        </div>
+      </section>
 
-          <div class="map-asset-wrap" data-animate="main-visual">
-            <img src="./asset-community-access-map.png" alt="Community access map with age-friendly routes" />
+      <section class="panel panel-people-first" data-panel data-panel-theme="people-first">
+        <div class="people-stage" aria-label="People and everyday community route">
+          <div class="people-visual-scene">
+            <div class="people-paper people-paper-cream" data-animate="paper-layer"></div>
+            <div class="people-paper people-paper-mint" data-animate="paper-layer"></div>
+            <div class="people-orb" data-animate="orb" aria-hidden="true"></div>
+            <img class="people-visual" data-animate="main-visual" src="./Materials3.png" alt="Older residents walking with groceries on a daily community route" />
           </div>
-
-          <svg class="map-route-overlay" viewBox="0 0 900 620" aria-hidden="true">
-            <path data-animate="path" d="M105 500 C 170 420, 210 330, 330 315 S 520 355, 610 240 S 735 130, 810 95" />
-          </svg>
-
-          <div class="map-title-stack" data-animate="title">
-            <span>Ageing</span>
-            <span>Is Not</span>
-            <span>A Future</span>
-            <span>Issue</span>
+          <div class="people-text-panel" data-animate="subtitle">
+            <p class="people-kicker">Daily Route</p>
+            <p class="people-sentence">The route begins before entering the store.</p>
+            <p class="people-note">
+              Everyday shopping is shaped by distance, pace, waiting, and the small decisions that happen before the supermarket door.
+            </p>
           </div>
+        </div>
+      </section>
 
-          <p class="map-statement" data-animate="subtitle">It is already shaping everyday life.</p>
-          <p class="map-support" data-animate="label">
-            As older residents become part of everyday community life, shopping becomes a question of access, comfort, dignity, and service support.
-          </p>
-
-          <div class="map-chapter-tag" data-animate="chapter">Social Background / Community System</div>
-          <div class="editorial-label label-home" data-animate="label">Home</div>
-          <div class="editorial-label label-access" data-animate="label">Access</div>
-          <div class="editorial-label label-market" data-animate="label">Community Market</div>
-          <div class="editorial-label label-route" data-animate="label">Daily Route</div>
+      <section class="panel panel-main-statement" data-panel data-panel-theme="main-statement">
+        <div class="statement-stage" aria-label="Ageing society statement">
+          <div class="statement-paper statement-paper-cream" data-animate="paper-layer"></div>
+          <div class="statement-paper statement-paper-pink" data-animate="paper-layer"></div>
+          <h2 class="statement-title" data-animate="title">
+            <span>Ageing Is Not</span>
+            <span>A Future Issue</span>
+          </h2>
+          <p class="statement-subtitle" data-animate="subtitle">It is already shaping everyday shopping.</p>
         </div>
       </section>
 

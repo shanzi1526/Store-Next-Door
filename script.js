@@ -14,6 +14,7 @@ let isAutoPlaying = false;
 let autoTimer = null;
 let autoRunToken = 0;
 const timelines = new WeakMap();
+const playedPanels = new WeakSet();
 
 function clampPanel(index) {
   return Math.max(0, Math.min(panels.length - 1, index));
@@ -48,6 +49,15 @@ function goToPanel(index, { keepAuto = false } = {}) {
   if (!keepAuto) stopAutoPlay();
   panels[nextIndex].scrollIntoView({ behavior: "smooth", block: "start" });
   setActivePanel(nextIndex);
+}
+
+function panelIndexFromScrollTop() {
+  const top = window.scrollY + 24;
+  let index = 0;
+  panels.forEach((panel, panelIndex) => {
+    if (panel.offsetTop <= top) index = panelIndex;
+  });
+  return clampPanel(index);
 }
 
 function nearestPanelIndex() {
@@ -118,12 +128,17 @@ function drawPath(path) {
 
 function playPanel(panel) {
   if (!window.gsap || !panel) return;
+  if (playedPanels.has(panel)) return;
 
   const existing = timelines.get(panel);
+  if (existing && existing.isActive()) return;
   if (existing) existing.kill();
 
   const theme = panel.dataset.panelTheme;
-  const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+  const tl = gsap.timeline({
+    defaults: { ease: "power3.out" },
+    onComplete: () => playedPanels.add(panel),
+  });
   timelines.set(panel, tl);
 
   if (theme === "cover") {
@@ -156,7 +171,7 @@ function playPanel(panel) {
       .fromTo(
         panel.querySelector('[data-animate="hero-front"]'),
         { xPercent: -50, yPercent: 34, scale: 1, autoAlpha: 1 },
-        { xPercent: -50, yPercent: -10, scale: 1, autoAlpha: 1, duration: 4.8, ease: "power1.inOut" },
+        { xPercent: -50, yPercent: -18, scale: 1, autoAlpha: 1, duration: 5.1, ease: "power1.inOut" },
         2.65,
       )
       .fromTo(
@@ -229,6 +244,79 @@ function playPanel(panel) {
         { y: 20, scale: 0.98, autoAlpha: 0 },
         { y: 0, scale: 1, autoAlpha: 1, duration: 0.56 },
         2.2,
+      );
+    return;
+  }
+
+  if (theme === "chapter-gate") {
+    tl.fromTo(
+      panel.querySelector('[data-animate="chapter"]'),
+      { y: 18, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.65 },
+      0.12,
+    )
+      .fromTo(
+        panel.querySelector('[data-animate="title"]'),
+        { y: 28, scale: 0.98, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.85 },
+        0.36,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="subtitle"]'),
+        { y: 18, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.58 },
+        1.1,
+      );
+    return;
+  }
+
+  if (theme === "people-first") {
+    tl.fromTo(
+      panel.querySelectorAll('[data-animate="paper-layer"]'),
+      { y: 28, rotation: -2, autoAlpha: 0 },
+      { y: 0, rotation: 0, autoAlpha: 1, duration: 0.78, stagger: 0.12 },
+      0,
+    )
+      .fromTo(
+        panel.querySelector('[data-animate="orb"]'),
+        { scale: 0.62, autoAlpha: 0 },
+        { scale: 0.9, autoAlpha: 1, duration: 0.9, ease: "power2.out" },
+        0.16,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="main-visual"]'),
+        { y: 64, scale: 0.98, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 1.15, ease: "power2.out" },
+        0.22,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="subtitle"]'),
+        { y: 26, rotation: -2, autoAlpha: 0 },
+        { y: 0, rotation: 0, autoAlpha: 1, duration: 0.72 },
+        1.22,
+      );
+    return;
+  }
+
+  if (theme === "main-statement") {
+    tl.fromTo(
+      panel.querySelectorAll('[data-animate="paper-layer"]'),
+      { y: 30, rotation: -2, autoAlpha: 0 },
+      { y: 0, rotation: 0, autoAlpha: 1, duration: 0.72, stagger: 0.12 },
+      0,
+    )
+      .set(panel.querySelector('[data-animate="title"]'), { autoAlpha: 1 }, 0.24)
+      .fromTo(
+        panel.querySelectorAll('[data-animate="title"] span'),
+        { y: 34, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.72, stagger: 0.14 },
+        0.26,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="subtitle"]'),
+        { y: 20, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.62 },
+        1.18,
       );
     return;
   }
@@ -309,6 +397,46 @@ function observePanels() {
   panels.forEach((panel) => observer.observe(panel));
 }
 
+function setupPeopleScrollMotion() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const panel = document.querySelector('[data-panel-theme="people-first"]');
+  if (!panel) return;
+
+  const orb = panel.querySelector('[data-animate="orb"]');
+  const visual = panel.querySelector('[data-animate="main-visual"]');
+  if (!orb || !visual) return;
+
+  gsap.fromTo(
+    orb,
+    { scale: 0.78 },
+    {
+      scale: 1.26,
+      ease: "none",
+      scrollTrigger: {
+        trigger: panel,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.5,
+      },
+    },
+  );
+
+  gsap.fromTo(
+    visual,
+    { rotation: -5 },
+    {
+      rotation: 4,
+      ease: "none",
+      scrollTrigger: {
+        trigger: panel,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.5,
+      },
+    },
+  );
+}
+
 dots.forEach((dot) => {
   dot.addEventListener("click", () => goToPanel(Number(dot.dataset.targetPanel)));
 });
@@ -327,17 +455,18 @@ window.addEventListener("keydown", (event) => {
 
   if (forwardKeys.includes(event.key)) {
     event.preventDefault();
-    goToPanel(activePanel + 1);
+    goToPanel(panelIndexFromScrollTop() + 1);
     return;
   }
 
   if (backKeys.includes(event.key)) {
     event.preventDefault();
-    goToPanel(activePanel - 1);
+    goToPanel(panelIndexFromScrollTop() - 1);
   }
 });
 
 setActivePanel(0);
 prepareAnimations();
 observePanels();
+setupPeopleScrollMotion();
 playPanel(panels[0]);
