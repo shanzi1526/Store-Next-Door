@@ -761,15 +761,17 @@ main {
 
 .map-stage {
   background:
-    radial-gradient(circle at 76% 18%, rgba(242, 138, 120, 0.26), transparent 17rem),
+    radial-gradient(circle at 50% 42%, rgba(245, 237, 216, 0.42), transparent 34rem),
+    radial-gradient(circle at 76% 18%, rgba(242, 138, 120, 0.18), transparent 17rem),
+    linear-gradient(180deg, rgba(139, 220, 196, 0.2), rgba(23, 63, 54, 0.08)),
     #173f36;
 }
 
 .map-paper-field {
-  left: -4%;
-  top: 7%;
-  width: min(102vw, 1580px);
-  height: 82svh;
+  left: -6%;
+  top: 4%;
+  width: min(106vw, 1640px);
+  height: 88svh;
   background: #f5edd8;
   clip-path: polygon(2% 3%, 98% 0, 100% 90%, 4% 100%, 0 42%);
   transform: rotate(-1.2deg);
@@ -786,10 +788,10 @@ main {
 }
 
 .map-paper-cream {
-  right: -8%;
-  top: 10%;
-  width: min(46vw, 780px);
-  height: 46svh;
+  right: -10%;
+  top: 4%;
+  width: min(52vw, 850px);
+  height: 54svh;
   background: #f7efdd;
   clip-path: polygon(5% 0, 98% 6%, 100% 92%, 0 100%);
   transform: rotate(4deg);
@@ -799,9 +801,9 @@ main {
   position: absolute;
   z-index: 4;
   left: 50%;
-  top: 50%;
-  width: min(92vw, 1390px);
-  transform: translate(-50%, -46%) rotate(-1.5deg);
+  top: 52%;
+  width: min(88vw, 1340px);
+  transform: translate(-50%, -47%) rotate(-1.5deg);
 }
 
 .map-asset-wrap img,
@@ -827,19 +829,20 @@ main {
 .map-route-overlay path {
   fill: none;
   stroke: #f36b21;
-  stroke-width: 12;
+  stroke-width: 9;
   stroke-linecap: round;
   stroke-dasharray: 18 20;
+  opacity: 0.82;
 }
 
 .map-title-stack {
   position: absolute;
-  left: clamp(2.3rem, 5vw, 5.8rem);
-  top: clamp(4.8rem, 9svh, 7rem);
+  left: clamp(2rem, 4.5vw, 5rem);
+  top: clamp(5.4rem, 11svh, 8.2rem);
   z-index: 7;
   color: #173f36;
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
-  font-size: clamp(4.4rem, 8vw, 10.8rem);
+  font-size: clamp(3.9rem, 6.8vw, 8.8rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.84;
@@ -871,8 +874,8 @@ main {
 .map-statement {
   position: absolute;
   z-index: 7;
-  left: clamp(4rem, 12vw, 13rem);
-  bottom: clamp(5rem, 13svh, 9rem);
+  left: clamp(3.2rem, 9vw, 10rem);
+  bottom: clamp(4.2rem, 10svh, 7rem);
   max-width: 34rem;
   margin: 0;
   padding: 0.72rem 1rem;
@@ -889,9 +892,9 @@ main {
 .map-support {
   position: absolute;
   z-index: 7;
-  right: clamp(3rem, 6vw, 7rem);
-  bottom: clamp(3rem, 8svh, 5.2rem);
-  width: min(28vw, 28rem);
+  right: clamp(2.4rem, 5vw, 5.8rem);
+  bottom: clamp(3.2rem, 8svh, 5.4rem);
+  width: min(30vw, 30rem);
   margin: 0;
   padding: 0.9rem 1rem;
   border: 2px solid #173f36;

@@ -185,44 +185,50 @@ function playPanel(panel) {
     tl.fromTo(
       panel.querySelectorAll('[data-animate="paper-layer"]'),
       { x: -70, y: 24, rotation: -4, scale: 0.98, autoAlpha: 0 },
-      { x: 0, y: 0, rotation: 0, scale: 1, autoAlpha: 1, duration: 0.82, stagger: 0.12 },
+      { x: 0, y: 0, rotation: 0, scale: 1, autoAlpha: 1, duration: 0.95, stagger: 0.12 },
       0,
     )
       .fromTo(
         panel.querySelector('[data-animate="main-visual"]'),
-        { y: 54, scale: 0.94, autoAlpha: 0 },
-        { y: 0, scale: 1, autoAlpha: 1, duration: 0.95 },
-        0.22,
+        { y: 64, scale: 0.96, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 1.12, ease: "power2.out" },
+        0.18,
       );
 
     if (routePath) {
-      tl.to(routePath, drawPath(routePath), 0.78);
+      tl.to(routePath, drawPath(routePath), 0.9);
     }
 
     tl.fromTo(
       panel.querySelector('[data-animate="chapter"]'),
       { y: -18, autoAlpha: 0 },
       { y: 0, autoAlpha: 1, duration: 0.42 },
-      0.88,
+      1.42,
     )
-      .set(panel.querySelector('[data-animate="title"]'), { autoAlpha: 1 }, 0.98)
+      .fromTo(
+        panel.querySelectorAll(".editorial-label"),
+        { y: 22, scale: 0.94, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.5, stagger: 0.12 },
+        1.08,
+    )
+      .set(panel.querySelector('[data-animate="title"]'), { autoAlpha: 1 }, 1.58)
       .fromTo(
         panel.querySelectorAll('[data-animate="title"] span'),
-        { x: -52, autoAlpha: 0 },
-        { x: 0, autoAlpha: 1, duration: 0.58, stagger: 0.08 },
-        0.98,
+        { x: -42, autoAlpha: 0 },
+        { x: 0, autoAlpha: 1, duration: 0.62, stagger: 0.08 },
+        1.58,
       )
       .fromTo(
         panel.querySelector('[data-animate="subtitle"]'),
         { y: 18, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.48 },
-        1.28,
+        { y: 0, autoAlpha: 1, duration: 0.52 },
+        1.94,
       )
       .fromTo(
-        panel.querySelectorAll('[data-animate="label"]'),
-        { y: 22, scale: 0.94, autoAlpha: 0 },
-        { y: 0, scale: 1, autoAlpha: 1, duration: 0.45, stagger: 0.08 },
-        1.42,
+        panel.querySelector(".map-support"),
+        { y: 20, scale: 0.98, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.56 },
+        2.2,
       );
     return;
   }
