@@ -106,7 +106,7 @@ function setupPath(path) {
   });
 }
 
-function drawPath(path, position = 0.2) {
+function drawPath(path) {
   if (!path) return {};
   return {
     autoAlpha: 1,
@@ -150,13 +150,13 @@ function playPanel(panel) {
       )
       .to(
         panel.querySelector('[data-animate="hero-title"]'),
-        { xPercent: -50, yPercent: -36, scale: 0.86, duration: 3.8, ease: "power1.inOut" },
+        { xPercent: -50, yPercent: -42, scale: 0.86, duration: 3.8, ease: "power1.inOut" },
         2.2,
       )
       .fromTo(
         panel.querySelector('[data-animate="hero-front"]'),
-        { xPercent: -50, yPercent: 26, scale: 1, autoAlpha: 1 },
-        { xPercent: -50, yPercent: -2, scale: 0.985, autoAlpha: 1, duration: 4.8, ease: "power1.inOut" },
+        { xPercent: -50, yPercent: 34, scale: 1, autoAlpha: 1 },
+        { xPercent: -50, yPercent: -10, scale: 1, autoAlpha: 1, duration: 4.8, ease: "power1.inOut" },
         2.65,
       )
       .fromTo(
@@ -179,55 +179,55 @@ function playPanel(panel) {
     return;
   }
 
-  if (["group-map", "pressure", "service-node"].includes(theme)) {
-    if (theme === "group-map") {
-      const routePath = panel.querySelector('[data-animate="path"]');
+  if (theme === "group-map") {
+    const routePath = panel.querySelector('[data-animate="path"]');
 
-      tl.fromTo(
-        panel.querySelectorAll('[data-animate="paper-layer"]'),
-        { x: -70, y: 24, rotation: -4, scale: 0.98, autoAlpha: 0 },
-        { x: 0, y: 0, rotation: 0, scale: 1, autoAlpha: 1, duration: 0.82, stagger: 0.12 },
-        0,
-      )
-        .fromTo(
-          panel.querySelector('[data-animate="main-visual"]'),
-          { y: 54, scale: 0.94, autoAlpha: 0 },
-          { y: 0, scale: 1, autoAlpha: 1, duration: 0.95 },
-          0.22,
-        );
+    tl.fromTo(
+      panel.querySelectorAll('[data-animate="paper-layer"]'),
+      { x: -70, y: 24, rotation: -4, scale: 0.98, autoAlpha: 0 },
+      { x: 0, y: 0, rotation: 0, scale: 1, autoAlpha: 1, duration: 0.82, stagger: 0.12 },
+      0,
+    )
+      .fromTo(
+        panel.querySelector('[data-animate="main-visual"]'),
+        { y: 54, scale: 0.94, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.95 },
+        0.22,
+      );
 
-      if (routePath) {
-        tl.to(routePath, drawPath(routePath), 0.78);
-      }
-
-      tl.fromTo(
-        panel.querySelector('[data-animate="chapter"]'),
-        { y: -18, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.42 },
-        0.88,
-      )
-        .set(panel.querySelector('[data-animate="title"]'), { autoAlpha: 1 }, 0.98)
-        .fromTo(
-          panel.querySelectorAll('[data-animate="title"] span'),
-          { x: -52, autoAlpha: 0 },
-          { x: 0, autoAlpha: 1, duration: 0.58, stagger: 0.08 },
-          0.98,
-        )
-        .fromTo(
-          panel.querySelector('[data-animate="subtitle"]'),
-          { y: 18, autoAlpha: 0 },
-          { y: 0, autoAlpha: 1, duration: 0.48 },
-          1.28,
-        )
-        .fromTo(
-          panel.querySelectorAll('[data-animate="label"]'),
-          { y: 22, scale: 0.94, autoAlpha: 0 },
-          { y: 0, scale: 1, autoAlpha: 1, duration: 0.45, stagger: 0.08 },
-          1.42,
-        );
-      return;
+    if (routePath) {
+      tl.to(routePath, drawPath(routePath), 0.78);
     }
 
+    tl.fromTo(
+      panel.querySelector('[data-animate="chapter"]'),
+      { y: -18, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.42 },
+      0.88,
+    )
+      .set(panel.querySelector('[data-animate="title"]'), { autoAlpha: 1 }, 0.98)
+      .fromTo(
+        panel.querySelectorAll('[data-animate="title"] span'),
+        { x: -52, autoAlpha: 0 },
+        { x: 0, autoAlpha: 1, duration: 0.58, stagger: 0.08 },
+        0.98,
+      )
+      .fromTo(
+        panel.querySelector('[data-animate="subtitle"]'),
+        { y: 18, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.48 },
+        1.28,
+      )
+      .fromTo(
+        panel.querySelectorAll('[data-animate="label"]'),
+        { y: 22, scale: 0.94, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.45, stagger: 0.08 },
+        1.42,
+      );
+    return;
+  }
+
+  if (theme === "pressure" || theme === "service-node") {
     const visualStart = theme === "pressure" ? { x: -58, y: 24 } : { x: 58, y: 24 };
     const routePath = panel.querySelector('[data-animate="path"]');
 
@@ -271,85 +271,7 @@ function playPanel(panel) {
     if (routePath) {
       tl.to(routePath, drawPath(routePath), 0.95);
     }
-
-    return;
   }
-
-  if (theme === "ageing") {
-    tl.fromTo(
-      panel.querySelector('[data-animate="title"]'),
-      { x: -38, y: 14, autoAlpha: 0 },
-      { x: 0, y: 0, autoAlpha: 1, duration: 0.72 },
-      0,
-    )
-      .to(panel.querySelector('[data-animate="path"]'), drawPath(panel.querySelector('[data-animate="path"]')), 0.24)
-      .fromTo(
-        panel.querySelectorAll('[data-animate="node"]'),
-        { y: 32, scale: 0.92, autoAlpha: 0 },
-        { y: 0, scale: 1, autoAlpha: 1, duration: 0.72, stagger: 0.16 },
-        0.36,
-      )
-      .fromTo(
-        panel.querySelector('[data-animate="figure"]'),
-        { x: -34, autoAlpha: 0 },
-        { x: 0, autoAlpha: 1, duration: 0.78 },
-        0.82,
-      )
-      .fromTo(
-        panel.querySelector('[data-animate="chart"]'),
-        { x: 32, y: -12, autoAlpha: 0 },
-        { x: 0, y: 0, autoAlpha: 1, duration: 0.7 },
-        0.95,
-      )
-      .fromTo(
-        panel.querySelectorAll('[data-animate="bar"]'),
-        { scaleY: 0 },
-        { scaleY: 1, duration: 0.55, stagger: 0.09 },
-        1.2,
-      )
-      .fromTo(
-        panel.querySelectorAll('[data-animate="label"]'),
-        { y: 20, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.1 },
-        1.45,
-      );
-    return;
-  }
-
-  tl.fromTo(
-    panel.querySelector('[data-animate="title"]'),
-    { x: -36, rotation: -3, autoAlpha: 0 },
-    { x: 0, rotation: 0, autoAlpha: 1, duration: 0.7 },
-    0,
-  )
-    .fromTo(
-      panel.querySelector('[data-animate="shopper"]'),
-      { y: 46, scale: 0.96, autoAlpha: 0 },
-      { y: 0, scale: 1, autoAlpha: 1, duration: 0.86 },
-      0.18,
-    )
-    .to(panel.querySelector('[data-animate="path"]'), drawPath(panel.querySelector('[data-animate="path"]')), 0.38)
-    .fromTo(
-      panel.querySelectorAll('[data-animate="paper"]'),
-      {
-        x: () => gsap.utils.random(-34, 34),
-        y: -56,
-        rotation: () => gsap.utils.random(-8, 8),
-        scale: 0.92,
-        autoAlpha: 0,
-      },
-      {
-        x: 0,
-        y: 0,
-        rotation: 0,
-        scale: 1,
-        autoAlpha: 1,
-        duration: 0.66,
-        stagger: 0.11,
-        ease: "back.out(1.3)",
-      },
-      0.72,
-    );
 }
 
 function prepareAnimations() {

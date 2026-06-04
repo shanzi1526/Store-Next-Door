@@ -85,7 +85,7 @@ main {
 
 .panel-cover {
   display: block;
-  min-height: 205svh;
+  min-height: 255svh;
   overflow: visible;
   background:
     radial-gradient(circle at 78% 18%, rgba(242, 138, 120, 0.42), transparent 16rem),
@@ -475,7 +475,7 @@ main {
 .hero-title {
   position: absolute;
   left: 50%;
-  top: 45%;
+  top: 43%;
   z-index: 5;
   margin: 0;
   color: #173f36;
@@ -500,11 +500,11 @@ main {
 .hero-front {
   z-index: 6;
   left: 50%;
-  bottom: -0.8svh;
-  width: min(108vw, 1680px);
+  bottom: 1svh;
+  width: min(104vw, 1620px);
   max-width: none;
   filter: drop-shadow(0 34px 42px rgba(0, 0, 0, 0.28));
-  transform: translate(-50%, 26%);
+  transform: translate(-50%, 34%);
 }
 
 .hero-route {
@@ -1415,8 +1415,8 @@ main {
 
   .hero-front {
     left: 50%;
-    bottom: -2svh;
-    width: 136vw;
+    bottom: 0;
+    width: 130vw;
   }
 
   .hero-route {
