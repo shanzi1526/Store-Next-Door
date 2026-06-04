@@ -131,8 +131,8 @@ function playPanel(panel) {
 
     tl.fromTo(
       panel.querySelector('[data-animate="hero-bg"]'),
-      { xPercent: -50, yPercent: -50, scale: 1.06, autoAlpha: 0 },
-      { xPercent: -50, yPercent: -50, scale: 1, autoAlpha: 1, duration: 1.05 },
+      { xPercent: -50, yPercent: -54, scale: 1.045, autoAlpha: 0 },
+      { xPercent: -50, yPercent: -47, scale: 1, autoAlpha: 1, duration: 7.2, ease: "power1.inOut" },
       0,
     )
       .fromTo(
@@ -155,8 +155,8 @@ function playPanel(panel) {
       )
       .fromTo(
         panel.querySelector('[data-animate="hero-front"]'),
-        { xPercent: -50, yPercent: 34, scale: 1.01, autoAlpha: 1 },
-        { xPercent: -50, yPercent: 0, scale: 1, autoAlpha: 1, duration: 4.4, ease: "power1.inOut" },
+        { xPercent: -50, yPercent: 26, scale: 1, autoAlpha: 1 },
+        { xPercent: -50, yPercent: -2, scale: 0.985, autoAlpha: 1, duration: 4.8, ease: "power1.inOut" },
         2.65,
       )
       .fromTo(

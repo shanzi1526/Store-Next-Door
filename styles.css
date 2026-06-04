@@ -417,11 +417,11 @@ main {
 .hero-bg {
   z-index: 1;
   left: 50%;
-  top: 50%;
+  top: 52%;
   width: 100vw;
-  height: 100svh;
+  height: 128svh;
   object-fit: cover;
-  object-position: center;
+  object-position: center 54%;
   transform: translate(-50%, -50%);
   filter: saturate(0.95) contrast(0.98);
 }
@@ -500,19 +500,20 @@ main {
 .hero-front {
   z-index: 6;
   left: 50%;
-  bottom: -1.8svh;
-  width: min(116vw, 1780px);
+  bottom: -0.8svh;
+  width: min(108vw, 1680px);
   max-width: none;
   filter: drop-shadow(0 34px 42px rgba(0, 0, 0, 0.28));
-  transform: translate(-50%, 34%);
+  transform: translate(-50%, 26%);
 }
 
 .hero-route {
   position: absolute;
-  z-index: 6;
+  z-index: 4;
   left: 50%;
   bottom: min(14svh, 8rem);
   width: min(64vw, 1050px);
+  opacity: 0.34;
   transform: translateX(-46%) rotate(-2deg);
   pointer-events: none;
 }
@@ -520,7 +521,7 @@ main {
 .hero-route path {
   fill: none;
   stroke: #f36b21;
-  stroke-width: 12;
+  stroke-width: 6;
   stroke-linecap: round;
   stroke-dasharray: 18 20;
 }
@@ -1403,7 +1404,7 @@ main {
 
   .hero-bg {
     width: 100vw;
-    height: 100svh;
+    height: 122svh;
     object-position: 50% center;
   }
 
@@ -1414,8 +1415,8 @@ main {
 
   .hero-front {
     left: 50%;
-    bottom: -5svh;
-    width: 145vw;
+    bottom: -2svh;
+    width: 136vw;
   }
 
   .hero-route {
