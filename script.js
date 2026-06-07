@@ -51,6 +51,44 @@ function goToPanel(index, { keepAuto = false } = {}) {
   setActivePanel(nextIndex);
 }
 
+function scrollToTop(top) {
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function peopleTextStop(panel) {
+  return panel.offsetTop + window.innerHeight * 0.62;
+}
+
+function busStoryStops(panel) {
+  const finalStop = panel.offsetTop + panel.offsetHeight - window.innerHeight - 4;
+  return [panel.offsetTop + window.innerHeight * 0.82, finalStop];
+}
+
+function isBeforePeopleText(panel) {
+  return panel?.dataset.panelTheme === "people-first" && window.scrollY < peopleTextStop(panel) - 80;
+}
+
+function isAfterPeopleText(panel) {
+  return panel?.dataset.panelTheme === "people-first" && window.scrollY > peopleTextStop(panel) - 80;
+}
+
+function nextInternalStop(panel) {
+  if (isBeforePeopleText(panel)) return peopleTextStop(panel);
+  if (panel?.dataset.panelTheme === "main-statement") {
+    return busStoryStops(panel).find((stop) => window.scrollY < stop - 80) ?? null;
+  }
+  return null;
+}
+
+function previousInternalStop(panel) {
+  if (isAfterPeopleText(panel)) return panel.offsetTop;
+  if (panel?.dataset.panelTheme === "main-statement") {
+    const stops = [panel.offsetTop, ...busStoryStops(panel)];
+    return stops.reverse().find((stop) => window.scrollY > stop + 80) ?? null;
+  }
+  return null;
+}
+
 function panelIndexFromScrollTop() {
   const top = window.scrollY + 24;
   let index = 0;
@@ -84,6 +122,14 @@ async function runAutoSequence(token) {
     if (index >= panels.length - 1) {
       stopAutoPlay();
       return;
+    }
+
+    const internalStop = nextInternalStop(panels[index]);
+    if (internalStop !== null) {
+      scrollToTop(internalStop);
+      await wait(autoConfig.settle, token);
+      if (!isAutoPlaying || token !== autoRunToken) return;
+      continue;
     }
 
     index += 1;
@@ -299,25 +345,7 @@ function playPanel(panel) {
   }
 
   if (theme === "main-statement") {
-    tl.fromTo(
-      panel.querySelectorAll('[data-animate="paper-layer"]'),
-      { y: 30, rotation: -2, autoAlpha: 0 },
-      { y: 0, rotation: 0, autoAlpha: 1, duration: 0.72, stagger: 0.12 },
-      0,
-    )
-      .set(panel.querySelector('[data-animate="title"]'), { autoAlpha: 1 }, 0.24)
-      .fromTo(
-        panel.querySelectorAll('[data-animate="title"] span'),
-        { y: 34, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.72, stagger: 0.14 },
-        0.26,
-      )
-      .fromTo(
-        panel.querySelector('[data-animate="subtitle"]'),
-        { y: 20, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.62 },
-        1.18,
-      );
+    playedPanels.add(panel);
     return;
   }
 
@@ -408,9 +436,9 @@ function setupPeopleScrollMotion() {
 
   gsap.fromTo(
     orb,
-    { scale: 0.78 },
+    { scale: 0.62 },
     {
-      scale: 1.26,
+      scale: 1.52,
       ease: "none",
       scrollTrigger: {
         trigger: panel,
@@ -423,9 +451,9 @@ function setupPeopleScrollMotion() {
 
   gsap.fromTo(
     visual,
-    { rotation: -5 },
+    { rotation: -11 },
     {
-      rotation: 4,
+      rotation: 9,
       ease: "none",
       scrollTrigger: {
         trigger: panel,
@@ -435,6 +463,93 @@ function setupPeopleScrollMotion() {
       },
     },
   );
+}
+
+function setupBusScrollMotion() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const panel = document.querySelector('[data-panel-theme="main-statement"]');
+  if (!panel) return;
+
+  const lineOne = panel.querySelector('[data-animate="title"]');
+  const lineTwo = panel.querySelector('[data-animate="title-alt"]');
+  const lineThree = panel.querySelector('[data-animate="title-final"]');
+  const busStop = panel.querySelector('[data-animate="bus-stop"]');
+  const bus = panel.querySelector('[data-animate="bus"]');
+  const caption = panel.querySelector('[data-animate="subtitle"]');
+  const ground = panel.querySelector('[data-animate="paper-layer"]');
+  const routePath = panel.querySelector('[data-animate="path"]');
+
+  if (!lineOne || !lineTwo || !lineThree || !busStop || !bus) return;
+
+  gsap.set([lineOne, lineTwo, lineThree], {
+    xPercent: -50,
+    yPercent: -50,
+    y: 0,
+    scale: 1,
+  });
+  gsap.set(lineOne, { autoAlpha: 1 });
+  gsap.set([lineTwo, lineThree], { autoAlpha: 0 });
+  gsap.set([busStop, bus], { autoAlpha: 0 });
+  if (ground) gsap.set(ground, { autoAlpha: 0 });
+  if (caption) gsap.set(caption, { xPercent: -50, autoAlpha: 0, y: 0, rotation: -1.4 });
+  if (routePath) {
+    setupPath(routePath);
+    gsap.set(routePath, { autoAlpha: 0 });
+  }
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 0.8,
+    },
+  });
+
+  tl.to(lineOne, { autoAlpha: 1, duration: 0.16, ease: "none" }, 0)
+    .to(lineOne, { autoAlpha: 0.055, scale: 0.96, y: -26, duration: 0.12, ease: "none" }, 0.24)
+    .fromTo(
+      lineTwo,
+      { xPercent: -50, yPercent: -50, autoAlpha: 0, scale: 1.05, y: 18 },
+      { xPercent: -50, yPercent: -50, autoAlpha: 1, scale: 1, y: 0, duration: 0.12, ease: "none" },
+      0.34,
+    )
+    .to(lineTwo, { autoAlpha: 0.055, scale: 0.96, y: -28, duration: 0.12, ease: "none" }, 0.52)
+    .fromTo(
+      lineThree,
+      { xPercent: -50, yPercent: -50, autoAlpha: 0, scale: 1.05, y: 24 },
+      { xPercent: -50, yPercent: -50, autoAlpha: 1, scale: 1, y: 0, duration: 0.14, ease: "none" },
+      0.64,
+    )
+    .to(lineThree, { autoAlpha: 0.38, y: -46, duration: 0.16, ease: "none" }, 0.8)
+    .fromTo(
+      ground,
+      { autoAlpha: 0, yPercent: 44 },
+      { autoAlpha: 1, yPercent: 0, duration: 0.18, ease: "none" },
+      0.72,
+    )
+    .fromTo(
+      busStop,
+      { autoAlpha: 0, yPercent: 68, scale: 0.92, rotation: -2 },
+      { autoAlpha: 1, yPercent: 0, scale: 1, rotation: 0, duration: 0.22, ease: "none" },
+      0.76,
+    )
+    .fromTo(
+      bus,
+      { autoAlpha: 0, xPercent: 86, yPercent: 30, scale: 0.28, rotation: -8 },
+      { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotation: 0, duration: 0.24, ease: "none" },
+      0.82,
+    )
+    .fromTo(
+      caption,
+      { xPercent: -50, autoAlpha: 0, y: 28, rotation: -3 },
+      { xPercent: -50, autoAlpha: 1, y: 0, rotation: -1.4, duration: 0.14, ease: "none" },
+      0.9,
+    );
+
+  if (routePath) {
+    tl.to(routePath, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.22, ease: "none" }, 0.8);
+  }
 }
 
 dots.forEach((dot) => {
@@ -455,13 +570,29 @@ window.addEventListener("keydown", (event) => {
 
   if (forwardKeys.includes(event.key)) {
     event.preventDefault();
-    goToPanel(panelIndexFromScrollTop() + 1);
+    const currentIndex = panelIndexFromScrollTop();
+    const currentPanel = panels[currentIndex];
+    const internalStop = nextInternalStop(currentPanel);
+    if (internalStop !== null) {
+      stopAutoPlay();
+      scrollToTop(internalStop);
+      return;
+    }
+    goToPanel(currentIndex + 1);
     return;
   }
 
   if (backKeys.includes(event.key)) {
     event.preventDefault();
-    goToPanel(panelIndexFromScrollTop() - 1);
+    const currentIndex = panelIndexFromScrollTop();
+    const currentPanel = panels[currentIndex];
+    const internalStop = previousInternalStop(currentPanel);
+    if (internalStop !== null) {
+      stopAutoPlay();
+      scrollToTop(internalStop);
+      return;
+    }
+    goToPanel(currentIndex - 1);
   }
 });
 
@@ -469,4 +600,5 @@ setActivePanel(0);
 prepareAnimations();
 observePanels();
 setupPeopleScrollMotion();
+setupBusScrollMotion();
 playPanel(panels[0]);
