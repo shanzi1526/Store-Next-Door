@@ -1405,14 +1405,14 @@ main {
 
 .panel-literature-evidence {
   display: block;
-  min-height: 195svh;
+  min-height: 155svh;
   margin-top: 0;
   overflow: visible;
   background:
-    radial-gradient(ellipse at 22% 84%, rgba(139, 220, 196, 0.2), transparent 30rem),
-    radial-gradient(ellipse at 78% 18%, rgba(255, 227, 154, 0.08), transparent 22rem),
-    #173f36;
-  color: var(--paper);
+    radial-gradient(ellipse at 24% 70%, rgba(139, 220, 196, 0.16), transparent 30rem),
+    radial-gradient(ellipse at 74% 18%, rgba(242, 138, 120, 0.18), transparent 25rem),
+    linear-gradient(180deg, #dfe6f0 0%, #eadde6 56%, #dbe8ed 100%);
+  color: #173f36;
 }
 
 .panel-literature-evidence::before,
@@ -1425,34 +1425,33 @@ main {
 .panel-literature-evidence::before {
   left: -3%;
   right: -3%;
-  top: 0;
-  z-index: 4;
-  height: clamp(3.2rem, 7svh, 5.8rem);
-  background: #173f36;
-  clip-path: polygon(0 0, 100% 0, 100% 22%, 88% 10%, 76% 26%, 64% 8%, 53% 28%, 42% 13%, 31% 30%, 21% 10%, 13% 24%, 6% 7%, 0 18%);
+  top: clamp(-4.2rem, -7svh, -2.4rem);
+  z-index: 5;
+  height: clamp(4.8rem, 9svh, 7rem);
+  background: #dfe6f0;
+  clip-path: polygon(0 0, 100% 0, 100% 44%, 90% 24%, 79% 48%, 67% 28%, 55% 52%, 42% 24%, 31% 50%, 20% 30%, 9% 54%, 0 34%);
 }
 
 .panel-literature-evidence::after {
   inset: 0;
   z-index: 1;
-  opacity: 0.22;
+  opacity: 0.2;
   background:
-    repeating-linear-gradient(106deg, rgba(36, 48, 46, 0.26) 0 1px, transparent 1px 8px),
-    repeating-radial-gradient(circle at 14% 20%, rgba(255, 253, 247, 0.18) 0 1px, transparent 1px 5px),
-    linear-gradient(rgba(255, 253, 247, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 253, 247, 0.06) 1px, transparent 1px);
+    repeating-linear-gradient(106deg, rgba(36, 48, 46, 0.12) 0 1px, transparent 1px 8px),
+    repeating-radial-gradient(circle at 14% 20%, rgba(255, 253, 247, 0.32) 0 1px, transparent 1px 5px),
+    linear-gradient(rgba(36, 48, 46, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(36, 48, 46, 0.035) 1px, transparent 1px);
   background-size: auto, auto, 34px 34px, 34px 34px;
   mix-blend-mode: overlay;
 }
 
 .literature-stage {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 2;
   width: 100vw;
-  height: 100svh;
-  min-height: 680px;
-  overflow: hidden;
+  min-height: 155svh;
+  padding: clamp(5.2rem, 11svh, 8rem) clamp(2rem, 5vw, 6rem) clamp(7rem, 14svh, 10rem);
+  overflow: visible;
 }
 
 .literature-stage::before {
@@ -1469,20 +1468,20 @@ main {
 
 .literature-card {
   position: absolute;
-  right: clamp(4.8rem, 8.4vw, 9.5rem);
-  top: 51%;
+  right: clamp(3rem, 7vw, 8rem);
+  top: clamp(7rem, 18svh, 12rem);
   z-index: 6;
-  width: min(41vw, 600px);
+  width: min(43vw, 640px);
   min-height: 0;
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: clamp(1.65rem, 2.9vw, 3.2rem) clamp(1.55rem, 2.8vw, 3rem);
-  background: #f5edd8;
+  padding: clamp(1.8rem, 3vw, 3.2rem) clamp(1.55rem, 2.8vw, 3rem);
+  background: #fff8e8;
   color: #173f36;
   clip-path: polygon(2% 3%, 98% 0, 100% 92%, 5% 100%, 0 38%);
-  box-shadow: 18px 22px 0 rgba(139, 220, 196, 0.42), 0 32px 80px rgba(0, 0, 0, 0.22);
-  transform: translateY(-45%) rotate(1deg);
+  box-shadow: 14px 18px 0 rgba(139, 220, 196, 0.34), 0 28px 72px rgba(36, 48, 46, 0.16);
+  transform: rotate(1deg);
 }
 
 .literature-card::after {
@@ -1511,43 +1510,32 @@ main {
 .literature-card h2 {
   position: relative;
   z-index: 1;
-  max-width: 9.8em;
+  max-width: 13em;
   margin: 0;
   color: #173f36;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
-  font-size: clamp(3rem, 4.8vw, 6.35rem);
-  font-weight: 900;
+  font-family: var(--font-display-serif);
+  font-size: clamp(2.4rem, 3vw, 3.4rem);
+  font-weight: 800;
   letter-spacing: 0;
-  line-height: 0.84;
-  text-transform: uppercase;
-  text-shadow: 0 6px 0 rgba(139, 220, 196, 0.42);
+  line-height: 1.02;
+  text-transform: none;
+  text-shadow: none;
+}
+
+.literature-intro,
+.literature-body {
+  position: relative;
+  z-index: 1;
+  max-width: 33rem;
+  margin: clamp(1rem, 1.55vw, 1.28rem) 0 0;
+  color: rgba(23, 63, 54, 0.82);
+  font-size: clamp(1.05rem, 1.12vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.44;
 }
 
 .literature-intro {
-  position: relative;
-  z-index: 1;
-  max-width: 28rem;
-  margin: clamp(1rem, 1.7vw, 1.35rem) 0 0;
-  color: rgba(23, 63, 54, 0.82);
-  font-size: clamp(1rem, 1.08vw, 1.14rem);
-  font-weight: 800;
-  line-height: 1.36;
-}
-
-.literature-note {
-  position: relative;
-  z-index: 1;
-  margin-top: clamp(1rem, 1.8vw, 1.45rem);
-  padding: clamp(0.95rem, 1.6vw, 1.35rem) clamp(1rem, 1.8vw, 1.45rem);
-  border: 2px solid rgba(23, 63, 54, 0.84);
-  background: #fffdf7;
-  color: rgba(23, 63, 54, 0.86);
-  font-family: var(--font-serif);
-  font-size: clamp(0.98rem, 1.08vw, 1.13rem);
-  font-weight: 700;
-  line-height: 1.43;
-  box-shadow: 8px 9px 0 rgba(242, 138, 120, 0.56);
-  transform: rotate(-0.8deg);
+  font-weight: 850;
 }
 
 .literature-card footer {
@@ -1573,16 +1561,16 @@ main {
 }
 
 .evidence-list {
-  left: clamp(5.5rem, 13vw, 14rem);
-  top: -2svh;
-  width: min(18vw, 250px);
+  left: clamp(4.2rem, 11vw, 12rem);
+  top: clamp(5rem, 12svh, 8.8rem);
+  width: min(20vw, 270px);
   transform: rotate(-13deg);
 }
 
 .evidence-receipt {
-  left: clamp(15rem, 26vw, 29rem);
-  top: 18svh;
-  width: min(16.5vw, 220px);
+  left: clamp(15rem, 25vw, 28rem);
+  top: clamp(22rem, 52svh, 34rem);
+  width: min(18vw, 245px);
   transform: rotate(7deg);
 }
 
@@ -2168,36 +2156,37 @@ main {
   }
 
   .literature-stage {
-    min-height: 680px;
+    min-height: 155svh;
+    padding: 5.6rem 1.2rem 6rem;
   }
 
   .literature-card {
     right: 1.1rem;
-    top: 49%;
-    width: min(84vw, 31rem);
-    min-height: 52svh;
+    top: 12svh;
+    width: min(86vw, 31rem);
+    min-height: 0;
     padding: 1.75rem 1.35rem 1.9rem;
-    transform: translateY(-38%) rotate(1deg);
+    transform: rotate(1deg);
   }
 
   .literature-card h2 {
-    font-size: clamp(2.85rem, 13vw, 4.8rem);
+    font-size: clamp(2.35rem, 10vw, 3.4rem);
   }
 
   .literature-intro,
-  .literature-note {
+  .literature-body {
     font-size: 0.98rem;
   }
 
   .evidence-list {
-    left: -1rem;
-    top: -8svh;
+    left: -0.5rem;
+    top: 64svh;
     width: min(36vw, 10.5rem);
   }
 
   .evidence-receipt {
     left: 15vw;
-    top: 17svh;
+    top: 91svh;
     width: min(33vw, 10rem);
   }
 

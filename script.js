@@ -92,7 +92,7 @@ function busStoryStops(panel) {
 function literatureEvidenceStop(panel) {
   return {
     top: panel.offsetTop + panel.offsetHeight - window.innerHeight - 4,
-    duration: 6.5,
+    duration: 5.1,
     ease: "none",
   };
 }
@@ -130,7 +130,7 @@ function previousInternalStop(panel) {
     return stops.reverse().find((stop) => window.scrollY > stop + 80) ?? null;
   }
   if (panel?.dataset.panelTheme === "literature-evidence") {
-    return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 4.6, ease: "none" } : null;
+    return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 3.8, ease: "none" } : null;
   }
   return null;
 }
@@ -614,25 +614,24 @@ function setupLiteratureEvidenceMotion() {
   const shadow = panel.querySelector('[data-animate="evidence-shadow"]');
   if (!card || !list || !receipt || !shadow) return;
 
-  gsap.set(card, { autoAlpha: 1, y: 46, rotation: 1 });
-  gsap.set(list, { autoAlpha: 1, yPercent: -12, rotation: -15 });
-  gsap.set(receipt, { autoAlpha: 1, yPercent: -4, rotation: 8 });
-  gsap.set(shadow, { autoAlpha: 0, scaleX: 0.76, scaleY: 0.72 });
+  gsap.set(card, { autoAlpha: 1, y: 28, rotation: 1 });
+  gsap.set(list, { autoAlpha: 1, y: -18, rotation: -15 });
+  gsap.set(receipt, { autoAlpha: 1, y: -8, rotation: 8 });
+  gsap.set(shadow, { autoAlpha: 0.2, scaleX: 0.82, scaleY: 0.72 });
 
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: panel,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 1.2,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 0.8,
     },
   });
 
-  tl.to(card, { y: -38, rotation: -0.25, ease: "none", duration: 1 }, 0)
-    .to(list, { yPercent: 86, xPercent: -7, rotation: -5, ease: "none", duration: 1 }, 0)
-    .to(receipt, { yPercent: 74, xPercent: 6, rotation: 13, ease: "none", duration: 1 }, 0)
-    .to(shadow, { autoAlpha: 0.82, scaleX: 1, scaleY: 1, ease: "none", duration: 0.48 }, 0.22)
-    .to(shadow, { autoAlpha: 0.62, scaleX: 1.08, ease: "none", duration: 0.42 }, 0.58);
+  tl.to(card, { y: -42, rotation: -0.25, ease: "none", duration: 1 }, 0)
+    .to(list, { y: 210, x: -22, rotation: -5, ease: "none", duration: 1 }, 0)
+    .to(receipt, { y: 170, x: 18, rotation: 13, ease: "none", duration: 1 }, 0)
+    .to(shadow, { autoAlpha: 0.58, scaleX: 1.05, scaleY: 0.9, ease: "none", duration: 1 }, 0);
 }
 
 dots.forEach((dot) => {
