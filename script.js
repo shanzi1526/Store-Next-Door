@@ -13,6 +13,7 @@ let activePanel = 0;
 let isAutoPlaying = false;
 let autoTimer = null;
 let autoRunToken = 0;
+let scrollTween = null;
 const timelines = new WeakMap();
 const playedPanels = new WeakSet();
 
@@ -44,15 +45,38 @@ function stopAutoPlay() {
   recordState.textContent = "Paused";
 }
 
-function goToPanel(index, { keepAuto = false } = {}) {
+function goToPanel(index, { keepAuto = false, duration = null, ease = "power2.inOut" } = {}) {
   const nextIndex = clampPanel(index);
   if (!keepAuto) stopAutoPlay();
-  panels[nextIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+  if (duration) {
+    scrollToTop(panels[nextIndex].offsetTop, { duration, ease });
+  } else {
+    panels[nextIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+  }
   setActivePanel(nextIndex);
 }
 
-function scrollToTop(top) {
-  window.scrollTo({ top, behavior: "smooth" });
+function scrollToTop(top, { duration = 1.2, ease = "power2.inOut" } = {}) {
+  const targetTop = Math.max(0, Math.min(top, document.documentElement.scrollHeight - window.innerHeight));
+
+  if (scrollTween) scrollTween.kill();
+
+  if (!window.gsap || duration <= 0) {
+    window.scrollTo({ top: targetTop, behavior: "smooth" });
+    return;
+  }
+
+  const scrollState = { y: window.scrollY };
+  scrollTween = gsap.to(scrollState, {
+    y: targetTop,
+    duration,
+    ease,
+    overwrite: true,
+    onUpdate: () => window.scrollTo(0, scrollState.y),
+    onComplete: () => {
+      scrollTween = null;
+    },
+  });
 }
 
 function peopleTextStop(panel) {
@@ -61,7 +85,22 @@ function peopleTextStop(panel) {
 
 function busStoryStops(panel) {
   const finalStop = panel.offsetTop + panel.offsetHeight - window.innerHeight - 4;
-  return [panel.offsetTop + window.innerHeight * 0.82, finalStop];
+  const scrollRange = panel.offsetHeight - window.innerHeight;
+  return [panel.offsetTop + scrollRange * 0.44, panel.offsetTop + scrollRange * 0.68, finalStop];
+}
+
+function literatureEvidenceStop(panel) {
+  return {
+    top: panel.offsetTop + panel.offsetHeight - window.innerHeight - 4,
+    duration: 6.5,
+    ease: "none",
+  };
+}
+
+function normalizeStop(stop) {
+  if (stop === null) return null;
+  if (typeof stop === "number") return { top: stop, duration: 1.2 };
+  return stop;
 }
 
 function isBeforePeopleText(panel) {
@@ -77,6 +116,10 @@ function nextInternalStop(panel) {
   if (panel?.dataset.panelTheme === "main-statement") {
     return busStoryStops(panel).find((stop) => window.scrollY < stop - 80) ?? null;
   }
+  if (panel?.dataset.panelTheme === "literature-evidence") {
+    const stop = literatureEvidenceStop(panel);
+    return window.scrollY < stop.top - 80 ? stop : null;
+  }
   return null;
 }
 
@@ -85,6 +128,9 @@ function previousInternalStop(panel) {
   if (panel?.dataset.panelTheme === "main-statement") {
     const stops = [panel.offsetTop, ...busStoryStops(panel)];
     return stops.reverse().find((stop) => window.scrollY > stop + 80) ?? null;
+  }
+  if (panel?.dataset.panelTheme === "literature-evidence") {
+    return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 4.6, ease: "none" } : null;
   }
   return null;
 }
@@ -126,15 +172,19 @@ async function runAutoSequence(token) {
 
     const internalStop = nextInternalStop(panels[index]);
     if (internalStop !== null) {
-      scrollToTop(internalStop);
-      await wait(autoConfig.settle, token);
+      const target = normalizeStop(internalStop);
+      scrollToTop(target.top, { duration: target.duration, ease: target.ease });
+      await wait(target.duration * 1000 + 350, token);
       if (!isAutoPlaying || token !== autoRunToken) return;
       continue;
     }
 
+    const currentPanel = panels[index];
     index += 1;
-    goToPanel(index, { keepAuto: true });
-    await wait(autoConfig.settle, token);
+    const duration = currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null;
+    const ease = currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut";
+    goToPanel(index, { keepAuto: true, duration, ease });
+    await wait(duration ? duration * 1000 + 250 : autoConfig.settle, token);
     if (!isAutoPlaying || token !== autoRunToken) return;
     playPanel(panels[index]);
   }
@@ -419,7 +469,7 @@ function observePanels() {
         playPanel(entry.target);
       });
     },
-    { threshold: 0.58 },
+    { threshold: 0.32 },
   );
 
   panels.forEach((panel) => observer.observe(panel));
@@ -507,49 +557,82 @@ function setupBusScrollMotion() {
   });
 
   tl.to(lineOne, { autoAlpha: 1, duration: 0.16, ease: "none" }, 0)
-    .to(lineOne, { autoAlpha: 0.055, scale: 0.96, y: -26, duration: 0.12, ease: "none" }, 0.24)
+    .to(lineOne, { autoAlpha: 0.02, scale: 0.96, y: -26, duration: 0.12, ease: "none" }, 0.24)
     .fromTo(
       lineTwo,
       { xPercent: -50, yPercent: -50, autoAlpha: 0, scale: 1.05, y: 18 },
       { xPercent: -50, yPercent: -50, autoAlpha: 1, scale: 1, y: 0, duration: 0.12, ease: "none" },
       0.34,
     )
-    .to(lineTwo, { autoAlpha: 0.055, scale: 0.96, y: -28, duration: 0.12, ease: "none" }, 0.52)
+    .to(lineTwo, { autoAlpha: 0.02, scale: 0.96, y: -28, duration: 0.12, ease: "none" }, 0.52)
     .fromTo(
       lineThree,
       { xPercent: -50, yPercent: -50, autoAlpha: 0, scale: 1.05, y: 24 },
-      { xPercent: -50, yPercent: -50, autoAlpha: 1, scale: 1, y: 0, duration: 0.14, ease: "none" },
-      0.64,
+      { xPercent: -50, yPercent: -50, autoAlpha: 1, scale: 1, y: 0, duration: 0.16, ease: "none" },
+      0.56,
     )
-    .to(lineThree, { autoAlpha: 0.38, y: -46, duration: 0.16, ease: "none" }, 0.8)
+    .to(lineThree, { autoAlpha: 1, y: 0, duration: 0.18, ease: "none" }, 0.68)
+    .to(lineThree, { autoAlpha: 0.42, y: -46, duration: 0.16, ease: "none" }, 0.82)
     .fromTo(
       ground,
       { autoAlpha: 0, yPercent: 44 },
       { autoAlpha: 1, yPercent: 0, duration: 0.18, ease: "none" },
-      0.72,
+      0.8,
     )
     .fromTo(
       busStop,
       { autoAlpha: 0, yPercent: 68, scale: 0.92, rotation: -2 },
       { autoAlpha: 1, yPercent: 0, scale: 1, rotation: 0, duration: 0.22, ease: "none" },
-      0.76,
+      0.84,
     )
     .fromTo(
       bus,
       { autoAlpha: 0, xPercent: 86, yPercent: 30, scale: 0.28, rotation: -8 },
       { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotation: 0, duration: 0.24, ease: "none" },
-      0.82,
+      0.88,
     )
     .fromTo(
       caption,
       { xPercent: -50, autoAlpha: 0, y: 28, rotation: -3 },
       { xPercent: -50, autoAlpha: 1, y: 0, rotation: -1.4, duration: 0.14, ease: "none" },
-      0.9,
+      0.94,
     );
 
   if (routePath) {
-    tl.to(routePath, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.22, ease: "none" }, 0.8);
+    tl.to(routePath, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.2, ease: "none" }, 0.86);
   }
+}
+
+function setupLiteratureEvidenceMotion() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const panel = document.querySelector('[data-panel-theme="literature-evidence"]');
+  if (!panel) return;
+
+  const card = panel.querySelector('[data-animate="evidence-card"]');
+  const list = panel.querySelector('[data-animate="evidence-list"]');
+  const receipt = panel.querySelector('[data-animate="evidence-receipt"]');
+  const shadow = panel.querySelector('[data-animate="evidence-shadow"]');
+  if (!card || !list || !receipt || !shadow) return;
+
+  gsap.set(card, { autoAlpha: 1, y: 46, rotation: 1 });
+  gsap.set(list, { autoAlpha: 1, yPercent: -12, rotation: -15 });
+  gsap.set(receipt, { autoAlpha: 1, yPercent: -4, rotation: 8 });
+  gsap.set(shadow, { autoAlpha: 0, scaleX: 0.76, scaleY: 0.72 });
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1.2,
+    },
+  });
+
+  tl.to(card, { y: -38, rotation: -0.25, ease: "none", duration: 1 }, 0)
+    .to(list, { yPercent: 86, xPercent: -7, rotation: -5, ease: "none", duration: 1 }, 0)
+    .to(receipt, { yPercent: 74, xPercent: 6, rotation: 13, ease: "none", duration: 1 }, 0)
+    .to(shadow, { autoAlpha: 0.82, scaleX: 1, scaleY: 1, ease: "none", duration: 0.48 }, 0.22)
+    .to(shadow, { autoAlpha: 0.62, scaleX: 1.08, ease: "none", duration: 0.42 }, 0.58);
 }
 
 dots.forEach((dot) => {
@@ -574,11 +657,14 @@ window.addEventListener("keydown", (event) => {
     const currentPanel = panels[currentIndex];
     const internalStop = nextInternalStop(currentPanel);
     if (internalStop !== null) {
+      const target = normalizeStop(internalStop);
       stopAutoPlay();
-      scrollToTop(internalStop);
+      scrollToTop(target.top, { duration: target.duration, ease: target.ease });
       return;
     }
-    goToPanel(currentIndex + 1);
+    const duration = currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null;
+    const ease = currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut";
+    goToPanel(currentIndex + 1, { duration, ease });
     return;
   }
 
@@ -588,11 +674,14 @@ window.addEventListener("keydown", (event) => {
     const currentPanel = panels[currentIndex];
     const internalStop = previousInternalStop(currentPanel);
     if (internalStop !== null) {
+      const target = normalizeStop(internalStop);
       stopAutoPlay();
-      scrollToTop(internalStop);
+      scrollToTop(target.top, { duration: target.duration, ease: target.ease });
       return;
     }
-    goToPanel(currentIndex - 1);
+    const duration = currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null;
+    const ease = currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut";
+    goToPanel(currentIndex - 1, { duration, ease });
   }
 });
 
@@ -601,4 +690,5 @@ prepareAnimations();
 observePanels();
 setupPeopleScrollMotion();
 setupBusScrollMotion();
+setupLiteratureEvidenceMotion();
 playPanel(panels[0]);

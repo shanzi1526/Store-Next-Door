@@ -769,7 +769,7 @@ main {
 
 .panel-main-statement {
   display: block;
-  min-height: 285svh;
+  min-height: 340svh;
   background:
     radial-gradient(circle at 74% 22%, rgba(242, 138, 120, 0.18), transparent 18rem),
     radial-gradient(circle at 24% 78%, rgba(139, 220, 196, 0.16), transparent 20rem),
@@ -1125,6 +1125,8 @@ main {
 .bus-line-three {
   top: 42%;
   color: #ffe39a;
+  width: min(94vw, 1420px);
+  font-size: clamp(3.6rem, 7.4vw, 10.8rem);
 }
 
 .bus-route {
@@ -1245,7 +1247,6 @@ main {
 }
 
 .map-asset-wrap img,
-.pressure-asset-wrap img,
 .node-asset-wrap img {
   display: block;
   width: 100%;
@@ -1402,75 +1403,199 @@ main {
   transform: rotate(4deg);
 }
 
-.pressure-copy {
-  right: clamp(2.5rem, 5vw, 5.8rem);
-  top: clamp(4.4rem, 9svh, 7rem);
+.panel-literature-evidence {
+  display: block;
+  min-height: 195svh;
+  margin-top: 0;
+  overflow: visible;
+  background:
+    radial-gradient(ellipse at 22% 84%, rgba(139, 220, 196, 0.2), transparent 30rem),
+    radial-gradient(ellipse at 78% 18%, rgba(255, 227, 154, 0.08), transparent 22rem),
+    #173f36;
+  color: var(--paper);
 }
 
-.pressure-paper-a {
-  left: 7%;
-  top: 9%;
-  width: min(47vw, 680px);
-  height: 76svh;
+.panel-literature-evidence::before,
+.panel-literature-evidence::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.panel-literature-evidence::before {
+  left: -3%;
+  right: -3%;
+  top: 0;
+  z-index: 4;
+  height: clamp(3.2rem, 7svh, 5.8rem);
+  background: #173f36;
+  clip-path: polygon(0 0, 100% 0, 100% 22%, 88% 10%, 76% 26%, 64% 8%, 53% 28%, 42% 13%, 31% 30%, 21% 10%, 13% 24%, 6% 7%, 0 18%);
+}
+
+.panel-literature-evidence::after {
+  inset: 0;
+  z-index: 1;
+  opacity: 0.22;
+  background:
+    repeating-linear-gradient(106deg, rgba(36, 48, 46, 0.26) 0 1px, transparent 1px 8px),
+    repeating-radial-gradient(circle at 14% 20%, rgba(255, 253, 247, 0.18) 0 1px, transparent 1px 5px),
+    linear-gradient(rgba(255, 253, 247, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 253, 247, 0.06) 1px, transparent 1px);
+  background-size: auto, auto, 34px 34px, 34px 34px;
+  mix-blend-mode: overlay;
+}
+
+.literature-stage {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  width: 100vw;
+  height: 100svh;
+  min-height: 680px;
+  overflow: hidden;
+}
+
+.literature-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.11;
+  background-image:
+    linear-gradient(rgba(255, 253, 247, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 253, 247, 0.07) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+.literature-card {
+  position: absolute;
+  right: clamp(4.8rem, 8.4vw, 9.5rem);
+  top: 51%;
+  z-index: 6;
+  width: min(41vw, 600px);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: clamp(1.65rem, 2.9vw, 3.2rem) clamp(1.55rem, 2.8vw, 3rem);
   background: #f5edd8;
-  clip-path: polygon(5% 0, 100% 5%, 94% 100%, 0 92%);
-  transform: rotate(-4deg);
+  color: #173f36;
+  clip-path: polygon(2% 3%, 98% 0, 100% 92%, 5% 100%, 0 38%);
+  box-shadow: 18px 22px 0 rgba(139, 220, 196, 0.42), 0 32px 80px rgba(0, 0, 0, 0.22);
+  transform: translateY(-45%) rotate(1deg);
 }
 
-.pressure-paper-b {
-  right: 8%;
-  bottom: 7%;
-  width: min(35vw, 520px);
-  height: 40svh;
-  background: #f4b9b4;
-  clip-path: polygon(0 12%, 96% 0, 100% 88%, 8% 100%);
+.literature-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  background:
+    repeating-linear-gradient(7deg, rgba(36, 48, 46, 0.18) 0 1px, transparent 1px 8px),
+    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.48), transparent 20rem);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.literature-label {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 clamp(0.75rem, 1.3vw, 1.15rem);
+  color: #2f5e4e;
+  font-size: clamp(0.74rem, 0.9vw, 0.92rem);
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.literature-card h2 {
+  position: relative;
+  z-index: 1;
+  max-width: 9.8em;
+  margin: 0;
+  color: #173f36;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
+  font-size: clamp(3rem, 4.8vw, 6.35rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.84;
+  text-transform: uppercase;
+  text-shadow: 0 6px 0 rgba(139, 220, 196, 0.42);
+}
+
+.literature-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 28rem;
+  margin: clamp(1rem, 1.7vw, 1.35rem) 0 0;
+  color: rgba(23, 63, 54, 0.82);
+  font-size: clamp(1rem, 1.08vw, 1.14rem);
+  font-weight: 800;
+  line-height: 1.36;
+}
+
+.literature-note {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(1rem, 1.8vw, 1.45rem);
+  padding: clamp(0.95rem, 1.6vw, 1.35rem) clamp(1rem, 1.8vw, 1.45rem);
+  border: 2px solid rgba(23, 63, 54, 0.84);
+  background: #fffdf7;
+  color: rgba(23, 63, 54, 0.86);
+  font-family: var(--font-serif);
+  font-size: clamp(0.98rem, 1.08vw, 1.13rem);
+  font-weight: 700;
+  line-height: 1.43;
+  box-shadow: 8px 9px 0 rgba(242, 138, 120, 0.56);
+  transform: rotate(-0.8deg);
+}
+
+.literature-card footer {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(1.4rem, 2.4vw, 2.3rem);
+  color: #2f5e4e;
+  font-size: clamp(0.78rem, 0.92vw, 0.98rem);
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.evidence-object {
+  position: absolute;
+  z-index: 4;
+  display: block;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 34px 36px rgba(0, 0, 0, 0.34));
+  transform-origin: 50% 18%;
+}
+
+.evidence-list {
+  left: clamp(5.5rem, 13vw, 14rem);
+  top: -2svh;
+  width: min(18vw, 250px);
+  transform: rotate(-13deg);
+}
+
+.evidence-receipt {
+  left: clamp(15rem, 26vw, 29rem);
+  top: 18svh;
+  width: min(16.5vw, 220px);
   transform: rotate(7deg);
 }
 
-.pressure-asset-wrap {
+.evidence-shadow {
   position: absolute;
-  z-index: 4;
-  left: clamp(2rem, 6vw, 7rem);
-  bottom: clamp(-4rem, -7svh, -2rem);
-  width: min(57vw, 780px);
-  transform: rotate(-2deg);
-}
-
-.pressure-label {
-  z-index: 6;
-}
-
-.label-small-type {
-  left: 48%;
-  top: 19%;
-  transform: rotate(4deg);
-}
-
-.label-prices {
-  left: 54%;
-  top: 40%;
-  background: #ffe39a;
-  transform: rotate(-3deg);
-}
-
-.label-distance {
-  left: 43%;
-  bottom: 16%;
-  background: #f4b9b4;
-  transform: rotate(3deg);
-}
-
-.label-decision {
-  right: 9%;
-  bottom: 29%;
-  transform: rotate(-2deg);
-}
-
-.label-anxiety {
-  right: 12%;
-  top: 58%;
-  background: #ffe39a;
-  transform: rotate(3deg);
+  left: clamp(5rem, 13vw, 14rem);
+  bottom: clamp(3rem, 7svh, 5.6rem);
+  z-index: 3;
+  width: min(36vw, 520px);
+  height: clamp(2.4rem, 5vw, 5.4rem);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(5, 18, 15, 0.48), rgba(5, 18, 15, 0.18) 48%, transparent 72%);
+  filter: blur(8px);
 }
 
 .node-copy {
@@ -1994,7 +2119,6 @@ main {
 
   .map-paper-a,
   .map-paper-field,
-  .pressure-paper-a,
   .node-paper-a {
     left: -10%;
     width: 86vw;
@@ -2004,7 +2128,6 @@ main {
   .map-paper-b,
   .map-paper-pink,
   .map-paper-cream,
-  .pressure-paper-b,
   .node-paper-b {
     right: -20%;
     bottom: 10%;
@@ -2037,12 +2160,51 @@ main {
     display: none;
   }
 
-  .pressure-asset-wrap,
   .node-asset-wrap {
     width: 92vw;
     left: auto;
     right: -12vw;
     bottom: -1rem;
+  }
+
+  .literature-stage {
+    min-height: 680px;
+  }
+
+  .literature-card {
+    right: 1.1rem;
+    top: 49%;
+    width: min(84vw, 31rem);
+    min-height: 52svh;
+    padding: 1.75rem 1.35rem 1.9rem;
+    transform: translateY(-38%) rotate(1deg);
+  }
+
+  .literature-card h2 {
+    font-size: clamp(2.85rem, 13vw, 4.8rem);
+  }
+
+  .literature-intro,
+  .literature-note {
+    font-size: 0.98rem;
+  }
+
+  .evidence-list {
+    left: -1rem;
+    top: -8svh;
+    width: min(36vw, 10.5rem);
+  }
+
+  .evidence-receipt {
+    left: 15vw;
+    top: 17svh;
+    width: min(33vw, 10rem);
+  }
+
+  .evidence-shadow {
+    left: -2rem;
+    bottom: 3.5rem;
+    width: 58vw;
   }
 
   .map-route-overlay {
