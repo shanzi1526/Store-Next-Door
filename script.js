@@ -91,8 +91,8 @@ function busStoryStops(panel) {
 
 function literatureEvidenceStop(panel) {
   return {
-    top: panel.offsetTop + panel.offsetHeight - window.innerHeight - 4,
-    duration: 5.1,
+    top: panel.offsetTop + panel.offsetHeight * 0.42,
+    duration: 5,
     ease: "none",
   };
 }
@@ -120,6 +120,11 @@ function nextInternalStop(panel) {
     const stop = literatureEvidenceStop(panel);
     return window.scrollY < stop.top - 80 ? stop : null;
   }
+  return null;
+}
+
+function panelEntryStop(panel) {
+  if (panel?.dataset.panelTheme === "literature-evidence") return literatureEvidenceStop(panel);
   return null;
 }
 
@@ -181,10 +186,17 @@ async function runAutoSequence(token) {
 
     const currentPanel = panels[index];
     index += 1;
-    const duration = currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null;
-    const ease = currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut";
-    goToPanel(index, { keepAuto: true, duration, ease });
-    await wait(duration ? duration * 1000 + 250 : autoConfig.settle, token);
+    const entryStop = panelEntryStop(panels[index]);
+    if (entryStop) {
+      setActivePanel(index);
+      scrollToTop(entryStop.top, { duration: entryStop.duration, ease: entryStop.ease });
+      await wait(entryStop.duration * 1000 + 250, token);
+    } else {
+      const duration = currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null;
+      const ease = currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut";
+      goToPanel(index, { keepAuto: true, duration, ease });
+      await wait(duration ? duration * 1000 + 250 : autoConfig.settle, token);
+    }
     if (!isAutoPlaying || token !== autoRunToken) return;
     playPanel(panels[index]);
   }
@@ -614,10 +626,10 @@ function setupLiteratureEvidenceMotion() {
   const shadow = panel.querySelector('[data-animate="evidence-shadow"]');
   if (!card || !list || !receipt || !shadow) return;
 
-  gsap.set(card, { autoAlpha: 1, y: 28, rotation: 1 });
-  gsap.set(list, { autoAlpha: 1, y: -18, rotation: -15 });
-  gsap.set(receipt, { autoAlpha: 1, y: -8, rotation: 8 });
-  gsap.set(shadow, { autoAlpha: 0.2, scaleX: 0.82, scaleY: 0.72 });
+  gsap.set(card, { autoAlpha: 1, y: 18, rotation: 1 });
+  gsap.set(receipt, { autoAlpha: 1, left: "24vw", top: "-22vh", rotation: -12, scale: 0.9 });
+  gsap.set(list, { autoAlpha: 1, left: "10vw", top: "-34vh", rotation: 10, scale: 0.86 });
+  gsap.set(shadow, { autoAlpha: 0, scaleX: 0.82, scaleY: 0.72 });
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -628,10 +640,10 @@ function setupLiteratureEvidenceMotion() {
     },
   });
 
-  tl.to(card, { y: -42, rotation: -0.25, ease: "none", duration: 1 }, 0)
-    .to(list, { y: 210, x: -22, rotation: -5, ease: "none", duration: 1 }, 0)
-    .to(receipt, { y: 170, x: 18, rotation: 13, ease: "none", duration: 1 }, 0)
-    .to(shadow, { autoAlpha: 0.58, scaleX: 1.05, scaleY: 0.9, ease: "none", duration: 1 }, 0);
+  tl.to(card, { y: -18, rotation: -0.25, ease: "none", duration: 1 }, 0)
+    .to(receipt, { left: "24vw", top: "68vh", rotation: 8, scale: 1.05, ease: "none", duration: 1 }, 0)
+    .to(list, { left: "13vw", top: "58vh", rotation: -8, scale: 1, ease: "none", duration: 1 }, 0)
+    .to(shadow, { autoAlpha: 0.6, scaleX: 1.05, scaleY: 0.9, ease: "none", duration: 1 }, 0);
 }
 
 dots.forEach((dot) => {
@@ -661,9 +673,18 @@ window.addEventListener("keydown", (event) => {
       scrollToTop(target.top, { duration: target.duration, ease: target.ease });
       return;
     }
+    if (currentIndex >= panels.length - 1) return;
+    const nextIndex = clampPanel(currentIndex + 1);
+    const entryStop = panelEntryStop(panels[nextIndex]);
+    if (entryStop) {
+      stopAutoPlay();
+      setActivePanel(nextIndex);
+      scrollToTop(entryStop.top, { duration: entryStop.duration, ease: entryStop.ease });
+      return;
+    }
     const duration = currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null;
     const ease = currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut";
-    goToPanel(currentIndex + 1, { duration, ease });
+    goToPanel(nextIndex, { duration, ease });
     return;
   }
 

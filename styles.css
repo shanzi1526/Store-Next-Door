@@ -1405,13 +1405,10 @@ main {
 
 .panel-literature-evidence {
   display: block;
-  min-height: 155svh;
-  margin-top: 0;
+  min-height: 145svh;
+  margin-top: -8svh;
   overflow: visible;
-  background:
-    radial-gradient(ellipse at 24% 70%, rgba(139, 220, 196, 0.16), transparent 30rem),
-    radial-gradient(ellipse at 74% 18%, rgba(242, 138, 120, 0.18), transparent 25rem),
-    linear-gradient(180deg, #dfe6f0 0%, #eadde6 56%, #dbe8ed 100%);
+  background: transparent;
   color: #173f36;
 }
 
@@ -1423,13 +1420,13 @@ main {
 }
 
 .panel-literature-evidence::before {
-  left: -3%;
-  right: -3%;
-  top: clamp(-4.2rem, -7svh, -2.4rem);
-  z-index: 5;
-  height: clamp(4.8rem, 9svh, 7rem);
-  background: #dfe6f0;
-  clip-path: polygon(0 0, 100% 0, 100% 44%, 90% 24%, 79% 48%, 67% 28%, 55% 52%, 42% 24%, 31% 50%, 20% 30%, 9% 54%, 0 34%);
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 22% 72%, rgba(139, 220, 196, 0.14), transparent 30rem),
+    radial-gradient(ellipse at 76% 18%, rgba(242, 138, 120, 0.16), transparent 25rem),
+    #dcdaf4;
+  clip-path: polygon(0 4.8%, 8% 2.2%, 17% 5.4%, 28% 2.6%, 39% 5.8%, 51% 2.4%, 63% 5.2%, 76% 2.8%, 88% 5.5%, 100% 3%, 100% 100%, 0 100%);
 }
 
 .panel-literature-evidence::after {
@@ -1443,14 +1440,15 @@ main {
     linear-gradient(90deg, rgba(36, 48, 46, 0.035) 1px, transparent 1px);
   background-size: auto, auto, 34px 34px, 34px 34px;
   mix-blend-mode: overlay;
+  clip-path: polygon(0 4.8%, 8% 2.2%, 17% 5.4%, 28% 2.6%, 39% 5.8%, 51% 2.4%, 63% 5.2%, 76% 2.8%, 88% 5.5%, 100% 3%, 100% 100%, 0 100%);
 }
 
 .literature-stage {
   position: relative;
   z-index: 2;
   width: 100vw;
-  min-height: 155svh;
-  padding: clamp(5.2rem, 11svh, 8rem) clamp(2rem, 5vw, 6rem) clamp(7rem, 14svh, 10rem);
+  min-height: 145svh;
+  padding: clamp(6rem, 12svh, 8rem) clamp(2rem, 5vw, 6rem) clamp(7rem, 14svh, 10rem);
   overflow: visible;
 }
 
@@ -1467,16 +1465,15 @@ main {
 }
 
 .literature-card {
-  position: absolute;
-  right: clamp(3rem, 7vw, 8rem);
-  top: clamp(7rem, 18svh, 12rem);
+  position: sticky;
+  top: 20svh;
   z-index: 6;
-  width: min(43vw, 640px);
+  width: min(48vw, 720px);
   min-height: 0;
   display: flex;
   flex-direction: column;
-  margin: 0;
-  padding: clamp(1.8rem, 3vw, 3.2rem) clamp(1.55rem, 2.8vw, 3rem);
+  margin: 0 clamp(3rem, 7vw, 8rem) 0 auto;
+  padding: clamp(1.7rem, 2.45vw, 2.6rem) clamp(1.55rem, 2.45vw, 2.55rem);
   background: #fff8e8;
   color: #173f36;
   clip-path: polygon(2% 3%, 98% 0, 100% 92%, 5% 100%, 0 38%);
@@ -1514,7 +1511,7 @@ main {
   margin: 0;
   color: #173f36;
   font-family: var(--font-display-serif);
-  font-size: clamp(2.4rem, 3vw, 3.4rem);
+  font-size: clamp(2.4rem, 2.75vw, 3.2rem);
   font-weight: 800;
   letter-spacing: 0;
   line-height: 1.02;
@@ -1529,7 +1526,7 @@ main {
   max-width: 33rem;
   margin: clamp(1rem, 1.55vw, 1.28rem) 0 0;
   color: rgba(23, 63, 54, 0.82);
-  font-size: clamp(1.05rem, 1.12vw, 1.25rem);
+  font-size: clamp(1.05rem, 1.08vw, 1.22rem);
   font-weight: 700;
   line-height: 1.44;
 }
@@ -1561,25 +1558,25 @@ main {
 }
 
 .evidence-list {
-  left: clamp(4.2rem, 11vw, 12rem);
-  top: clamp(5rem, 12svh, 8.8rem);
+  left: 10vw;
+  top: -34vh;
   width: min(20vw, 270px);
-  transform: rotate(-13deg);
+  transform: rotate(10deg) scale(0.86);
 }
 
 .evidence-receipt {
-  left: clamp(15rem, 25vw, 28rem);
-  top: clamp(22rem, 52svh, 34rem);
+  left: 24vw;
+  top: -22vh;
   width: min(18vw, 245px);
-  transform: rotate(7deg);
+  transform: rotate(-12deg) scale(0.9);
 }
 
 .evidence-shadow {
   position: absolute;
-  left: clamp(5rem, 13vw, 14rem);
-  bottom: clamp(3rem, 7svh, 5.6rem);
+  left: 8vw;
+  bottom: 8vh;
   z-index: 3;
-  width: min(36vw, 520px);
+  width: 34vw;
   height: clamp(2.4rem, 5vw, 5.4rem);
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(5, 18, 15, 0.48), rgba(5, 18, 15, 0.18) 48%, transparent 72%);
