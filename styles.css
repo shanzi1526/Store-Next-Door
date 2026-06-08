@@ -1154,8 +1154,8 @@ main {
   bottom: -10%;
   width: 118vw;
   height: 28svh;
-  background: #f5edd8;
-  opacity: 0.16;
+  background: #dcdaf4;
+  opacity: 1;
   clip-path: polygon(0 38%, 9% 28%, 19% 36%, 30% 24%, 43% 34%, 55% 22%, 67% 35%, 80% 26%, 92% 38%, 100% 30%, 100% 100%, 0 100%);
 }
 
@@ -1469,24 +1469,62 @@ main {
   background-size: 46px 46px;
 }
 
-.literature-card {
+.literature-reading {
   position: sticky;
-  top: 20svh;
+  top: 25svh;
   z-index: 6;
   width: min(48vw, 720px);
+  margin: 0 clamp(3rem, 7vw, 8rem) 0 auto;
+}
+
+.literature-context {
+  max-width: 34rem;
+  margin: 0 0 clamp(1.15rem, 1.8svh, 1.55rem);
+  padding-left: clamp(0.05rem, 0.3vw, 0.2rem);
+  color: rgba(23, 63, 54, 0.82);
+}
+
+.literature-context p {
+  margin: 0;
+  font-size: clamp(1.02rem, 1.08vw, 1.18rem);
+  font-weight: 750;
+  line-height: 1.38;
+}
+
+.literature-eyebrow {
+  color: #2f5e4e;
+  font-size: clamp(0.68rem, 0.78vw, 0.82rem) !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.literature-context h3 {
+  margin: 0.28rem 0 0.42rem;
+  color: #173f36;
+  font-family: var(--font-display-serif);
+  font-size: clamp(1.5rem, 1.75vw, 2rem);
+  font-weight: 800;
+  line-height: 1.04;
+}
+
+.literature-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  margin: 0 clamp(3rem, 7vw, 8rem) 0 auto;
   padding: clamp(1.7rem, 2.45vw, 2.6rem) clamp(1.55rem, 2.45vw, 2.55rem);
   background: #fff8e8;
   color: #173f36;
-  clip-path: polygon(2% 3%, 98% 0, 100% 92%, 5% 100%, 0 38%);
+  clip-path: polygon(0.3% 0.6%, 99.6% 0.2%, 99.8% 99%, 0.8% 99.5%, 0 42%);
   box-shadow: 14px 18px 0 rgba(139, 220, 196, 0.34), 0 28px 72px rgba(36, 48, 46, 0.16);
-  transform: rotate(1deg);
+  transform: rotate(-0.7deg);
 }
 
-.literature-card::after {
+.literature-card::after,
+.literature-support::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -1496,6 +1534,23 @@ main {
     radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.48), transparent 20rem);
   mix-blend-mode: multiply;
   pointer-events: none;
+}
+
+.literature-support {
+  position: relative;
+  z-index: 1;
+  width: min(84%, 34rem);
+  margin: clamp(1.35rem, 2.2svh, 1.85rem) 0 0;
+  padding: clamp(1rem, 1.65vw, 1.45rem) clamp(1rem, 1.75vw, 1.55rem);
+  background: #e9f4df;
+  color: #173f36;
+  clip-path: polygon(0.8% 1.2%, 99% 0.2%, 100% 97.5%, 1.4% 100%, 0 28%);
+  box-shadow: 9px 11px 0 rgba(242, 138, 120, 0.24), 0 20px 48px rgba(36, 48, 46, 0.12);
+  transform: rotate(0.8deg);
+}
+
+.literature-support::after {
+  opacity: 0.16;
 }
 
 .literature-label {
@@ -1525,7 +1580,8 @@ main {
 }
 
 .literature-intro,
-.literature-body {
+.literature-body,
+.literature-support p {
   position: relative;
   z-index: 1;
   max-width: 33rem;
@@ -1540,10 +1596,10 @@ main {
   font-weight: 850;
 }
 
-.literature-card footer {
+.literature-support footer {
   position: relative;
   z-index: 1;
-  margin-top: clamp(1.4rem, 2.4vw, 2.3rem);
+  margin-top: clamp(0.85rem, 1.4vw, 1.25rem);
   color: #2f5e4e;
   font-size: clamp(0.78rem, 0.92vw, 0.98rem);
   font-weight: 950;
@@ -1579,13 +1635,13 @@ main {
 .evidence-shadow {
   position: absolute;
   left: 8vw;
-  bottom: 8vh;
+  bottom: 14vh;
   z-index: 3;
-  width: 34vw;
-  height: clamp(2.4rem, 5vw, 5.4rem);
+  width: 25vw;
+  height: clamp(1.5rem, 3vw, 3.2rem);
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(5, 18, 15, 0.48), rgba(5, 18, 15, 0.18) 48%, transparent 72%);
-  filter: blur(8px);
+  background: radial-gradient(ellipse at center, rgba(5, 18, 15, 0.36), rgba(5, 18, 15, 0.13) 48%, transparent 72%);
+  filter: blur(7px);
 }
 
 .node-copy {
@@ -2162,13 +2218,27 @@ main {
     padding: 5.6rem 1.2rem 6rem;
   }
 
-  .literature-card {
+  .literature-reading {
     right: 1.1rem;
     top: 12svh;
     width: min(86vw, 31rem);
+    margin: 0 1.1rem 0 auto;
+  }
+
+  .literature-context {
+    margin-left: 0;
+    margin-bottom: 0.75rem;
+  }
+
+  .literature-card {
     min-height: 0;
     padding: 1.75rem 1.35rem 1.9rem;
-    transform: rotate(1deg);
+    transform: rotate(-0.7deg);
+  }
+
+  .literature-support {
+    width: 92%;
+    padding: 1rem 1.1rem 1.15rem;
   }
 
   .literature-card h2 {

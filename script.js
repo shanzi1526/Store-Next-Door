@@ -623,9 +623,10 @@ function setupLiteratureEvidenceMotion() {
   const list = panel.querySelector('[data-animate="evidence-list"]');
   const receipt = panel.querySelector('[data-animate="evidence-receipt"]');
   const shadow = panel.querySelector('[data-animate="evidence-shadow"]');
-  if (!list || !receipt || !shadow) return;
+  const reading = panel.querySelector('[data-animate="evidence-card"]');
+  if (!list || !receipt || !shadow || !reading) return;
 
-  gsap.set(panel.querySelector('[data-animate="evidence-card"]'), { autoAlpha: 1 });
+  gsap.set(reading, { autoAlpha: 1, y: 10 });
   gsap.set(receipt, { autoAlpha: 1, left: "24vw", top: "-22vh", rotation: -12, scale: 0.9 });
   gsap.set(list, { autoAlpha: 1, left: "10vw", top: "-34vh", rotation: 10, scale: 0.86 });
   gsap.set(shadow, { autoAlpha: 0, scaleX: 0.82, scaleY: 0.72 });
@@ -639,9 +640,10 @@ function setupLiteratureEvidenceMotion() {
     },
   });
 
-  tl.to(receipt, { left: "24vw", top: "52vh", rotation: 8, scale: 1.05, ease: "none", duration: 1 }, 0)
-    .to(list, { left: "13vw", top: "46vh", rotation: -8, scale: 1, ease: "none", duration: 1 }, 0)
-    .to(shadow, { autoAlpha: 0.6, scaleX: 1.05, scaleY: 0.9, ease: "none", duration: 1 }, 0);
+  tl.to(reading, { y: -8, ease: "none", duration: 1 }, 0)
+    .to(receipt, { left: "22vw", top: "96vh", rotation: 4, scale: 0.91, ease: "none", duration: 1 }, 0)
+    .to(list, { left: "12vw", top: "84vh", rotation: -5, scale: 0.86, ease: "none", duration: 1 }, 0)
+    .to(shadow, { autoAlpha: 0.38, scaleX: 0.78, scaleY: 0.68, ease: "none", duration: 1 }, 0);
 }
 
 dots.forEach((dot) => {
