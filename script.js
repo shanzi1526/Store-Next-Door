@@ -91,7 +91,7 @@ function busStoryStops(panel) {
 
 function literatureEvidenceStop(panel) {
   return {
-    top: panel.offsetTop + panel.offsetHeight * 0.42,
+    top: panel.offsetTop + panel.offsetHeight * 0.36,
     duration: 5,
     ease: "none",
   };
@@ -620,13 +620,12 @@ function setupLiteratureEvidenceMotion() {
   const panel = document.querySelector('[data-panel-theme="literature-evidence"]');
   if (!panel) return;
 
-  const card = panel.querySelector('[data-animate="evidence-card"]');
   const list = panel.querySelector('[data-animate="evidence-list"]');
   const receipt = panel.querySelector('[data-animate="evidence-receipt"]');
   const shadow = panel.querySelector('[data-animate="evidence-shadow"]');
-  if (!card || !list || !receipt || !shadow) return;
+  if (!list || !receipt || !shadow) return;
 
-  gsap.set(card, { autoAlpha: 1, y: 18, rotation: 1 });
+  gsap.set(panel.querySelector('[data-animate="evidence-card"]'), { autoAlpha: 1 });
   gsap.set(receipt, { autoAlpha: 1, left: "24vw", top: "-22vh", rotation: -12, scale: 0.9 });
   gsap.set(list, { autoAlpha: 1, left: "10vw", top: "-34vh", rotation: 10, scale: 0.86 });
   gsap.set(shadow, { autoAlpha: 0, scaleX: 0.82, scaleY: 0.72 });
@@ -635,14 +634,13 @@ function setupLiteratureEvidenceMotion() {
     scrollTrigger: {
       trigger: panel,
       start: "top bottom",
-      end: "bottom top",
+      end: () => `+=${window.innerHeight + panel.offsetHeight * 0.36}`,
       scrub: 0.8,
     },
   });
 
-  tl.to(card, { y: -18, rotation: -0.25, ease: "none", duration: 1 }, 0)
-    .to(receipt, { left: "24vw", top: "68vh", rotation: 8, scale: 1.05, ease: "none", duration: 1 }, 0)
-    .to(list, { left: "13vw", top: "58vh", rotation: -8, scale: 1, ease: "none", duration: 1 }, 0)
+  tl.to(receipt, { left: "24vw", top: "52vh", rotation: 8, scale: 1.05, ease: "none", duration: 1 }, 0)
+    .to(list, { left: "13vw", top: "46vh", rotation: -8, scale: 1, ease: "none", duration: 1 }, 0)
     .to(shadow, { autoAlpha: 0.6, scaleX: 1.05, scaleY: 0.9, ease: "none", duration: 1 }, 0);
 }
 

@@ -1406,9 +1406,12 @@ main {
 .panel-literature-evidence {
   display: block;
   min-height: 145svh;
-  margin-top: -8svh;
+  margin-top: 0;
   overflow: visible;
-  background: transparent;
+  background:
+    radial-gradient(ellipse at 22% 72%, rgba(139, 220, 196, 0.14), transparent 30rem),
+    radial-gradient(ellipse at 76% 18%, rgba(242, 138, 120, 0.16), transparent 25rem),
+    #dcdaf4;
   color: #173f36;
 }
 
@@ -1420,13 +1423,16 @@ main {
 }
 
 .panel-literature-evidence::before {
-  inset: 0;
-  z-index: 0;
+  left: -3%;
+  right: -3%;
+  top: -4svh;
+  z-index: 5;
+  height: 7svh;
   background:
     radial-gradient(ellipse at 22% 72%, rgba(139, 220, 196, 0.14), transparent 30rem),
     radial-gradient(ellipse at 76% 18%, rgba(242, 138, 120, 0.16), transparent 25rem),
     #dcdaf4;
-  clip-path: polygon(0 4.8%, 8% 2.2%, 17% 5.4%, 28% 2.6%, 39% 5.8%, 51% 2.4%, 63% 5.2%, 76% 2.8%, 88% 5.5%, 100% 3%, 100% 100%, 0 100%);
+  clip-path: polygon(0 42%, 8% 20%, 17% 48%, 28% 24%, 39% 52%, 51% 20%, 63% 46%, 76% 24%, 88% 50%, 100% 26%, 100% 100%, 0 100%);
 }
 
 .panel-literature-evidence::after {
@@ -1440,7 +1446,6 @@ main {
     linear-gradient(90deg, rgba(36, 48, 46, 0.035) 1px, transparent 1px);
   background-size: auto, auto, 34px 34px, 34px 34px;
   mix-blend-mode: overlay;
-  clip-path: polygon(0 4.8%, 8% 2.2%, 17% 5.4%, 28% 2.6%, 39% 5.8%, 51% 2.4%, 63% 5.2%, 76% 2.8%, 88% 5.5%, 100% 3%, 100% 100%, 0 100%);
 }
 
 .literature-stage {
@@ -1449,7 +1454,7 @@ main {
   width: 100vw;
   min-height: 145svh;
   padding: clamp(6rem, 12svh, 8rem) clamp(2rem, 5vw, 6rem) clamp(7rem, 14svh, 10rem);
-  overflow: visible;
+  overflow: clip;
 }
 
 .literature-stage::before {
