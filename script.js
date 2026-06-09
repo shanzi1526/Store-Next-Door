@@ -90,19 +90,19 @@ function busStoryStops(panel) {
 }
 
 function literatureEvidenceStop(panel) {
-  const safeFinalStop = panel.offsetTop + Math.max(0, panel.offsetHeight - window.innerHeight - 8);
+  const stopBeforeStickyRelease = panel.offsetTop + Math.max(0, panel.offsetHeight - window.innerHeight * 1.08);
   return {
-    top: Math.min(panel.offsetTop + panel.offsetHeight * 0.36, safeFinalStop),
-    duration: 5,
+    top: stopBeforeStickyRelease,
+    duration: 4.35,
     ease: "none",
   };
 }
 
 function literatureSupportStop(panel) {
-  const scrollRange = Math.max(window.innerHeight * 3.2, panel.offsetHeight - window.innerHeight);
+  const scrollRange = Math.max(window.innerHeight * 3, panel.offsetHeight - window.innerHeight);
   return {
-    top: panel.offsetTop + scrollRange * 0.92,
-    duration: 7,
+    top: panel.offsetTop + scrollRange * 0.9,
+    duration: 6.4,
     ease: "none",
   };
 }
@@ -644,7 +644,7 @@ function setupLiteratureEvidenceMotion() {
   const reading = panel.querySelector('[data-animate="evidence-card"]');
   if (!list || !receipt || !shadow || !reading) return;
 
-  gsap.set(reading, { autoAlpha: 1, y: 10 });
+  gsap.set(reading, { autoAlpha: 1, y: 0 });
   gsap.set(receipt, { autoAlpha: 1, left: "24vw", top: "-22vh", rotation: -12, scale: 0.9 });
   gsap.set(list, { autoAlpha: 1, left: "10vw", top: "-34vh", rotation: 10, scale: 0.86 });
   gsap.set(shadow, { autoAlpha: 0, scaleX: 0.82, scaleY: 0.72 });
@@ -653,12 +653,12 @@ function setupLiteratureEvidenceMotion() {
     scrollTrigger: {
       trigger: panel,
       start: "top bottom",
-      end: () => `+=${window.innerHeight + panel.offsetHeight * 0.36}`,
+      end: () => `+=${Math.max(window.innerHeight, panel.offsetHeight - window.innerHeight * 0.08)}`,
       scrub: 0.8,
     },
   });
 
-  tl.to(reading, { y: -8, ease: "none", duration: 1 }, 0)
+  tl.to(reading, { y: 0, ease: "none", duration: 1 }, 0)
     .to(receipt, { left: "22vw", top: "76vh", rotation: 4, scale: 0.88, ease: "none", duration: 1 }, 0)
     .to(list, { left: "12vw", top: "64vh", rotation: -5, scale: 0.84, ease: "none", duration: 1 }, 0)
     .to(shadow, { autoAlpha: 0.32, scaleX: 0.74, scaleY: 0.62, ease: "none", duration: 1 }, 0);
@@ -670,45 +670,41 @@ function setupLiteratureSupportMotion() {
   if (!panel) return;
 
   const stage = panel.querySelector(".lens-stage");
-  const wash = panel.querySelector('[data-animate="support-wash"]');
-  const ghost = panel.querySelector('[data-animate="support-ghost"]');
+  const texture = panel.querySelector('[data-animate="lens-texture"]');
   const backdrop = panel.querySelector('[data-animate="literature-backdrop"]');
   const opening = panel.querySelector('[data-animate="literature-opening"]');
   const kicker = panel.querySelector('[data-animate="literature-kicker"]');
   const title = panel.querySelector('[data-animate="literature-title"]');
   const subtitle = panel.querySelector('[data-animate="literature-subtitle"]');
   const desk = panel.querySelector('[data-animate="literature-desk"]');
-  const quote = panel.querySelector('[data-animate="lens-quote"]');
-  const summary = panel.querySelector('[data-animate="literature-final-summary"]');
   const card01 = panel.querySelector('[data-lens-card="01"]');
   const card02 = panel.querySelector('[data-lens-card="02"]');
   const card03 = panel.querySelector('[data-lens-card="03"]');
   const card04 = panel.querySelector('[data-lens-card="04"]');
   const card05 = panel.querySelector('[data-lens-card="05"]');
-  if (!stage || !wash || !ghost || !backdrop || !opening || !kicker || !title || !subtitle || !desk || !quote || !summary || !card01 || !card02 || !card03 || !card04 || !card05) return;
+  if (!stage || !texture || !backdrop || !opening || !kicker || !title || !subtitle || !desk || !card01 || !card02 || !card03 || !card04 || !card05) return;
 
   const allCards = [card01, card02, card03, card04, card05];
 
-  gsap.set(panel, { backgroundColor: "#dcdaf4" });
-  gsap.set(wash, { autoAlpha: 0 });
-  gsap.set(ghost, { autoAlpha: 1, y: 0, scale: 1, transformOrigin: "50% 48%" });
-  gsap.set(backdrop, { autoAlpha: 0, xPercent: 4, yPercent: 2, scale: 0.96 });
-  gsap.set([kicker, title, subtitle], { autoAlpha: 0, x: 56 });
-  gsap.set(opening, { y: 12 });
-  gsap.set(desk, { xPercent: 18, yPercent: 0, scale: 0.98, rotation: 0 });
+  gsap.set(panel, { backgroundColor: "transparent" });
+  gsap.set(stage, { backgroundColor: "rgba(20, 63, 54, 0)" });
+  gsap.set(texture, { autoAlpha: 0 });
+  gsap.set(backdrop, { autoAlpha: 0, xPercent: 6, scale: 0.96 });
+  gsap.set([kicker, title, subtitle], { autoAlpha: 0, x: 44 });
+  gsap.set(opening, { y: 0 });
+  gsap.set(desk, { xPercent: 66, yPercent: 0, scale: 1.07, rotation: 0 });
   gsap.set(allCards, { autoAlpha: 0 });
-  gsap.set(card01, { xPercent: 210, yPercent: 12, scale: 1.06, rotation: -9 });
-  gsap.set(card02, { xPercent: 205, yPercent: -8, scale: 0.98, rotation: 8 });
-  gsap.set(card03, { xPercent: 198, yPercent: 10, scale: 1.02, rotation: -3 });
-  gsap.set(card04, { xPercent: 192, yPercent: -6, scale: 1.04, rotation: 7 });
-  gsap.set(card05, { xPercent: 186, yPercent: 9, scale: 1.02, rotation: -5 });
-  gsap.set([quote, summary], { autoAlpha: 0, y: 28 });
+  gsap.set(card01, { xPercent: 145, yPercent: 8, scale: 1.08, rotation: -8 });
+  gsap.set(card02, { xPercent: 136, yPercent: -4, scale: 1.05, rotation: 7 });
+  gsap.set(card03, { xPercent: 128, yPercent: 6, scale: 1.08, rotation: -6 });
+  gsap.set(card04, { xPercent: 120, yPercent: -3, scale: 1.06, rotation: 8 });
+  gsap.set(card05, { xPercent: 112, yPercent: 5, scale: 1.08, rotation: -9 });
 
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: panel,
       start: "top top",
-      end: () => `+=${Math.max(window.innerHeight * 3.2, panel.offsetHeight - window.innerHeight)}`,
+      end: () => `+=${Math.max(window.innerHeight * 3, panel.offsetHeight - window.innerHeight)}`,
       pin: stage,
       pinSpacing: false,
       scrub: 0.9,
@@ -717,25 +713,23 @@ function setupLiteratureSupportMotion() {
     defaults: { ease: "power3.inOut" },
   });
 
-  tl.to(ghost, { autoAlpha: 0.2, scale: 0.9, y: -30, duration: 1.35, ease: "power2.inOut" }, 0)
-    .to(wash, { autoAlpha: 1, duration: 1.35, ease: "none" }, 0)
-    .to(backdrop, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, duration: 1.2, ease: "power2.out" }, 0.35)
-    .to(kicker, { autoAlpha: 1, x: 0, duration: 0.48, ease: "power2.out" }, 0.75)
-    .to(title, { autoAlpha: 1, x: 0, duration: 0.72, ease: "power3.out" }, 0.92)
-    .to(subtitle, { autoAlpha: 1, x: 0, duration: 0.58, ease: "power2.out" }, 1.2)
-    .to(backdrop, { xPercent: -5, scale: 1.04, duration: 5.2, ease: "none" }, 1.1)
-    .to(opening, { x: -70, autoAlpha: 0.78, duration: 2.2, ease: "none" }, 1.55)
-    .to(desk, { xPercent: -7, scale: 1.01, rotation: -0.35, duration: 5.6, ease: "none" }, 1.3)
-    .to(card01, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.96, rotation: -6, duration: 1.05, ease: "power3.out" }, 1.45)
-    .to(card02, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.94, rotation: 5, duration: 1.05, ease: "power3.out" }, 1.95)
-    .to(card03, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.96, rotation: -2, duration: 1.05, ease: "power3.out" }, 2.45)
-    .to(card04, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.94, rotation: 4, duration: 1.05, ease: "power3.out" }, 2.95)
-    .to(card05, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.96, rotation: -4, duration: 1.05, ease: "power3.out" }, 3.45)
-    .to(quote, { autoAlpha: 1, y: 0, duration: 0.72, ease: "power3.out" }, 3.55)
-    .to(quote, { autoAlpha: 0, y: -28, duration: 0.58, ease: "power2.inOut" }, 4.55)
-    .to(allCards, { xPercent: (index) => [-6, -2, 1, 3, 6][index], yPercent: (index) => [3, -2, 2, -3, 2][index], duration: 1.2, ease: "power2.inOut" }, 4.7)
-    .to(summary, { autoAlpha: 1, y: 0, duration: 0.72, ease: "power3.out" }, 5.25)
-    .to([summary, ...allCards], { duration: 1.35, ease: "none" }, 6.0);
+  tl.to(stage, { backgroundColor: "rgba(20, 63, 54, 1)", duration: 0.75, ease: "none" }, 0)
+    .to(texture, { autoAlpha: 1, duration: 0.75, ease: "none" }, 0)
+    .to(backdrop, { autoAlpha: 1, xPercent: 0, scale: 1, duration: 0.8, ease: "power2.out" }, 0.08)
+    .to(kicker, { autoAlpha: 1, x: 0, duration: 0.34, ease: "power2.out" }, 0.22)
+    .to(title, { autoAlpha: 1, x: 0, duration: 0.48, ease: "power3.out" }, 0.36)
+    .to(subtitle, { autoAlpha: 1, x: 0, duration: 0.38, ease: "power2.out" }, 0.58)
+    .to(desk, { autoAlpha: 1, xPercent: 0, scale: 1, duration: 1.75, ease: "power2.inOut" }, 0.44)
+    .to(card01, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotation: -4, duration: 1.22, ease: "power3.out" }, 0.58)
+    .to(card02, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotation: 3, duration: 1.22, ease: "power3.out" }, 0.78)
+    .to(card03, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotation: -2, duration: 1.22, ease: "power3.out" }, 0.98)
+    .to(card04, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotation: 4, duration: 1.22, ease: "power3.out" }, 1.18)
+    .to(card05, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotation: -5, duration: 1.22, ease: "power3.out" }, 1.38)
+    .to(backdrop, { xPercent: -7, scale: 1.04, duration: 3.2, ease: "none" }, 1.25)
+    .to(opening, { x: -18, autoAlpha: 0.72, duration: 1.6, ease: "none" }, 1.85)
+    .to(desk, { xPercent: 0, scale: 1.02, duration: 1.8, ease: "none" }, 2.2)
+    .to(allCards, { xPercent: (index) => [-0.6, -0.3, 0, 0.4, 0.7][index], yPercent: (index) => [1.2, -0.8, 0.7, -1, 1.1][index], scale: (index) => [1.01, 1, 1.01, 1, 1.01][index], duration: 1.75, ease: "power2.inOut" }, 2.35)
+    .to(allCards, { duration: 1.25, ease: "none" }, 4.1);
 }
 
 dots.forEach((dot) => {

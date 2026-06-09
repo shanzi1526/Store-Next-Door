@@ -1475,10 +1475,10 @@ main {
 .literature-backdrop-word {
   position: absolute;
   left: 50%;
-  top: 51%;
+  top: 52%;
   z-index: 4;
   width: 100%;
-  color: rgba(255, 227, 154, 0.16);
+  color: rgba(255, 227, 154, 0.1);
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
   font-size: clamp(7rem, 18vw, 23rem);
   font-weight: 900;
@@ -1494,9 +1494,9 @@ main {
 .literature-opening {
   position: absolute;
   left: clamp(2rem, 5vw, 5.8rem);
-  top: clamp(4.6rem, 10svh, 7rem);
-  z-index: 9;
-  width: min(64vw, 980px);
+  top: clamp(2.4rem, 4.6svh, 3.8rem);
+  z-index: 12;
+  width: min(36vw, 560px);
   color: #fff8e8;
 }
 
@@ -1510,11 +1510,11 @@ main {
 }
 
 .literature-opening h2 {
-  max-width: 12em;
+  max-width: 11em;
   margin: 0;
   color: #fff8e8;
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
-  font-size: clamp(4rem, 8.1vw, 10.8rem);
+  font-size: clamp(2.2rem, 3.25vw, 4.3rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.86;
@@ -1523,10 +1523,10 @@ main {
 }
 
 .literature-opening p:last-child {
-  max-width: 42rem;
+  max-width: 24rem;
   margin: clamp(1.1rem, 1.6vw, 1.65rem) 0 0;
   color: rgba(255, 248, 232, 0.78);
-  font-size: clamp(1.05rem, 1.35vw, 1.48rem);
+  font-size: clamp(0.95rem, 1vw, 1.12rem);
   font-weight: 700;
   line-height: 1.36;
 }
@@ -1534,17 +1534,19 @@ main {
 .literature-desk {
   position: absolute;
   inset: 0;
-  z-index: 8;
-  transform-origin: 50% 54%;
+  z-index: 10;
+  transform-origin: 50% 58%;
 }
 
 .lens-paper {
   position: absolute;
-  width: clamp(11.8rem, 15.6vw, 18rem);
+  width: 24vw;
+  max-width: 500px;
+  min-width: 340px;
   aspect-ratio: 1086 / 1448;
   pointer-events: none;
   transform-origin: 50% 82%;
-  filter: drop-shadow(0 30px 26px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 34px 28px rgba(0, 0, 0, 0.42));
 }
 
 .lens-paper img {
@@ -1597,67 +1599,36 @@ main {
 }
 
 .lens-paper-01 {
-  left: 6.6vw;
-  top: 25svh;
+  left: 5vw;
+  top: 26vh;
   z-index: 4;
 }
 
 .lens-paper-02 {
-  left: 24.2vw;
-  top: 18svh;
+  left: 22vw;
+  top: 34vh;
   z-index: 5;
 }
 
 .lens-paper-03 {
-  left: 42.6vw;
-  top: 28svh;
+  left: 39vw;
+  top: 23vh;
   z-index: 6;
 }
 
 .lens-paper-04 {
-  left: 59.4vw;
-  top: 16svh;
+  left: 56vw;
+  top: 35vh;
   z-index: 7;
 }
 
 .lens-paper-05 {
-  left: 75vw;
-  top: 31svh;
+  left: 71vw;
+  top: 25vh;
   z-index: 8;
-  width: clamp(11.8rem, 15.6vw, 18rem);
-}
-
-.lens-quote {
-  position: absolute;
-  left: clamp(2rem, 6vw, 7rem);
-  top: clamp(11rem, 31svh, 18rem);
-  z-index: 10;
-  max-width: min(55vw, 760px);
-  color: #ffe39a;
-  font-family: var(--font-display-serif);
-  font-size: clamp(3rem, 5.2vw, 7rem);
-  font-weight: 900;
-  line-height: 0.95;
-  text-shadow: 0 8px 0 rgba(242, 138, 120, 0.32);
-}
-
-.literature-final-summary {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(2.1rem, 5svh, 4.4rem);
-  z-index: 12;
-  width: min(68vw, 880px);
-  margin: 0;
-  padding: clamp(0.9rem, 1.3vw, 1.3rem) clamp(1.1rem, 2vw, 2rem);
-  color: #173f36;
-  background: #ffe39a;
-  font-size: clamp(1.05rem, 1.45vw, 1.65rem);
-  font-weight: 950;
-  line-height: 1.2;
-  text-align: center;
-  box-shadow: 10px 12px 0 rgba(242, 138, 120, 0.75), 0 26px 54px rgba(0, 0, 0, 0.2);
-  transform: translateX(-50%) rotate(-0.8deg);
-  clip-path: polygon(0 8%, 99% 0, 100% 91%, 1% 100%);
+  width: 24vw;
+  max-width: 500px;
+  min-width: 340px;
 }
 
 .panel-literature-evidence {
@@ -1708,7 +1679,7 @@ main {
 
 .literature-reading {
   position: sticky;
-  top: 25svh;
+  top: 12svh;
   z-index: 6;
   width: min(48vw, 720px);
   margin: 0 clamp(3rem, 7vw, 8rem) 0 auto;
@@ -1874,13 +1845,13 @@ main {
 }
 
 .panel-literature-support {
+  position: relative;
+  z-index: 30;
   display: block;
   min-height: 360svh;
+  margin-top: -100svh;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 26% 76%, rgba(139, 220, 196, 0.16), transparent 30rem),
-    radial-gradient(ellipse at 78% 18%, rgba(242, 138, 120, 0.14), transparent 26rem),
-    #dcdaf4;
+  background: transparent;
   color: #fff8e8;
 }
 
@@ -1891,135 +1862,25 @@ main {
   height: 100svh;
   min-height: 680px;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 22% 72%, rgba(139, 220, 196, 0.14), transparent 30rem),
-    radial-gradient(ellipse at 76% 18%, rgba(242, 138, 120, 0.16), transparent 25rem),
-    #dcdaf4;
+  background: transparent;
 }
 
-.support-forest-wash {
+.lens-texture {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 0;
   opacity: 0;
   background:
     radial-gradient(ellipse at 18% 78%, rgba(139, 220, 196, 0.18), transparent 32rem),
     radial-gradient(ellipse at 84% 18%, rgba(242, 138, 120, 0.14), transparent 28rem),
-    #143f36;
-}
-
-.support-purple-ghost {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  overflow: hidden;
-  color: #173f36;
-}
-
-.support-purple-ghost::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.2;
-  background:
-    repeating-linear-gradient(106deg, rgba(36, 48, 46, 0.12) 0 1px, transparent 1px 8px),
-    repeating-radial-gradient(circle at 14% 20%, rgba(255, 253, 247, 0.32) 0 1px, transparent 1px 5px),
-    linear-gradient(rgba(36, 48, 46, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(36, 48, 46, 0.035) 1px, transparent 1px);
+    linear-gradient(#143f36, #143f36),
+    repeating-linear-gradient(106deg, rgba(255, 253, 247, 0.1) 0 1px, transparent 1px 8px),
+    repeating-radial-gradient(circle at 14% 20%, rgba(255, 253, 247, 0.2) 0 1px, transparent 1px 5px),
+    linear-gradient(rgba(255, 253, 247, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 253, 247, 0.035) 1px, transparent 1px);
   background-size: auto, auto, 34px 34px, 34px 34px;
   mix-blend-mode: overlay;
-}
-
-.support-ghost-list,
-.support-ghost-receipt {
-  position: absolute;
-  z-index: 2;
-  height: auto;
   pointer-events: none;
-  filter: drop-shadow(0 34px 36px rgba(0, 0, 0, 0.28));
-}
-
-.support-ghost-list {
-  left: 12vw;
-  top: 64vh;
-  width: min(20vw, 270px);
-  transform: rotate(-5deg) scale(0.84);
-}
-
-.support-ghost-receipt {
-  left: 22vw;
-  top: 76vh;
-  width: min(18vw, 245px);
-  transform: rotate(4deg) scale(0.88);
-}
-
-.support-ghost-shadow {
-  position: absolute;
-  left: 8vw;
-  bottom: 19vh;
-  z-index: 1;
-  width: 22vw;
-  height: clamp(1.5rem, 3vw, 3.2rem);
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(5, 18, 15, 0.28), rgba(5, 18, 15, 0.1) 48%, transparent 72%);
-  filter: blur(7px);
-}
-
-.support-ghost-reading {
-  position: absolute;
-  right: clamp(5rem, 10vw, 11.5rem);
-  top: 17vh;
-  z-index: 3;
-  width: min(48vw, 720px);
-}
-
-.support-ghost-intro {
-  max-width: 34rem;
-  margin-bottom: clamp(1.15rem, 1.8svh, 1.55rem);
-  color: rgba(23, 63, 54, 0.82);
-}
-
-.support-ghost-intro p,
-.support-ghost-card p {
-  margin: 0;
-  color: #2f5e4e;
-  font-size: clamp(0.68rem, 0.78vw, 0.82rem);
-  font-weight: 950;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.support-ghost-intro h3 {
-  margin: 0.28rem 0 0.42rem;
-  color: #173f36;
-  font-family: var(--font-display-serif);
-  font-size: clamp(1.5rem, 1.75vw, 2rem);
-  line-height: 1.04;
-}
-
-.support-ghost-intro span {
-  display: block;
-  color: rgba(23, 63, 54, 0.82);
-  font-size: clamp(1.02rem, 1.08vw, 1.18rem);
-  font-weight: 750;
-  line-height: 1.38;
-}
-
-.support-ghost-card {
-  padding: clamp(1.7rem, 2.45vw, 2.6rem) clamp(1.55rem, 2.45vw, 2.55rem);
-  background: #fff8e8;
-  clip-path: polygon(0.3% 0.6%, 99.6% 0.2%, 99.8% 99%, 0.8% 99.5%, 0 42%);
-  box-shadow: 14px 18px 0 rgba(139, 220, 196, 0.28), 0 28px 72px rgba(36, 48, 46, 0.12);
-  transform: rotate(-0.7deg);
-}
-
-.support-ghost-card h2 {
-  max-width: 13em;
-  margin: clamp(0.75rem, 1.3vw, 1.15rem) 0 0;
-  color: #173f36;
-  font-family: var(--font-display-serif);
-  font-size: clamp(2.4rem, 2.75vw, 3.2rem);
-  line-height: 1.02;
 }
 
 .node-copy {
@@ -2649,19 +2510,6 @@ main {
 
   .lens-meta {
     display: none;
-  }
-
-  .lens-quote {
-    left: 1.3rem;
-    top: 31svh;
-    max-width: 82vw;
-    font-size: clamp(2.6rem, 13vw, 4.4rem);
-  }
-
-  .literature-final-summary {
-    bottom: 2rem;
-    width: min(88vw, 34rem);
-    font-size: 0.98rem;
   }
 
   .map-route-overlay {
