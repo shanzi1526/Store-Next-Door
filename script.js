@@ -90,9 +90,19 @@ function busStoryStops(panel) {
 }
 
 function literatureEvidenceStop(panel) {
+  const safeFinalStop = panel.offsetTop + Math.max(0, panel.offsetHeight - window.innerHeight - 8);
   return {
-    top: panel.offsetTop + panel.offsetHeight * 0.36,
+    top: Math.min(panel.offsetTop + panel.offsetHeight * 0.36, safeFinalStop),
     duration: 5,
+    ease: "none",
+  };
+}
+
+function literatureSupportStop(panel) {
+  const scrollRange = Math.max(window.innerHeight * 3.2, panel.offsetHeight - window.innerHeight);
+  return {
+    top: panel.offsetTop + scrollRange * 0.92,
+    duration: 7,
     ease: "none",
   };
 }
@@ -120,11 +130,16 @@ function nextInternalStop(panel) {
     const stop = literatureEvidenceStop(panel);
     return window.scrollY < stop.top - 80 ? stop : null;
   }
+  if (panel?.dataset.panelTheme === "literature-support") {
+    const stop = literatureSupportStop(panel);
+    return window.scrollY < stop.top - 80 ? stop : null;
+  }
   return null;
 }
 
 function panelEntryStop(panel) {
   if (panel?.dataset.panelTheme === "literature-evidence") return literatureEvidenceStop(panel);
+  if (panel?.dataset.panelTheme === "literature-support") return literatureSupportStop(panel);
   return null;
 }
 
@@ -136,6 +151,9 @@ function previousInternalStop(panel) {
   }
   if (panel?.dataset.panelTheme === "literature-evidence") {
     return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 3.8, ease: "none" } : null;
+  }
+  if (panel?.dataset.panelTheme === "literature-support") {
+    return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 5.2, ease: "none" } : null;
   }
   return null;
 }
@@ -641,9 +659,83 @@ function setupLiteratureEvidenceMotion() {
   });
 
   tl.to(reading, { y: -8, ease: "none", duration: 1 }, 0)
-    .to(receipt, { left: "22vw", top: "96vh", rotation: 4, scale: 0.91, ease: "none", duration: 1 }, 0)
-    .to(list, { left: "12vw", top: "84vh", rotation: -5, scale: 0.86, ease: "none", duration: 1 }, 0)
-    .to(shadow, { autoAlpha: 0.38, scaleX: 0.78, scaleY: 0.68, ease: "none", duration: 1 }, 0);
+    .to(receipt, { left: "22vw", top: "76vh", rotation: 4, scale: 0.88, ease: "none", duration: 1 }, 0)
+    .to(list, { left: "12vw", top: "64vh", rotation: -5, scale: 0.84, ease: "none", duration: 1 }, 0)
+    .to(shadow, { autoAlpha: 0.32, scaleX: 0.74, scaleY: 0.62, ease: "none", duration: 1 }, 0);
+}
+
+function setupLiteratureSupportMotion() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const panel = document.querySelector('[data-panel-theme="literature-support"]');
+  if (!panel) return;
+
+  const stage = panel.querySelector(".lens-stage");
+  const wash = panel.querySelector('[data-animate="support-wash"]');
+  const ghost = panel.querySelector('[data-animate="support-ghost"]');
+  const backdrop = panel.querySelector('[data-animate="literature-backdrop"]');
+  const opening = panel.querySelector('[data-animate="literature-opening"]');
+  const kicker = panel.querySelector('[data-animate="literature-kicker"]');
+  const title = panel.querySelector('[data-animate="literature-title"]');
+  const subtitle = panel.querySelector('[data-animate="literature-subtitle"]');
+  const desk = panel.querySelector('[data-animate="literature-desk"]');
+  const quote = panel.querySelector('[data-animate="lens-quote"]');
+  const summary = panel.querySelector('[data-animate="literature-final-summary"]');
+  const card01 = panel.querySelector('[data-lens-card="01"]');
+  const card02 = panel.querySelector('[data-lens-card="02"]');
+  const card03 = panel.querySelector('[data-lens-card="03"]');
+  const card04 = panel.querySelector('[data-lens-card="04"]');
+  const card05 = panel.querySelector('[data-lens-card="05"]');
+  if (!stage || !wash || !ghost || !backdrop || !opening || !kicker || !title || !subtitle || !desk || !quote || !summary || !card01 || !card02 || !card03 || !card04 || !card05) return;
+
+  const allCards = [card01, card02, card03, card04, card05];
+
+  gsap.set(panel, { backgroundColor: "#dcdaf4" });
+  gsap.set(wash, { autoAlpha: 0 });
+  gsap.set(ghost, { autoAlpha: 1, y: 0, scale: 1, transformOrigin: "50% 48%" });
+  gsap.set(backdrop, { autoAlpha: 0, xPercent: 4, yPercent: 2, scale: 0.96 });
+  gsap.set([kicker, title, subtitle], { autoAlpha: 0, x: 56 });
+  gsap.set(opening, { y: 12 });
+  gsap.set(desk, { xPercent: 18, yPercent: 0, scale: 0.98, rotation: 0 });
+  gsap.set(allCards, { autoAlpha: 0 });
+  gsap.set(card01, { xPercent: 210, yPercent: 12, scale: 1.06, rotation: -9 });
+  gsap.set(card02, { xPercent: 205, yPercent: -8, scale: 0.98, rotation: 8 });
+  gsap.set(card03, { xPercent: 198, yPercent: 10, scale: 1.02, rotation: -3 });
+  gsap.set(card04, { xPercent: 192, yPercent: -6, scale: 1.04, rotation: 7 });
+  gsap.set(card05, { xPercent: 186, yPercent: 9, scale: 1.02, rotation: -5 });
+  gsap.set([quote, summary], { autoAlpha: 0, y: 28 });
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top top",
+      end: () => `+=${Math.max(window.innerHeight * 3.2, panel.offsetHeight - window.innerHeight)}`,
+      pin: stage,
+      pinSpacing: false,
+      scrub: 0.9,
+      invalidateOnRefresh: true,
+    },
+    defaults: { ease: "power3.inOut" },
+  });
+
+  tl.to(ghost, { autoAlpha: 0.2, scale: 0.9, y: -30, duration: 1.35, ease: "power2.inOut" }, 0)
+    .to(wash, { autoAlpha: 1, duration: 1.35, ease: "none" }, 0)
+    .to(backdrop, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, duration: 1.2, ease: "power2.out" }, 0.35)
+    .to(kicker, { autoAlpha: 1, x: 0, duration: 0.48, ease: "power2.out" }, 0.75)
+    .to(title, { autoAlpha: 1, x: 0, duration: 0.72, ease: "power3.out" }, 0.92)
+    .to(subtitle, { autoAlpha: 1, x: 0, duration: 0.58, ease: "power2.out" }, 1.2)
+    .to(backdrop, { xPercent: -5, scale: 1.04, duration: 5.2, ease: "none" }, 1.1)
+    .to(opening, { x: -70, autoAlpha: 0.78, duration: 2.2, ease: "none" }, 1.55)
+    .to(desk, { xPercent: -7, scale: 1.01, rotation: -0.35, duration: 5.6, ease: "none" }, 1.3)
+    .to(card01, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.96, rotation: -6, duration: 1.05, ease: "power3.out" }, 1.45)
+    .to(card02, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.94, rotation: 5, duration: 1.05, ease: "power3.out" }, 1.95)
+    .to(card03, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.96, rotation: -2, duration: 1.05, ease: "power3.out" }, 2.45)
+    .to(card04, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.94, rotation: 4, duration: 1.05, ease: "power3.out" }, 2.95)
+    .to(card05, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.96, rotation: -4, duration: 1.05, ease: "power3.out" }, 3.45)
+    .to(quote, { autoAlpha: 1, y: 0, duration: 0.72, ease: "power3.out" }, 3.55)
+    .to(quote, { autoAlpha: 0, y: -28, duration: 0.58, ease: "power2.inOut" }, 4.55)
+    .to(allCards, { xPercent: (index) => [-6, -2, 1, 3, 6][index], yPercent: (index) => [3, -2, 2, -3, 2][index], duration: 1.2, ease: "power2.inOut" }, 4.7)
+    .to(summary, { autoAlpha: 1, y: 0, duration: 0.72, ease: "power3.out" }, 5.25)
+    .to([summary, ...allCards], { duration: 1.35, ease: "none" }, 6.0);
 }
 
 dots.forEach((dot) => {
@@ -711,4 +803,5 @@ observePanels();
 setupPeopleScrollMotion();
 setupBusScrollMotion();
 setupLiteratureEvidenceMotion();
+setupLiteratureSupportMotion();
 playPanel(panels[0]);
