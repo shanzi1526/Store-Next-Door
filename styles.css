@@ -1883,6 +1883,279 @@ main {
   pointer-events: none;
 }
 
+.panel-theory-criteria {
+  display: block;
+  min-height: 285svh;
+  overflow: hidden;
+  background: #5c47a0;
+  color: #fff8e8;
+}
+
+.criteria-stage {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  min-height: 680px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 35% 22%, rgba(220, 218, 244, 0.18), transparent 15rem),
+    radial-gradient(circle at 50% 24%, rgba(220, 218, 244, 0.16), transparent 14rem),
+    radial-gradient(circle at 65% 22%, rgba(220, 218, 244, 0.16), transparent 15rem),
+    #5c47a0;
+}
+
+.criteria-texture,
+.criteria-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.criteria-texture {
+  z-index: 1;
+  opacity: 0.28;
+  background:
+    repeating-radial-gradient(circle at 12% 18%, rgba(255, 253, 247, 0.22) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(94deg, rgba(255, 253, 247, 0.09) 0 1px, transparent 1px 9px),
+    linear-gradient(rgba(255, 253, 247, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 253, 247, 0.03) 1px, transparent 1px);
+  background-size: auto, auto, 44px 44px, 44px 44px;
+  mix-blend-mode: overlay;
+}
+
+.criteria-stage::after {
+  z-index: 4;
+  background:
+    linear-gradient(180deg, rgba(92, 71, 160, 0) 0 56%, rgba(92, 71, 160, 0.16) 74%, rgba(92, 71, 160, 0.42) 100%),
+    radial-gradient(ellipse at 50% 80%, transparent 46%, rgba(43, 30, 96, 0.24));
+}
+
+.criteria-background {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 1;
+  transform-origin: 50% 34%;
+}
+
+.criteria-bg-paper {
+  position: absolute;
+  display: block;
+  width: min(31vw, 620px);
+  min-width: 440px;
+  height: auto;
+  pointer-events: none;
+  filter: saturate(0.82) contrast(0.94) drop-shadow(0 22px 18px rgba(28, 18, 74, 0.34));
+  opacity: 0.56;
+  transform-origin: 50% 80%;
+}
+
+.criteria-bg-paper.is-highlighted {
+  opacity: 0.78;
+  filter: saturate(1.02) contrast(1) drop-shadow(0 28px 22px rgba(28, 18, 74, 0.42));
+}
+
+.criteria-bg-paper-01 {
+  left: -4vw;
+  top: 18vh;
+  transform: rotate(-13deg);
+}
+
+.criteria-bg-paper-02 {
+  left: 22vw;
+  top: 13vh;
+  transform: rotate(-1deg);
+}
+
+.criteria-bg-paper-03 {
+  left: 43vw;
+  top: 21vh;
+  transform: rotate(-16deg);
+}
+
+.criteria-bg-paper-04 {
+  right: 15vw;
+  top: 12vh;
+  transform: rotate(11deg);
+}
+
+.criteria-bg-paper-05 {
+  right: -5vw;
+  top: 25vh;
+  transform: rotate(24deg);
+}
+
+.criteria-report {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(2rem, 5svh, 4rem);
+  z-index: 8;
+  display: grid;
+  grid-template-columns: minmax(13rem, 22%) minmax(0, 1fr);
+  width: min(94vw, 1810px);
+  min-height: min(47svh, 520px);
+  padding: clamp(2rem, 3.4vw, 4.3rem) clamp(2rem, 3.8vw, 4.8rem);
+  color: #173f36;
+  background: #fffdf7;
+  border-radius: clamp(1.1rem, 1.8vw, 2rem);
+  box-shadow: 0 34px 86px rgba(31, 20, 78, 0.32);
+  transform: translateX(-50%);
+}
+
+.criteria-report::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0.12;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(47, 94, 78, 0.22), transparent 18rem),
+    repeating-linear-gradient(0deg, rgba(36, 48, 46, 0.1) 0 1px, transparent 1px 12px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.criteria-report-source,
+.criteria-report-body {
+  position: relative;
+  z-index: 1;
+}
+
+.criteria-report-source {
+  padding-right: clamp(1.4rem, 2.6vw, 3.1rem);
+  border-right: 2px solid rgba(47, 94, 78, 0.15);
+  color: #2f5e4e;
+}
+
+.criteria-source-label {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  font-size: clamp(0.98rem, 1.25vw, 1.35rem);
+  font-weight: 760;
+  line-height: 1.2;
+}
+
+.criteria-source-label span {
+  font-size: 1.15em;
+}
+
+.criteria-report-source p:last-child {
+  margin: clamp(1.1rem, 2vw, 2rem) 0 0;
+  color: rgba(47, 94, 78, 0.56);
+  font-size: clamp(0.78rem, 0.9vw, 0.96rem);
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.criteria-report-body {
+  padding-left: clamp(2rem, 3.2vw, 4rem);
+}
+
+.criteria-heading {
+  margin-bottom: clamp(0.95rem, 1.6svh, 1.35rem);
+}
+
+.criteria-kicker {
+  margin: 0;
+  color: #2f5e4e;
+  font-size: clamp(0.72rem, 0.88vw, 0.95rem);
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.criteria-heading h2 {
+  margin: clamp(0.55rem, 0.9vw, 0.85rem) 0 0;
+  color: #173f36;
+  font-family: var(--font-display-serif);
+  font-size: clamp(2.15rem, 3.55vw, 4.65rem);
+  font-weight: 760;
+  letter-spacing: 0;
+  line-height: 1.03;
+}
+
+.criteria-heading p:last-child {
+  margin: clamp(0.65rem, 1vw, 0.95rem) 0 0;
+  color: rgba(23, 63, 54, 0.78);
+  font-size: clamp(0.94rem, 1vw, 1.12rem);
+  font-weight: 760;
+  line-height: 1.38;
+}
+
+.criteria-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.42rem, 0.8vw, 0.72rem);
+  margin-top: clamp(0.95rem, 1.5svh, 1.35rem);
+}
+
+.criteria-row {
+  flex: 1 1 13rem;
+  min-width: min(18vw, 15rem);
+  padding: clamp(0.62rem, 0.92vw, 0.9rem) clamp(0.7rem, 1.1vw, 1rem);
+  background: rgba(220, 218, 244, 0.42);
+  border-left: 4px solid rgba(139, 220, 196, 0.85);
+  box-shadow: 5px 6px 0 rgba(47, 94, 78, 0.08);
+  transform: rotate(-0.2deg);
+}
+
+.criteria-row:nth-child(even) {
+  margin-left: 0;
+  background: rgba(233, 244, 223, 0.52);
+  border-left-color: rgba(242, 138, 120, 0.7);
+  transform: rotate(0.25deg);
+}
+
+.criteria-row span {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: rgba(47, 94, 78, 0.72);
+  font-size: clamp(0.68rem, 0.72vw, 0.78rem);
+  font-weight: 950;
+  letter-spacing: 0.12em;
+}
+
+.criteria-row h3 {
+  margin: 0;
+  color: #173f36;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
+  font-size: clamp(1rem, 1.25vw, 1.45rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.criteria-row strong {
+  display: block;
+  margin-top: 0.18rem;
+  color: #2f5e4e;
+  font-size: clamp(0.72rem, 0.78vw, 0.88rem);
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.criteria-row p {
+  margin: 0.24rem 0 0;
+  color: rgba(23, 63, 54, 0.76);
+  font-size: clamp(0.66rem, 0.7vw, 0.78rem);
+  font-weight: 720;
+  line-height: 1.24;
+}
+
+.criteria-final {
+  margin: clamp(0.9rem, 1.5svh, 1.2rem) 0 0;
+  color: #2f5e4e;
+  font-size: clamp(0.84rem, 0.92vw, 1rem);
+  font-weight: 850;
+  line-height: 1.2;
+}
+
 .node-copy {
   left: clamp(2.3rem, 5vw, 5.8rem);
   top: clamp(4.2rem, 9svh, 6.6rem);

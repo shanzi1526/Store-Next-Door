@@ -107,6 +107,15 @@ function literatureSupportStop(panel) {
   };
 }
 
+function theoryCriteriaStop(panel) {
+  const scrollRange = Math.max(window.innerHeight * 2.8, panel.offsetHeight - window.innerHeight);
+  return {
+    top: panel.offsetTop + scrollRange * 0.92,
+    duration: 6.2,
+    ease: "none",
+  };
+}
+
 function normalizeStop(stop) {
   if (stop === null) return null;
   if (typeof stop === "number") return { top: stop, duration: 1.2 };
@@ -134,12 +143,17 @@ function nextInternalStop(panel) {
     const stop = literatureSupportStop(panel);
     return window.scrollY < stop.top - 80 ? stop : null;
   }
+  if (panel?.dataset.panelTheme === "theory-criteria") {
+    const stop = theoryCriteriaStop(panel);
+    return window.scrollY < stop.top - 80 ? stop : null;
+  }
   return null;
 }
 
 function panelEntryStop(panel) {
   if (panel?.dataset.panelTheme === "literature-evidence") return literatureEvidenceStop(panel);
   if (panel?.dataset.panelTheme === "literature-support") return literatureSupportStop(panel);
+  if (panel?.dataset.panelTheme === "theory-criteria") return theoryCriteriaStop(panel);
   return null;
 }
 
@@ -154,6 +168,9 @@ function previousInternalStop(panel) {
   }
   if (panel?.dataset.panelTheme === "literature-support") {
     return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 5.2, ease: "none" } : null;
+  }
+  if (panel?.dataset.panelTheme === "theory-criteria") {
+    return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 5, ease: "none" } : null;
   }
   return null;
 }
@@ -732,6 +749,81 @@ function setupLiteratureSupportMotion() {
     .to(allCards, { duration: 1.25, ease: "none" }, 4.1);
 }
 
+function setupTheoryCriteriaMotion() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const panel = document.querySelector('[data-panel-theme="theory-criteria"]');
+  if (!panel) return;
+
+  const stage = panel.querySelector(".criteria-stage");
+  const background = panel.querySelector('[data-animate="criteria-background"]');
+  const board = panel.querySelector('[data-animate="criteria-board"]');
+  const source = panel.querySelector(".criteria-report-source");
+  const heading = panel.querySelector('[data-animate="criteria-heading"]');
+  const rows = Array.from(panel.querySelectorAll("[data-criteria-row]"));
+  const finalLine = panel.querySelector('[data-animate="criteria-final"]');
+  const bgPapers = Array.from(panel.querySelectorAll("[data-criteria-bg]"));
+  if (!stage || !background || !board || !source || !heading || !rows.length || !finalLine || !bgPapers.length) return;
+
+  gsap.set(background, { autoAlpha: 1, scale: 1.04, xPercent: 0, yPercent: 0 });
+  gsap.set(bgPapers, {
+    autoAlpha: 0,
+    yPercent: (index) => [48, 32, 42, 30, 52][index],
+    xPercent: (index) => [-16, -4, 7, 6, 18][index],
+    rotation: (index) => [-24, -8, -25, 22, 36][index],
+  });
+  gsap.set(board, { autoAlpha: 0, y: 92, scale: 0.985 });
+  gsap.set(source.children, { autoAlpha: 0, y: 16 });
+  gsap.set(heading.children, { autoAlpha: 0, y: 24 });
+  gsap.set(rows, { autoAlpha: 0, y: 18, scale: 0.985 });
+  gsap.set(finalLine, { autoAlpha: 0, y: 22 });
+
+  const highlightPaper = (row) => {
+    const targetId = row?.dataset.relatedBg;
+    bgPapers.forEach((paper) => paper.classList.toggle("is-highlighted", paper.dataset.criteriaBg === targetId));
+  };
+
+  const clearHighlight = () => {
+    bgPapers.forEach((paper) => paper.classList.remove("is-highlighted"));
+  };
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top top",
+      end: () => `+=${Math.max(window.innerHeight * 2.8, panel.offsetHeight - window.innerHeight)}`,
+      pin: stage,
+      pinSpacing: false,
+      scrub: 0.85,
+      invalidateOnRefresh: true,
+      onLeave: clearHighlight,
+      onLeaveBack: clearHighlight,
+    },
+    defaults: { ease: "power3.out" },
+  });
+
+  tl.to(bgPapers, {
+    autoAlpha: 0.56,
+    xPercent: 0,
+    yPercent: 0,
+    rotation: (index) => [-13, -1, -16, 11, 24][index],
+    stagger: 0.08,
+    duration: 0.9,
+    ease: "power3.out",
+  }, 0)
+    .to(background, { scale: 0.99, yPercent: -3, duration: 3.6, ease: "none" }, 0)
+    .to(bgPapers, { yPercent: (index) => [-7, -5, -9, -4, -6][index], duration: 3.6, ease: "none" }, 0.58)
+    .to(board, { autoAlpha: 1, y: 0, scale: 1, duration: 0.72, ease: "power3.out" }, 0.42)
+    .to(source.children, { autoAlpha: 1, y: 0, stagger: 0.12, duration: 0.38, ease: "power2.out" }, 0.82)
+    .to(heading.children, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.48, ease: "power2.out" }, 0.92)
+    .to(rows[0], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[0]), onReverseComplete: clearHighlight }, 1.42)
+    .to(rows[1], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[1]), onReverseComplete: () => highlightPaper(rows[0]) }, 1.66)
+    .to(rows[2], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[2]), onReverseComplete: () => highlightPaper(rows[1]) }, 1.9)
+    .to(rows[3], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[3]), onReverseComplete: () => highlightPaper(rows[2]) }, 2.14)
+    .to(rows[4], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[4]), onReverseComplete: () => highlightPaper(rows[3]) }, 2.38)
+    .to(finalLine, { autoAlpha: 1, y: 0, duration: 0.42, ease: "power2.out", onStart: clearHighlight }, 2.78)
+    .to([board, background], { duration: 0.95, ease: "none" }, 3.25);
+}
+
 dots.forEach((dot) => {
   dot.addEventListener("click", () => goToPanel(Number(dot.dataset.targetPanel)));
 });
@@ -798,4 +890,5 @@ setupPeopleScrollMotion();
 setupBusScrollMotion();
 setupLiteratureEvidenceMotion();
 setupLiteratureSupportMotion();
+setupTheoryCriteriaMotion();
 playPanel(panels[0]);
