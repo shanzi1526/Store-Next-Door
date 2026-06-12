@@ -107,13 +107,29 @@ function literatureSupportStop(panel) {
   };
 }
 
-function theoryCriteriaStop(panel) {
+function theoryCriteriaStops(panel) {
   const scrollRange = Math.max(window.innerHeight * 2.8, panel.offsetHeight - window.innerHeight);
-  return {
-    top: panel.offsetTop + scrollRange * 0.92,
-    duration: 6.2,
-    ease: "none",
-  };
+  return [
+    {
+      top: panel.offsetTop + scrollRange * 0.22,
+      duration: 2.2,
+      ease: "none",
+    },
+    {
+      top: panel.offsetTop + scrollRange * 0.41,
+      duration: 2.4,
+      ease: "none",
+    },
+    {
+      top: panel.offsetTop + scrollRange * 0.82,
+      duration: 3.1,
+      ease: "none",
+    },
+  ];
+}
+
+function theoryCriteriaStop(panel) {
+  return theoryCriteriaStops(panel).at(-1);
 }
 
 function normalizeStop(stop) {
@@ -144,8 +160,7 @@ function nextInternalStop(panel) {
     return window.scrollY < stop.top - 80 ? stop : null;
   }
   if (panel?.dataset.panelTheme === "theory-criteria") {
-    const stop = theoryCriteriaStop(panel);
-    return window.scrollY < stop.top - 80 ? stop : null;
+    return theoryCriteriaStops(panel).find((stop) => window.scrollY < stop.top - 80) ?? null;
   }
   return null;
 }
@@ -153,7 +168,7 @@ function nextInternalStop(panel) {
 function panelEntryStop(panel) {
   if (panel?.dataset.panelTheme === "literature-evidence") return literatureEvidenceStop(panel);
   if (panel?.dataset.panelTheme === "literature-support") return literatureSupportStop(panel);
-  if (panel?.dataset.panelTheme === "theory-criteria") return theoryCriteriaStop(panel);
+  if (panel?.dataset.panelTheme === "theory-criteria") return theoryCriteriaStops(panel)[0];
   return null;
 }
 
@@ -170,7 +185,11 @@ function previousInternalStop(panel) {
     return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 5.2, ease: "none" } : null;
   }
   if (panel?.dataset.panelTheme === "theory-criteria") {
-    return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 5, ease: "none" } : null;
+    const stops = [
+      { top: panel.offsetTop, duration: 2.2, ease: "none" },
+      ...theoryCriteriaStops(panel),
+    ];
+    return stops.reverse().find((stop) => window.scrollY > stop.top + 80) ?? null;
   }
   return null;
 }
@@ -182,6 +201,13 @@ function panelIndexFromScrollTop() {
     if (panel.offsetTop <= top) index = panelIndex;
   });
   return clampPanel(index);
+}
+
+function updateTheoryCriteriaState() {
+  const panel = document.querySelector('[data-panel-theme="theory-criteria"]');
+  if (!panel) return;
+  const top = window.scrollY + window.innerHeight * 0.5;
+  document.body.classList.toggle("is-theory-criteria-active", top >= panel.offsetTop && top <= panel.offsetTop + panel.offsetHeight);
 }
 
 function nearestPanelIndex() {
@@ -756,13 +782,18 @@ function setupTheoryCriteriaMotion() {
 
   const stage = panel.querySelector(".criteria-stage");
   const background = panel.querySelector('[data-animate="criteria-background"]');
-  const board = panel.querySelector('[data-animate="criteria-board"]');
-  const source = panel.querySelector(".criteria-report-source");
-  const heading = panel.querySelector('[data-animate="criteria-heading"]');
+  const report = panel.querySelector('[data-animate="criteria-report"]');
+  const bridge = panel.querySelector('[data-animate="criteria-bridge"]');
+  const synthesis = panel.querySelector('[data-animate="criteria-synthesis"]');
+  const source = report?.querySelector(".criteria-report-source");
+  const reportBody = report?.querySelector(".criteria-report-body");
+  const bridgeParts = bridge ? Array.from(bridge.children) : [];
+  const synthesisIntro = synthesis?.querySelector('[data-animate="criteria-synthesis-intro"]');
+  const synthesisBoard = synthesis?.querySelector('[data-animate="criteria-synthesis-board"]');
   const rows = Array.from(panel.querySelectorAll("[data-criteria-row]"));
   const finalLine = panel.querySelector('[data-animate="criteria-final"]');
   const bgPapers = Array.from(panel.querySelectorAll("[data-criteria-bg]"));
-  if (!stage || !background || !board || !source || !heading || !rows.length || !finalLine || !bgPapers.length) return;
+  if (!stage || !background || !report || !bridge || !synthesis || !source || !reportBody || !synthesisIntro || !synthesisBoard || !rows.length || !finalLine || !bgPapers.length) return;
 
   gsap.set(background, { autoAlpha: 1, scale: 1.04, xPercent: 0, yPercent: 0 });
   gsap.set(bgPapers, {
@@ -771,10 +802,15 @@ function setupTheoryCriteriaMotion() {
     xPercent: (index) => [-16, -4, 7, 6, 18][index],
     rotation: (index) => [-24, -8, -25, 22, 36][index],
   });
-  gsap.set(board, { autoAlpha: 0, y: 92, scale: 0.985 });
+  gsap.set(report, { autoAlpha: 0, y: 92, scale: 0.985 });
   gsap.set(source.children, { autoAlpha: 0, y: 16 });
-  gsap.set(heading.children, { autoAlpha: 0, y: 24 });
-  gsap.set(rows, { autoAlpha: 0, y: 18, scale: 0.985 });
+  gsap.set(reportBody.children, { autoAlpha: 0, y: 24 });
+  gsap.set(bridge, { autoAlpha: 0, yPercent: 100, rotation: -4 });
+  gsap.set(bridgeParts, { autoAlpha: 0, y: 24 });
+  gsap.set(synthesis, { autoAlpha: 0, yPercent: 104, rotation: 2 });
+  gsap.set(synthesisIntro, { autoAlpha: 0, y: 22 });
+  gsap.set(synthesisBoard, { autoAlpha: 0, y: 28, scale: 0.975, rotation: -2 });
+  gsap.set(rows, { autoAlpha: 0, y: 28, scale: 0.985 });
   gsap.set(finalLine, { autoAlpha: 0, y: 22 });
 
   const highlightPaper = (row) => {
@@ -802,7 +838,7 @@ function setupTheoryCriteriaMotion() {
   });
 
   tl.to(bgPapers, {
-    autoAlpha: 0.56,
+    autoAlpha: 0.78,
     xPercent: 0,
     yPercent: 0,
     rotation: (index) => [-13, -1, -16, 11, 24][index],
@@ -810,18 +846,41 @@ function setupTheoryCriteriaMotion() {
     duration: 0.9,
     ease: "power3.out",
   }, 0)
-    .to(background, { scale: 0.99, yPercent: -3, duration: 3.6, ease: "none" }, 0)
-    .to(bgPapers, { yPercent: (index) => [-7, -5, -9, -4, -6][index], duration: 3.6, ease: "none" }, 0.58)
-    .to(board, { autoAlpha: 1, y: 0, scale: 1, duration: 0.72, ease: "power3.out" }, 0.42)
+    .to(background, { scale: 0.98, yPercent: -4, duration: 4.2, ease: "none" }, 0)
+    .to(bgPapers, { yPercent: (index) => [-8, -5, -10, -4, -7][index], duration: 4.2, ease: "none" }, 0.58)
+    .to(report, { autoAlpha: 1, y: 0, scale: 1, duration: 0.72, ease: "power3.out" }, 0.42)
     .to(source.children, { autoAlpha: 1, y: 0, stagger: 0.12, duration: 0.38, ease: "power2.out" }, 0.82)
-    .to(heading.children, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.48, ease: "power2.out" }, 0.92)
-    .to(rows[0], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[0]), onReverseComplete: clearHighlight }, 1.42)
-    .to(rows[1], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[1]), onReverseComplete: () => highlightPaper(rows[0]) }, 1.66)
-    .to(rows[2], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[2]), onReverseComplete: () => highlightPaper(rows[1]) }, 1.9)
-    .to(rows[3], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[3]), onReverseComplete: () => highlightPaper(rows[2]) }, 2.14)
-    .to(rows[4], { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, onStart: () => highlightPaper(rows[4]), onReverseComplete: () => highlightPaper(rows[3]) }, 2.38)
-    .to(finalLine, { autoAlpha: 1, y: 0, duration: 0.42, ease: "power2.out", onStart: clearHighlight }, 2.78)
-    .to([board, background], { duration: 0.95, ease: "none" }, 3.25);
+    .to(reportBody.children, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.48, ease: "power2.out" }, 0.92)
+    .to(bridge, { autoAlpha: 1, yPercent: 0, rotation: -1.8, duration: 0.86, ease: "power3.inOut" }, 1.55)
+    .to(bridgeParts, { autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.42, ease: "power2.out" }, 1.92)
+    .to(report, { autoAlpha: 0.32, y: -18, scale: 0.97, duration: 0.72, ease: "power2.inOut" }, 1.7)
+    .to(synthesis, { autoAlpha: 1, yPercent: 0, rotation: 0, duration: 0.9, ease: "power3.inOut" }, 2.55)
+    .to(bridge, { autoAlpha: 0.18, yPercent: -14, duration: 0.86, ease: "power2.inOut" }, 2.65)
+    .to(synthesisIntro, { autoAlpha: 1, y: 0, duration: 0.42, ease: "power2.out" }, 3.08)
+    .to(synthesisBoard, { autoAlpha: 1, y: 0, scale: 1, rotation: -0.8, duration: 0.5, ease: "power2.out" }, 3.26)
+    .to(rows.slice(0, 2), {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      stagger: 0.14,
+      duration: 0.42,
+      ease: "power2.out",
+      onStart: () => highlightPaper(rows[0]),
+      onReverseComplete: clearHighlight,
+    }, 3.62)
+    .to(rows.slice(2, 4), {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      stagger: 0.14,
+      duration: 0.42,
+      ease: "power2.out",
+      onStart: () => highlightPaper(rows[2]),
+      onReverseComplete: () => highlightPaper(rows[1]),
+    }, 4.02)
+    .to(rows[4], { autoAlpha: 1, y: 0, scale: 1, duration: 0.42, ease: "power2.out", onStart: () => highlightPaper(rows[4]), onReverseComplete: () => highlightPaper(rows[3]) }, 4.42)
+    .to(finalLine, { autoAlpha: 1, y: 0, duration: 0.42, ease: "power2.out", onStart: clearHighlight }, 4.78)
+    .to([synthesis, background], { duration: 0.95, ease: "none" }, 5.08);
 }
 
 dots.forEach((dot) => {
@@ -883,7 +942,10 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
+window.addEventListener("scroll", updateTheoryCriteriaState, { passive: true });
+
 setActivePanel(0);
+updateTheoryCriteriaState();
 prepareAnimations();
 observePanels();
 setupPeopleScrollMotion();
