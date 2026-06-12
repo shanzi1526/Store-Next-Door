@@ -2205,9 +2205,10 @@ main {
 }
 
 .criteria-synthesis-intro {
-  width: min(32vw, 30rem);
-  padding-left: clamp(0.9rem, 1.3vw, 1.3rem);
-  border-left: 5px solid rgba(139, 220, 196, 0.7);
+  width: min(34vw, 31rem);
+  padding: clamp(0.45rem, 0.8vw, 0.7rem) 0 clamp(0.45rem, 0.8vw, 0.7rem) clamp(0.9rem, 1.3vw, 1.3rem);
+  border-left: 4px solid rgba(139, 220, 196, 0.78);
+  background: linear-gradient(90deg, rgba(139, 220, 196, 0.1), transparent 88%);
 }
 
 .criteria-synthesis-subtitle {
@@ -2221,7 +2222,7 @@ main {
 
 .criteria-synthesis-board {
   width: min(58vw, 58rem);
-  margin: clamp(0.75rem, 1.5svh, 1.2rem) auto 0;
+  margin: clamp(0.58rem, 1.05svh, 0.85rem) auto 0;
   padding-left: 0;
   color: #fff8e8;
 }
@@ -2230,30 +2231,32 @@ main {
   position: relative;
   margin: 0;
   font-family: var(--font-display-serif);
-  font-size: clamp(2rem, 3.25vw, 4.1rem);
+  font-size: clamp(1.82rem, 2.92vw, 3.68rem);
   font-weight: 760;
   letter-spacing: 0;
   line-height: 1.04;
 }
 
 .criteria-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: clamp(0.52rem, 0.85vw, 0.82rem) clamp(1.05rem, 1.7vw, 1.75rem);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
   width: min(58vw, 58rem);
   margin: clamp(4.4rem, 8svh, 6rem) auto 0;
   padding-left: 0;
+  border-top: 1px solid rgba(255, 253, 247, 0.16);
 }
 
 .criteria-row {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 2.8rem 9rem minmax(0, 1fr);
   align-items: baseline;
-  column-gap: clamp(0.55rem, 0.9vw, 0.85rem);
+  column-gap: clamp(0.65rem, 1vw, 1rem);
   min-height: 0;
-  padding: 0;
+  padding: clamp(0.36rem, 0.62svh, 0.52rem) 0;
   color: #fff8e8;
   background: transparent;
+  border-bottom: 1px solid rgba(255, 253, 247, 0.15);
   box-shadow: none;
   transform: none;
 }
@@ -2296,7 +2299,7 @@ main {
 .criteria-row span {
   display: block;
   margin: 0;
-  color: rgba(139, 220, 196, 0.9);
+  color: rgba(139, 220, 196, 0.92);
   font-size: clamp(0.68rem, 0.74vw, 0.8rem);
   font-weight: 950;
   letter-spacing: 0.12em;
@@ -2306,7 +2309,7 @@ main {
   margin: 0;
   color: #fff8e8;
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
-  font-size: clamp(1.05rem, 1.22vw, 1.42rem);
+  font-size: clamp(0.94rem, 1.08vw, 1.22rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.95;
@@ -2314,15 +2317,23 @@ main {
 }
 
 .criteria-row:nth-child(5) h3 {
-  font-size: clamp(1.18rem, 1.42vw, 1.72rem);
+  font-size: clamp(1rem, 1.18vw, 1.34rem);
+}
+
+.criteria-row p {
+  margin: 0;
+  color: rgba(255, 253, 247, 0.82);
+  font-size: clamp(0.74rem, 0.84vw, 0.92rem);
+  font-weight: 780;
+  line-height: 1.25;
 }
 
 .criteria-final {
   width: min(58vw, 58rem);
   max-width: 36rem;
-  margin: clamp(0.62rem, 1svh, 0.82rem) auto 0;
+  margin: clamp(0.7rem, 1.15svh, 0.95rem) auto 0;
   padding-left: 0;
-  color: #fff8e8;
+  color: rgba(255, 253, 247, 0.82);
   font-size: clamp(0.78rem, 0.88vw, 0.94rem);
   font-weight: 820;
   line-height: 1.32;
