@@ -83,6 +83,24 @@ function peopleTextStop(panel) {
   return panel.offsetTop + window.innerHeight * 0.62;
 }
 
+function communityObjectStop(panel) {
+  const scrollRange = Math.max(window.innerHeight * 1.45, panel.offsetHeight - window.innerHeight);
+  return {
+    top: panel.offsetTop + scrollRange * 0.88,
+    duration: 4.8,
+    ease: "none",
+  };
+}
+
+function silverEconomyStop(panel) {
+  const scrollRange = Math.max(window.innerHeight * 2.55, panel.offsetHeight - window.innerHeight);
+  return {
+    top: panel.offsetTop + scrollRange * 0.92,
+    duration: 5.8,
+    ease: "none",
+  };
+}
+
 function busStoryStops(panel) {
   const finalStop = panel.offsetTop + panel.offsetHeight - window.innerHeight - 4;
   const scrollRange = panel.offsetHeight - window.innerHeight;
@@ -147,6 +165,14 @@ function isAfterPeopleText(panel) {
 }
 
 function nextInternalStop(panel) {
+  if (panel?.dataset.panelTheme === "community-object") {
+    const stop = communityObjectStop(panel);
+    return window.scrollY < stop.top - 80 ? stop : null;
+  }
+  if (panel?.dataset.panelTheme === "silver-economy") {
+    const stop = silverEconomyStop(panel);
+    return window.scrollY < stop.top - 80 ? stop : null;
+  }
   if (isBeforePeopleText(panel)) return peopleTextStop(panel);
   if (panel?.dataset.panelTheme === "main-statement") {
     return busStoryStops(panel).find((stop) => window.scrollY < stop - 80) ?? null;
@@ -166,6 +192,8 @@ function nextInternalStop(panel) {
 }
 
 function panelEntryStop(panel) {
+  if (panel?.dataset.panelTheme === "community-object") return communityObjectStop(panel);
+  if (panel?.dataset.panelTheme === "silver-economy") return silverEconomyStop(panel);
   if (panel?.dataset.panelTheme === "literature-evidence") return literatureEvidenceStop(panel);
   if (panel?.dataset.panelTheme === "literature-support") return literatureSupportStop(panel);
   if (panel?.dataset.panelTheme === "theory-criteria") return theoryCriteriaStops(panel)[0];
@@ -183,6 +211,12 @@ function previousInternalStop(panel) {
   }
   if (panel?.dataset.panelTheme === "literature-support") {
     return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 5.2, ease: "none" } : null;
+  }
+  if (panel?.dataset.panelTheme === "community-object") {
+    return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 3.4, ease: "none" } : null;
+  }
+  if (panel?.dataset.panelTheme === "silver-economy") {
+    return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 4.2, ease: "none" } : null;
   }
   if (panel?.dataset.panelTheme === "theory-criteria") {
     const stops = [
@@ -588,6 +622,124 @@ function setupPeopleScrollMotion() {
   );
 }
 
+function setupCommunityObjectMotion() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const panel = document.querySelector('[data-panel-theme="community-object"]');
+  if (!panel) return;
+
+  const stage = panel.querySelector(".community-object-stage");
+  const image = panel.querySelector('[data-animate="community-image"]');
+  const label = panel.querySelector('[data-animate="community-label"]');
+  const title = panel.querySelector('[data-animate="community-title"]');
+  const subtitle = panel.querySelector('[data-animate="community-subtitle"]');
+  const tags = Array.from(panel.querySelectorAll('[data-animate="community-tag"]'));
+  const marquee = panel.querySelector('[data-animate="community-marquee"]');
+  if (!stage || !image || !label || !title || !subtitle || !marquee) return;
+
+  gsap.set(image, { autoAlpha: 0, yPercent: -7, scale: 1.06 });
+  gsap.set([label, title, subtitle], { autoAlpha: 0, y: 44 });
+  gsap.set(tags, { autoAlpha: 0, y: 24 });
+  gsap.set(marquee, { autoAlpha: 0, xPercent: 18 });
+
+  const enterTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top bottom",
+      end: "top top",
+      scrub: 0.65,
+      invalidateOnRefresh: true,
+    },
+    defaults: { ease: "none" },
+  });
+
+  enterTl
+    .to(image, { autoAlpha: 1, yPercent: -2.5, scale: 1.035, duration: 1 }, 0)
+    .to(label, { autoAlpha: 1, y: 0, duration: 0.42 }, 0.18)
+    .to(title, { autoAlpha: 1, y: 0, duration: 0.55 }, 0.24)
+    .to(subtitle, { autoAlpha: 1, y: 0, duration: 0.42 }, 0.46)
+    .to(tags, { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.38 }, 0.62)
+    .to(marquee, { autoAlpha: 1, xPercent: 5, duration: 0.72 }, 0.28);
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top top",
+      end: () => `+=${Math.max(window.innerHeight * 1.45, panel.offsetHeight - window.innerHeight)}`,
+      pin: stage,
+      pinSpacing: false,
+      scrub: 0.85,
+      invalidateOnRefresh: true,
+    },
+    defaults: { ease: "none" },
+  });
+
+  tl.to(image, { yPercent: 5.8, scale: 1.015, duration: 2.4 }, 0)
+    .to(marquee, { xPercent: -18, duration: 2.4 }, 0)
+    .to([label, title, subtitle], { y: -8, duration: 1.2 }, 1.2)
+    .to(tags, { y: -6, duration: 1.2 }, 1.2);
+}
+
+function setupSilverEconomyMotion() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const panel = document.querySelector('[data-panel-theme="silver-economy"]');
+  if (!panel) return;
+
+  const stage = panel.querySelector(".silver-stage");
+  const words = Array.from(panel.querySelectorAll('[data-animate="silver-word"]'));
+  const base = panel.querySelector('[data-animate="silver-base"]');
+  const milk = panel.querySelector('[data-animate="silver-milk"]');
+  const copy = panel.querySelector('[data-animate="silver-copy"]');
+  const report = panel.querySelector('[data-animate="silver-report"]');
+  if (!stage || !words.length || !base || !milk || !copy || !report) return;
+
+  gsap.set(stage, { backgroundColor: "#dcdaf4" });
+  gsap.set(words, { autoAlpha: 1, x: 0, y: 0, scale: 1 });
+  gsap.set(base, { autoAlpha: 0, y: "2vh", scale: 0.995, rotation: 0 });
+  gsap.set(milk, { autoAlpha: 0, x: "-2vw", y: "4vh", rotation: -3, scale: 1 });
+  gsap.set(copy, { autoAlpha: 0, y: 42 });
+  gsap.set(report, { autoAlpha: 0, yPercent: 118, scale: 0.98 });
+
+  const wordMoves = [
+    { autoAlpha: 0.08 },
+    { autoAlpha: 0.12 },
+    { autoAlpha: 0.05 },
+    { autoAlpha: 0.1 },
+  ];
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top top",
+      end: () => `+=${Math.max(window.innerHeight * 2.55, panel.offsetHeight - window.innerHeight)}`,
+      pin: stage,
+      pinSpacing: false,
+      scrub: 0.85,
+      invalidateOnRefresh: true,
+    },
+    defaults: { ease: "none" },
+  });
+
+  tl.to(stage, { backgroundColor: "#f3ccd2", duration: 1.25 }, 0)
+    .to(words, {
+      xPercent: 0,
+      yPercent: 0,
+      autoAlpha: (index) => wordMoves[index]?.autoAlpha ?? 0.1,
+      scale: 0.992,
+      stagger: 0.16,
+      duration: 0.72,
+      ease: "power2.inOut",
+    }, 0.12)
+    .to(milk, { autoAlpha: 1, x: "-2vw", y: "4vh", rotation: -3, scale: 1, duration: 0.95, ease: "power3.out" }, 1.16)
+    .to(base, { autoAlpha: 1, y: 0, scale: 1, rotation: 0, duration: 1.05, ease: "power3.out" }, 1.22)
+    .to(copy, { autoAlpha: 1, y: 0, duration: 0.72, ease: "power2.out" }, 1.88)
+    .to(milk, { x: "2vw", y: "-4vh", rotation: 1, duration: 1.4, ease: "power2.inOut" }, 2.1)
+    .to(base, { y: 0, scale: 1, duration: 1.4, ease: "power2.inOut" }, 2.1)
+    .to(copy, { autoAlpha: 0.28, y: -20, duration: 0.72, ease: "power2.inOut" }, 3.1)
+    .to(report, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.9, ease: "power3.out" }, 3.22)
+    .to(milk, { x: "2vw", y: "-4vh", duration: 0.9 }, 3.42)
+    .to([base, report], { duration: 0.72 }, 4.08);
+}
+
 function setupBusScrollMotion() {
   if (!window.gsap || !window.ScrollTrigger) return;
   const panel = document.querySelector('[data-panel-theme="main-statement"]');
@@ -948,6 +1100,8 @@ setActivePanel(0);
 updateTheoryCriteriaState();
 prepareAnimations();
 observePanels();
+setupCommunityObjectMotion();
+setupSilverEconomyMotion();
 setupPeopleScrollMotion();
 setupBusScrollMotion();
 setupLiteratureEvidenceMotion();
