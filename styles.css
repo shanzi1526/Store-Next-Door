@@ -800,7 +800,7 @@ main {
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 227, 154, 0.2), transparent 18rem),
     linear-gradient(180deg, #e1efed 0%, #f5edd8 100%);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .panel-people-first::before,
@@ -811,18 +811,24 @@ main {
   left: -2%;
   right: -2%;
   z-index: 6;
-  height: clamp(1.2rem, 3svh, 2.4rem);
   pointer-events: none;
 }
 
 .panel-people-first::before {
-  top: -1px;
-  background: #e1efed;
-  clip-path: polygon(0 0, 7% 62%, 15% 28%, 24% 72%, 33% 38%, 43% 67%, 53% 24%, 64% 70%, 75% 35%, 86% 76%, 100% 30%, 100% 0);
+  top: -12svh;
+  z-index: 1;
+  height: 24svh;
+  background:
+    repeating-linear-gradient(8deg, rgba(47, 94, 78, 0.08) 0 1px, transparent 1px 9px),
+    radial-gradient(circle at 22% 48%, rgba(245, 237, 216, 0.72), transparent 28rem),
+    #e1efed;
+  clip-path: polygon(0 4%, 9% 0, 19% 8%, 31% 1%, 43% 9%, 56% 3%, 69% 11%, 82% 2%, 100% 8%, 100% 100%, 91% 87%, 79% 96%, 67% 86%, 54% 94%, 42% 84%, 29% 92%, 16% 82%, 7% 90%, 0 80%);
+  filter: drop-shadow(0 -1.2rem 2.6rem rgba(23, 63, 54, 0.1));
 }
 
 .panel-people-first::after {
   bottom: -1px;
+  height: clamp(1.2rem, 3svh, 2.4rem);
   background: #173f36;
   clip-path: polygon(0 52%, 8% 22%, 18% 58%, 29% 30%, 39% 68%, 52% 26%, 63% 62%, 75% 34%, 87% 70%, 100% 36%, 100% 100%, 0 100%);
   opacity: 1;
@@ -830,6 +836,7 @@ main {
 
 .panel-main-statement::before {
   bottom: -1px;
+  height: clamp(1.2rem, 3svh, 2.4rem);
   background: #173f36;
   clip-path: polygon(0 52%, 8% 22%, 18% 58%, 29% 30%, 39% 68%, 52% 26%, 63% 62%, 75% 34%, 87% 70%, 100% 36%, 100% 100%, 0 100%);
   opacity: 0.96;
@@ -857,6 +864,22 @@ main {
   background:
     linear-gradient(90deg, rgba(218, 222, 214, 0.92) 0%, rgba(199, 218, 212, 0.48) 46%, rgba(83, 78, 126, 0.24) 100%),
     #cfd7cf;
+}
+
+.community-object-reveal {
+  position: absolute;
+  inset: -7svh -8vw -7svh -8vw;
+  z-index: 20;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(96deg, rgba(47, 94, 78, 0.11) 0 1px, transparent 1px 9px),
+    radial-gradient(circle at 24% 30%, rgba(139, 220, 196, 0.28), transparent 28rem),
+    radial-gradient(circle at 82% 72%, rgba(242, 138, 120, 0.16), transparent 26rem),
+    #e1efed;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 4% 86%, 1% 72%, 5% 58%, 2% 42%, 6% 28%, 1% 12%);
+  filter: drop-shadow(-1.2rem 0 2.4rem rgba(23, 63, 54, 0.12));
+  transform-origin: 18% 50%;
+  will-change: transform, opacity;
 }
 
 .silver-stage {
@@ -1212,16 +1235,85 @@ main {
 .people-stage::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -14svh 0 0;
   z-index: 0;
-  opacity: 0.1;
+  opacity: 0.12;
   pointer-events: none;
   background-image: url("./Materials4.png");
-  background-position: center 42%;
+  background-position: center 18svh;
   background-repeat: no-repeat;
   background-size: min(108vw, 1720px) auto;
   mix-blend-mode: multiply;
   filter: saturate(0.82) contrast(0.92);
+}
+
+.people-boundary-collage {
+  position: absolute;
+  top: -13svh;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: 36svh;
+  min-height: 230px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.people-boundary-collage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  opacity: 0.12;
+  background:
+    repeating-linear-gradient(86deg, rgba(23, 63, 54, 0.16) 0 1px, transparent 1px 8px),
+    repeating-radial-gradient(circle at 28% 42%, rgba(23, 63, 54, 0.12) 0 1px, transparent 1px 5px);
+  mix-blend-mode: multiply;
+}
+
+.people-boundary-paper {
+  position: absolute;
+  pointer-events: none;
+  box-shadow: 0 1.2rem 2.8rem rgba(23, 63, 54, 0.12);
+}
+
+.people-boundary-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background: repeating-linear-gradient(7deg, rgba(36, 48, 46, 0.14) 0 1px, transparent 1px 8px);
+  mix-blend-mode: multiply;
+}
+
+.people-boundary-paper-cream {
+  left: 9vw;
+  top: 7svh;
+  width: 62vw;
+  height: 20svh;
+  background: #f5edd8;
+  clip-path: polygon(2% 12%, 98% 0, 100% 78%, 78% 91%, 52% 82%, 31% 100%, 0 86%);
+  transform: rotate(-2.4deg);
+}
+
+.people-boundary-paper-mint {
+  right: -4vw;
+  top: 13svh;
+  width: 48vw;
+  height: 17svh;
+  background: #cfe8df;
+  clip-path: polygon(0 8%, 100% 0, 94% 100%, 8% 86%);
+  transform: rotate(3.4deg);
+}
+
+.people-boundary-paper-pale {
+  left: 52vw;
+  top: 2svh;
+  width: 34vw;
+  height: 14svh;
+  background: rgba(250, 247, 240, 0.92);
+  clip-path: polygon(3% 0, 100% 13%, 91% 96%, 0 82%);
+  transform: rotate(1.6deg);
 }
 
 .gate-chapter,
@@ -2184,6 +2276,281 @@ main {
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(5, 18, 15, 0.36), rgba(5, 18, 15, 0.13) 48%, transparent 72%);
   filter: blur(7px);
+}
+
+.panel-history-float {
+  display: block;
+  min-height: 430svh;
+  overflow: visible;
+  background: #0f5147;
+  color: #fffdf4;
+}
+
+.history-float-stage {
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  height: 100svh;
+  min-height: 680px;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(245, 237, 216, 0.1), transparent 28rem),
+    radial-gradient(circle at 82% 76%, rgba(139, 220, 196, 0.14), transparent 32rem),
+    #bdb4ef;
+}
+
+.history-float-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.16;
+  background:
+    repeating-linear-gradient(92deg, rgba(23, 63, 54, 0.14) 0 1px, transparent 1px 8px),
+    repeating-radial-gradient(circle at 22% 32%, rgba(23, 63, 54, 0.12) 0 1px, transparent 1px 5px);
+  mix-blend-mode: multiply;
+}
+
+.history-float-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  opacity: 0.12;
+  background:
+    repeating-linear-gradient(12deg, rgba(250, 247, 240, 0.16) 0 1px, transparent 1px 7px),
+    repeating-radial-gradient(circle at 70% 40%, rgba(23, 63, 54, 0.16) 0 1px, transparent 1px 4px);
+  mix-blend-mode: soft-light;
+}
+
+.history-float-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 10;
+  width: min(78vw, 1040px);
+  color: #fffdf4;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.history-float-title-keyword {
+  top: 54%;
+}
+
+.history-float-title-photo {
+  color: #eff9cf;
+}
+
+.history-float-title h2 {
+  margin: 0;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
+  font-size: clamp(4.2rem, 8.1vw, 10.6rem);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.84;
+  text-transform: uppercase;
+}
+
+.history-float-title p {
+  max-width: 42rem;
+  margin: clamp(1rem, 2svh, 1.6rem) auto 0;
+  color: rgba(255, 253, 244, 0.88);
+  font-size: clamp(1.1rem, 1.65vw, 1.9rem);
+  font-weight: 760;
+  line-height: 1.22;
+}
+
+.history-float-title-photo p {
+  color: rgba(239, 249, 207, 0.82);
+}
+
+.history-insight-card {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(3.2rem, 6svh, 5.2rem);
+  z-index: 11;
+  display: grid;
+  grid-template-columns: minmax(8rem, 20vw) 1fr;
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  width: min(92vw, 1420px);
+  min-height: clamp(15rem, 27svh, 22rem);
+  margin: 0;
+  padding: clamp(1.7rem, 3vw, 3.1rem) clamp(1.8rem, 4vw, 4.5rem);
+  color: #0f5147;
+  background:
+    repeating-linear-gradient(0deg, rgba(15, 81, 71, 0.055) 0 1px, transparent 1px 13px),
+    #fffdf4;
+  border-radius: clamp(1.1rem, 1.7vw, 1.8rem);
+  box-shadow: 0 2.2rem 4.8rem rgba(23, 63, 54, 0.18);
+  transform: translateX(-50%);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.history-insight-card aside {
+  border-right: 1px solid rgba(15, 81, 71, 0.14);
+}
+
+.history-insight-card aside p {
+  margin: 0;
+  color: #0f5147;
+  font-size: clamp(0.88rem, 1vw, 1.08rem);
+  font-weight: 850;
+  letter-spacing: 0.02em;
+}
+
+.history-insight-card h3 {
+  max-width: 58rem;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 3.6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.history-insight-card div p {
+  margin: clamp(1.2rem, 2.4svh, 1.8rem) 0 0;
+  color: rgba(15, 81, 71, 0.78);
+  font-size: clamp(0.82rem, 1vw, 1rem);
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.history-keywords,
+.history-photo-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.history-keywords {
+  z-index: 3;
+}
+
+.history-keyword {
+  position: absolute;
+  display: block;
+  color: #064f44;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", var(--font-sans);
+  font-size: clamp(7rem, 17vw, 22rem);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.76;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.history-keyword-access {
+  left: -7vw;
+  top: 9svh;
+}
+
+.history-keyword-route {
+  right: -8vw;
+  top: 3svh;
+}
+
+.history-keyword-waiting {
+  left: 4vw;
+  bottom: 1svh;
+}
+
+.history-keyword-support {
+  right: -10vw;
+  bottom: 15svh;
+}
+
+.history-keyword-trust {
+  left: 31vw;
+  top: 58svh;
+}
+
+.history-photo-field {
+  z-index: 5;
+}
+
+.history-float-photo {
+  position: absolute;
+  display: block;
+  width: clamp(19rem, 31vw, 40rem);
+  height: auto;
+  max-width: none;
+  object-fit: cover;
+  box-shadow: 0 1.4rem 3.2rem rgba(23, 63, 54, 0.26);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.history-float-photo-01 {
+  left: -4vw;
+  top: 10svh;
+  z-index: 4;
+  width: clamp(21rem, 34vw, 44rem);
+}
+
+.history-float-photo-02 {
+  left: 59vw;
+  top: 24svh;
+  z-index: 6;
+  width: clamp(22rem, 36vw, 46rem);
+}
+
+.history-float-photo-03 {
+  left: 5vw;
+  top: 48svh;
+  z-index: 3;
+  width: clamp(17rem, 27vw, 35rem);
+}
+
+.history-float-photo-04 {
+  left: 69vw;
+  top: 54svh;
+  z-index: 4;
+  width: clamp(17rem, 28vw, 36rem);
+}
+
+.history-float-photo-05 {
+  left: 30vw;
+  top: 21svh;
+  z-index: 2;
+  width: clamp(19rem, 30vw, 39rem);
+}
+
+.history-float-photo-06 {
+  left: -7vw;
+  top: 72svh;
+  z-index: 6;
+  width: clamp(23rem, 38vw, 50rem);
+}
+
+.history-float-photo-07 {
+  left: 47vw;
+  top: 67svh;
+  z-index: 3;
+  width: clamp(18rem, 29vw, 38rem);
+}
+
+.history-float-photo-08 {
+  left: 18vw;
+  top: 83svh;
+  z-index: 5;
+  width: clamp(17rem, 27vw, 35rem);
+}
+
+.history-float-photo-09 {
+  left: 72vw;
+  top: 84svh;
+  z-index: 7;
+  width: clamp(19rem, 30vw, 40rem);
 }
 
 .panel-literature-support {

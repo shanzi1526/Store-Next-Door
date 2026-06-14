@@ -56,6 +56,22 @@ function goToPanel(index, { keepAuto = false, duration = null, ease = "power2.in
   setActivePanel(nextIndex);
 }
 
+function panelExitTransition(panel) {
+  if (panel?.dataset.panelTheme === "silver-economy") {
+    return {
+      duration: 2.45,
+      ease: "none",
+    };
+  }
+  if (panel?.dataset.panelTheme === "history-float") {
+    return {
+      duration: 3.1,
+      ease: "none",
+    };
+  }
+  return null;
+}
+
 function scrollToTop(top, { duration = 1.2, ease = "power2.inOut" } = {}) {
   const targetTop = Math.max(0, Math.min(top, document.documentElement.scrollHeight - window.innerHeight));
 
@@ -92,8 +108,17 @@ function communityObjectStop(panel) {
   };
 }
 
+function silverEconomyBaseRange(panel) {
+  return Math.max(window.innerHeight * 2.55, panel.offsetHeight - window.innerHeight);
+}
+
+function silverEconomyPinRange(panel) {
+  const baseRange = silverEconomyBaseRange(panel);
+  return Math.min(panel.offsetHeight - window.innerHeight * 0.04, baseRange + window.innerHeight * 0.72);
+}
+
 function silverEconomyStop(panel) {
-  const scrollRange = Math.max(window.innerHeight * 2.55, panel.offsetHeight - window.innerHeight);
+  const scrollRange = silverEconomyBaseRange(panel);
   return {
     top: panel.offsetTop + scrollRange * 0.92,
     duration: 5.8,
@@ -123,6 +148,22 @@ function literatureSupportStop(panel) {
     duration: 6.4,
     ease: "none",
   };
+}
+
+function historyFloatStops(panel) {
+  const scrollRange = Math.max(window.innerHeight * 3.15, panel.offsetHeight - window.innerHeight);
+  return [
+    {
+      top: panel.offsetTop + scrollRange * 0.43,
+      duration: 3.35,
+      ease: "none",
+    },
+    {
+      top: panel.offsetTop + scrollRange * 0.985,
+      duration: 6.4,
+      ease: "none",
+    },
+  ];
 }
 
 function theoryCriteriaStops(panel) {
@@ -185,6 +226,9 @@ function nextInternalStop(panel) {
     const stop = literatureSupportStop(panel);
     return window.scrollY < stop.top - 80 ? stop : null;
   }
+  if (panel?.dataset.panelTheme === "history-float") {
+    return historyFloatStops(panel).find((stop) => window.scrollY < stop.top - 150) ?? null;
+  }
   if (panel?.dataset.panelTheme === "theory-criteria") {
     return theoryCriteriaStops(panel).find((stop) => window.scrollY < stop.top - 80) ?? null;
   }
@@ -194,7 +238,15 @@ function nextInternalStop(panel) {
 function panelEntryStop(panel) {
   if (panel?.dataset.panelTheme === "community-object") return communityObjectStop(panel);
   if (panel?.dataset.panelTheme === "silver-economy") return silverEconomyStop(panel);
+  if (panel?.dataset.panelTheme === "people-first") {
+    return {
+      top: panel.offsetTop + Math.min(window.innerHeight * 0.14, 150),
+      duration: 2.65,
+      ease: "power1.inOut",
+    };
+  }
   if (panel?.dataset.panelTheme === "literature-evidence") return literatureEvidenceStop(panel);
+  if (panel?.dataset.panelTheme === "history-float") return historyFloatStops(panel)[0];
   if (panel?.dataset.panelTheme === "literature-support") return literatureSupportStop(panel);
   if (panel?.dataset.panelTheme === "theory-criteria") return theoryCriteriaStops(panel)[0];
   return null;
@@ -211,6 +263,13 @@ function previousInternalStop(panel) {
   }
   if (panel?.dataset.panelTheme === "literature-support") {
     return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 5.2, ease: "none" } : null;
+  }
+  if (panel?.dataset.panelTheme === "history-float") {
+    const stops = [
+      { top: panel.offsetTop, duration: 2.35, ease: "none" },
+      ...historyFloatStops(panel),
+    ];
+    return stops.reverse().find((stop) => window.scrollY > stop.top + 80) ?? null;
   }
   if (panel?.dataset.panelTheme === "community-object") {
     return window.scrollY > panel.offsetTop + 120 ? { top: panel.offsetTop, duration: 3.4, ease: "none" } : null;
@@ -281,14 +340,17 @@ async function runAutoSequence(token) {
 
     const currentPanel = panels[index];
     index += 1;
-    const entryStop = panelEntryStop(panels[index]);
+    const nextPanel = panels[index];
+    const shouldUseEntryStop = !(currentPanel?.dataset.panelTheme === "history-float" && nextPanel?.dataset.panelTheme === "literature-support");
+    const entryStop = shouldUseEntryStop ? panelEntryStop(nextPanel) : null;
     if (entryStop) {
       setActivePanel(index);
       scrollToTop(entryStop.top, { duration: entryStop.duration, ease: entryStop.ease });
       await wait(entryStop.duration * 1000 + 250, token);
     } else {
-      const duration = currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null;
-      const ease = currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut";
+      const exitTransition = panelExitTransition(currentPanel);
+      const duration = exitTransition?.duration ?? (currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null);
+      const ease = exitTransition?.ease ?? (currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut");
       goToPanel(index, { keepAuto: true, duration, ease });
       await wait(duration ? duration * 1000 + 250 : autoConfig.settle, token);
     }
@@ -628,18 +690,22 @@ function setupCommunityObjectMotion() {
   if (!panel) return;
 
   const stage = panel.querySelector(".community-object-stage");
+  const reveal = panel.querySelector(".community-object-reveal");
   const image = panel.querySelector('[data-animate="community-image"]');
   const label = panel.querySelector('[data-animate="community-label"]');
   const title = panel.querySelector('[data-animate="community-title"]');
   const subtitle = panel.querySelector('[data-animate="community-subtitle"]');
   const tags = Array.from(panel.querySelectorAll('[data-animate="community-tag"]'));
   const marquee = panel.querySelector('[data-animate="community-marquee"]');
-  if (!stage || !image || !label || !title || !subtitle || !marquee) return;
+  if (!stage || !reveal || !image || !label || !title || !subtitle || !marquee) return;
 
-  gsap.set(image, { autoAlpha: 0, yPercent: -7, scale: 1.06 });
-  gsap.set([label, title, subtitle], { autoAlpha: 0, y: 44 });
-  gsap.set(tags, { autoAlpha: 0, y: 24 });
-  gsap.set(marquee, { autoAlpha: 0, xPercent: 18 });
+  gsap.set(reveal, { autoAlpha: 1, xPercent: 0, yPercent: 0, rotation: 0.4 });
+  gsap.set(image, { autoAlpha: 0, xPercent: 1.4, yPercent: -7, scale: 1.06 });
+  gsap.set(label, { autoAlpha: 0, x: -22, y: 28 });
+  gsap.set(title, { autoAlpha: 0, x: -32, y: 52 });
+  gsap.set(subtitle, { autoAlpha: 0, x: -18, y: 34 });
+  gsap.set(tags, { autoAlpha: 0, x: -12, y: 24 });
+  gsap.set(marquee, { autoAlpha: 0, xPercent: 18, yPercent: 10 });
 
   const enterTl = gsap.timeline({
     scrollTrigger: {
@@ -653,12 +719,13 @@ function setupCommunityObjectMotion() {
   });
 
   enterTl
-    .to(image, { autoAlpha: 1, yPercent: -2.5, scale: 1.035, duration: 1 }, 0)
-    .to(label, { autoAlpha: 1, y: 0, duration: 0.42 }, 0.18)
-    .to(title, { autoAlpha: 1, y: 0, duration: 0.55 }, 0.24)
-    .to(subtitle, { autoAlpha: 1, y: 0, duration: 0.42 }, 0.46)
-    .to(tags, { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.38 }, 0.62)
-    .to(marquee, { autoAlpha: 1, xPercent: 5, duration: 0.72 }, 0.28);
+    .to(reveal, { xPercent: 106, yPercent: -1.5, rotation: -1.2, duration: 1 }, 0)
+    .to(image, { autoAlpha: 1, xPercent: 0, yPercent: -2.5, scale: 1.035, duration: 0.88 }, 0.08)
+    .to(marquee, { autoAlpha: 1, xPercent: 5, yPercent: 0, duration: 0.8 }, 0.2)
+    .to(label, { autoAlpha: 1, x: 0, y: 0, duration: 0.38 }, 0.34)
+    .to(title, { autoAlpha: 1, x: 0, y: 0, duration: 0.52 }, 0.42)
+    .to(subtitle, { autoAlpha: 1, x: 0, y: 0, duration: 0.38 }, 0.62)
+    .to(tags, { autoAlpha: 1, x: 0, y: 0, stagger: 0.06, duration: 0.34 }, 0.72);
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -705,14 +772,16 @@ function setupSilverEconomyMotion() {
     { autoAlpha: 0.05 },
     { autoAlpha: 0.1 },
   ];
+  const endHoldDuration = 1.4;
 
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: panel,
       start: "top top",
-      end: () => `+=${Math.max(window.innerHeight * 2.55, panel.offsetHeight - window.innerHeight)}`,
+      end: () => `+=${silverEconomyPinRange(panel)}`,
       pin: stage,
       pinSpacing: false,
+      anticipatePin: 1,
       scrub: 0.85,
       invalidateOnRefresh: true,
     },
@@ -737,7 +806,8 @@ function setupSilverEconomyMotion() {
     .to(copy, { autoAlpha: 0.28, y: -20, duration: 0.72, ease: "power2.inOut" }, 3.1)
     .to(report, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.9, ease: "power3.out" }, 3.22)
     .to(milk, { x: "2vw", y: "-4vh", duration: 0.9 }, 3.42)
-    .to([base, report], { duration: 0.72 }, 4.08);
+    .to([base, report], { duration: 0.72 }, 4.08)
+    .to([base, milk, report], { duration: endHoldDuration }, 4.8);
 }
 
 function setupBusScrollMotion() {
@@ -927,6 +997,114 @@ function setupLiteratureSupportMotion() {
     .to(allCards, { duration: 1.25, ease: "none" }, 4.1);
 }
 
+function setupHistoryFloatMotion() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const panel = document.querySelector('[data-panel-theme="history-float"]');
+  if (!panel) return;
+
+  const stage = panel.querySelector(".history-float-stage");
+  const keywordTitle = panel.querySelector("[data-history-title-keyword]");
+  const photoTitle = panel.querySelector("[data-history-title-photo]");
+  const insightCard = panel.querySelector("[data-history-card]");
+  const keywords = Array.from(panel.querySelectorAll("[data-history-keyword]"));
+  const photos = Array.from(panel.querySelectorAll("[data-history-photo]"));
+  if (!stage || !keywordTitle || !photoTitle || !insightCard || !keywords.length || !photos.length) return;
+
+  const keywordPasses = [
+    { start: 0.08, fromY: "-122vh", outY: "116vh", x: "-8vw", outX: "-16vw", rotation: -8, outRotation: -16, alpha: 0.9 },
+    { start: 0.34, fromY: "-128vh", outY: "122vh", x: "9vw", outX: "18vw", rotation: 7, outRotation: 15, alpha: 0.82 },
+    { start: 0.6, fromY: "-120vh", outY: "128vh", x: "-3vw", outX: "-9vw", rotation: 11, outRotation: 20, alpha: 0.78 },
+    { start: 0.86, fromY: "-130vh", outY: "120vh", x: "12vw", outX: "24vw", rotation: -12, outRotation: -20, alpha: 0.76 },
+    { start: 1.12, fromY: "-116vh", outY: "132vh", x: "0vw", outX: "8vw", rotation: 5, outRotation: 13, alpha: 0.7 },
+  ];
+
+  const photoPasses = [
+    { start: 4.0, fromY: "126vh", outY: "-126vh", x: "-6vw", outX: "-9vw", rotation: -8, outRotation: -13, scale: 1.08, alpha: 0.78 },
+    { start: 4.22, fromY: "134vh", outY: "-134vh", x: "5vw", outX: "8vw", rotation: 6, outRotation: 11, scale: 1.1, alpha: 0.82 },
+    { start: 4.44, fromY: "128vh", outY: "-120vh", x: "-8vw", outX: "-12vw", rotation: 4, outRotation: 8, scale: 1, alpha: 0.66 },
+    { start: 4.66, fromY: "140vh", outY: "-126vh", x: "7vw", outX: "10vw", rotation: -5, outRotation: -10, scale: 1.02, alpha: 0.68 },
+    { start: 4.88, fromY: "132vh", outY: "-140vh", x: "0vw", outX: "2vw", rotation: 3, outRotation: 7, scale: 0.96, alpha: 0.54 },
+    { start: 5.1, fromY: "144vh", outY: "-136vh", x: "-7vw", outX: "-13vw", rotation: -4, outRotation: -8, scale: 1.08, alpha: 0.76 },
+    { start: 5.32, fromY: "138vh", outY: "-146vh", x: "6vw", outX: "10vw", rotation: 8, outRotation: 13, scale: 1, alpha: 0.62 },
+    { start: 5.54, fromY: "148vh", outY: "-128vh", x: "-3vw", outX: "-5vw", rotation: -7, outRotation: -11, scale: 0.94, alpha: 0.6 },
+    { start: 5.74, fromY: "150vh", outY: "-140vh", x: "8vw", outX: "12vw", rotation: 5, outRotation: 10, scale: 1, alpha: 0.7 },
+  ];
+
+  gsap.set(stage, { backgroundColor: "#bdb4ef" });
+  gsap.set(keywordTitle, { autoAlpha: 1, xPercent: -50, yPercent: -50, scale: 1 });
+  gsap.set(photoTitle, { autoAlpha: 0, xPercent: -50, yPercent: -50, scale: 0.98 });
+  gsap.set(insightCard, { autoAlpha: 0, xPercent: -50, yPercent: 118, scale: 0.985 });
+  gsap.set(keywords, {
+    autoAlpha: 0,
+    x: (index) => keywordPasses[index]?.x ?? 0,
+    y: (index) => keywordPasses[index]?.fromY ?? "-120vh",
+    rotation: (index) => keywordPasses[index]?.rotation ?? 0,
+    scale: 0.98,
+  });
+  gsap.set(photos, {
+    autoAlpha: 0,
+    x: (index) => photoPasses[index]?.x ?? 0,
+    y: (index) => photoPasses[index]?.fromY ?? "124vh",
+    rotation: (index) => photoPasses[index]?.rotation ?? 0,
+    scale: (index) => photoPasses[index]?.scale ?? 0.9,
+  });
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: panel,
+      start: "top top",
+      end: () => `+=${Math.max(window.innerHeight * 3.15, panel.offsetHeight - window.innerHeight)}`,
+      pin: stage,
+      pinSpacing: false,
+      anticipatePin: 1,
+      scrub: true,
+      invalidateOnRefresh: true,
+    },
+    defaults: { ease: "none" },
+  });
+
+  tl.to(keywordTitle, { scale: 0.985, duration: 1.3, ease: "power1.inOut" }, 0);
+
+  keywords.forEach((keyword, index) => {
+    const pass = keywordPasses[index];
+    tl.to(keyword, {
+      autoAlpha: pass.alpha,
+      y: pass.outY,
+      x: pass.outX,
+      rotation: pass.outRotation,
+      duration: 1.25,
+      ease: "none",
+    }, pass.start)
+      .to(keyword, { autoAlpha: 0, duration: 0.18, ease: "none" }, pass.start + 1.08);
+  });
+
+  tl.to(keywordTitle, { yPercent: -126, scale: 0.68, duration: 0.56, ease: "none" }, 2.48)
+    .to(insightCard, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.72, ease: "none" }, 2.58)
+    .to([keywordTitle, insightCard], { duration: 0.58, ease: "none" }, 3.26)
+    .to(stage, { backgroundColor: "#0f5147", duration: 0.72, ease: "none" }, 3.74)
+    .to(keywordTitle, { autoAlpha: 0, scale: 0.62, yPercent: -148, duration: 0.5, ease: "none" }, 3.76)
+    .to(insightCard, { autoAlpha: 0, yPercent: -112, scale: 0.965, duration: 0.58, ease: "none" }, 3.78)
+    .to(photoTitle, { autoAlpha: 1, scale: 1, duration: 0.5, ease: "none" }, 3.92);
+
+  photos.forEach((photo, index) => {
+    const pass = photoPasses[index];
+    tl.to(photo, {
+      autoAlpha: pass.alpha,
+      y: pass.outY,
+      x: pass.outX,
+      rotation: pass.outRotation,
+      scale: pass.scale,
+      duration: 1.82,
+      ease: "none",
+    }, pass.start)
+      .to(photo, { autoAlpha: 0, duration: 0.18, ease: "none" }, pass.start + 1.58);
+  });
+
+  tl.to(photoTitle, { scale: 0.985, duration: 3.6, ease: "none" }, 3.45)
+    .to(photos, { autoAlpha: 0, duration: 0.12, ease: "none" }, 7.44)
+    .to(photoTitle, { autoAlpha: 1, scale: 0.985, duration: 0.72, ease: "none" }, 7.52);
+}
+
 function setupTheoryCriteriaMotion() {
   if (!window.gsap || !window.ScrollTrigger) return;
   const panel = document.querySelector('[data-panel-theme="theory-criteria"]');
@@ -1064,15 +1242,18 @@ window.addEventListener("keydown", (event) => {
     }
     if (currentIndex >= panels.length - 1) return;
     const nextIndex = clampPanel(currentIndex + 1);
-    const entryStop = panelEntryStop(panels[nextIndex]);
+    const nextPanel = panels[nextIndex];
+    const shouldUseEntryStop = !(currentPanel?.dataset.panelTheme === "history-float" && nextPanel?.dataset.panelTheme === "literature-support");
+    const entryStop = shouldUseEntryStop ? panelEntryStop(nextPanel) : null;
     if (entryStop) {
       stopAutoPlay();
       setActivePanel(nextIndex);
       scrollToTop(entryStop.top, { duration: entryStop.duration, ease: entryStop.ease });
       return;
     }
-    const duration = currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null;
-    const ease = currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut";
+    const exitTransition = panelExitTransition(currentPanel);
+    const duration = exitTransition?.duration ?? (currentPanel?.dataset.panelTheme === "literature-evidence" ? 3.2 : null);
+    const ease = exitTransition?.ease ?? (currentPanel?.dataset.panelTheme === "literature-evidence" ? "none" : "power2.inOut");
     goToPanel(nextIndex, { duration, ease });
     return;
   }
@@ -1105,6 +1286,7 @@ setupSilverEconomyMotion();
 setupPeopleScrollMotion();
 setupBusScrollMotion();
 setupLiteratureEvidenceMotion();
+setupHistoryFloatMotion();
 setupLiteratureSupportMotion();
 setupTheoryCriteriaMotion();
 playPanel(panels[0]);
